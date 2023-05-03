@@ -118,7 +118,7 @@
     </x-slot>
 
     <x-slot name="scripts">
-        <!-- Script to set chosen name for award printing and show help dialogue for each award-->
+        <!-- Script to set chosen name for award printing and show help dialogue for each award -->
         <script>
             function copyInputValue() {
                 var inputValue = document.getElementById("input").value;
