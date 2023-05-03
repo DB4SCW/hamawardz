@@ -163,7 +163,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dark" role="document">
               <div class="modal-content">
                 <div class="modal-header modal-dark">
-                  <h5 class="modal-title" id="addCallsignModalLabel">Add new event manager:</h5>
+                  <h5 class="modal-title" id="addCallsignModalLabel">Add new participating callsign:</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -176,7 +176,7 @@
                             <input name="callsign" class="form-control" type="text" value="{{ old('callsign') }}">
                         </div>
                         <div class="text-center">
-                            <input type="submit" class="btn btn-primary" value="Add Manager">
+                            <input type="submit" class="btn btn-primary" value="Add Callsign">
                         </div>
                       </form>  
                 </div>
