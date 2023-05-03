@@ -18,18 +18,20 @@ class HameventController extends Controller
         if($siteadmin)
         {
             $events = Hamevent::with('awards.issued_awards', 'callsigns', 'creator', 'eventmanagers')->get();
+            //return view
+            return view('hamevent.list', ['events' => $events]);
         }else{
             $events = auth()->user()->events_to_manage()->with('awards.issued_awards', 'callsigns', 'creator', 'eventmanagers')->get();
-        }
 
-        //Sanity-check
-        if($events->count() < 1)
-        {
-            return back()->with('danger', 'You are not allowed to manage events on this website.');
-        }
+            //Sanity-check
+            if($events->count() < 1)
+            {
+                return back()->with('danger', 'You are not allowed to manage events on this website.');
+            }
 
-        //return view
-        return view('hamevent.list', ['events' => $events]);
+            //return view
+            return view('hamevent.list', ['events' => $events]);
+        }
 
     }
     
