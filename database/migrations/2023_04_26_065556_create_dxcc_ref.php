@@ -15,7 +15,7 @@ return new class extends Migration
         //create table
         Schema::create('dxcc_ref', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dxcc');
+            $table->unsignedBigInteger('dxcc')->unique();
             $table->string('prefix', 20);
             $table->string('name', 100);
             $table->string('cont', 6);
