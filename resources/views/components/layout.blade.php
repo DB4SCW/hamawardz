@@ -88,7 +88,7 @@
     <body>
          <!-- Floating Navbar -->
         <nav class="navbar fixed-top navbar-dark custom-navbar"  style="display: flex;">
-            <a class="navbar-brand" href="/">Hamawardz</a>
+            <a class="navbar-brand" href="/">Hamawards</a>
             
             <div class="navbar-element">
                 @if(auth()->check())

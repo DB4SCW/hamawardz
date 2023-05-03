@@ -1,9 +1,9 @@
 <x-layout>
-    <x-slot name="title">Hamawardz - Logcheck</x-slot>
+    <x-slot name="title">Hamawards - Logcheck</x-slot>
 
     <x-slot name="slot">
         <div class="container mt-5">
-            <h1 class="text-center mb-4">Hamawardz - Logcheck</h1>
+            <h1 class="text-center mb-4">Hamawards - Logcheck</h1>
             <form action="/logcheck" method="post">
                 @csrf
                 <div class="form-group">
