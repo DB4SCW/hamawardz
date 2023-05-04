@@ -17,6 +17,10 @@
                             <input name="slug" class="form-control" type="text" value="{{ old('slug') ?? $event->slug }}">
                         </div>
                         <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea name="description" class="form-control" style="height: 150px;">{{ old('description') ?? $event->description }}</textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="start">Start:</label>
                             <input name="start" class="form-control" type="datetime-local" value="{{ old('start') ?? $event->start->format('Y-m-d\TH:i') }}">
                         </div>

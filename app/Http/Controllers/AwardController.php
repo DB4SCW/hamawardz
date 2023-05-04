@@ -41,7 +41,7 @@ class AwardController extends Controller
 
         //Prepare data array
         $data = [
-            'callsign' => $callsign,
+            'callsign' => $callsign, //str_replace("0", "Ø", $callsign),
             'chosenname' => $chosenname, 
             'issue_datetime' => \Carbon\Carbon::now(),
             'award' => $award

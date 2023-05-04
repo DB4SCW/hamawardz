@@ -65,6 +65,7 @@ class HameventController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make($requestinput, [
             'title' => 'string|min:5|max:200|unique:hamevents,title',
             'slug' => 'string|min:3|max:200|unique:hamevents,slug',
+            'description' => 'nullable|string',
             'start' => 'date', 
             'end' => 'date'
         ], 
@@ -78,7 +79,8 @@ class HameventController extends Controller
             'title.string' => 'The event title must be a valid text.',
             'slug.string' => 'The event slug must be a valid text.',
             'start.date' => 'The event start must be a valid datetime.',
-            'end.date' => 'The event start must be a valid datetime.'
+            'end.date' => 'The event start must be a valid datetime.',
+            'description.string' => 'Description has to be a string'
         ]);
 
         //handle validation failure
@@ -95,6 +97,7 @@ class HameventController extends Controller
         //fill event
         $event->title = $attributes['title'];
         $event->slug = $attributes['slug'];
+        $event->description = array_key_exists('description', $attributes) ? $attributes['description'] : null;
         $event->creator_id = auth()->user()->id;
         $event->start = \Carbon\Carbon::parse($attributes['start']);
         $event->end = \Carbon\Carbon::parse($attributes['end']);
@@ -137,6 +140,7 @@ class HameventController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make($requestinput, [
             'title' => 'string|min:5|max:200|unique:hamevents,title,' . $event->id,
             'slug' => 'string|min:3|max:200|unique:hamevents,slug,' . $event->id,
+            'description' => 'nullable|string',
             'start' => 'date', 
             'end' => 'date'
         ], 
@@ -150,7 +154,8 @@ class HameventController extends Controller
             'title.string' => 'The event title must be a valid text.',
             'slug.string' => 'The event slug must be a valid text.',
             'start.date' => 'The event start must be a valid datetime.',
-            'end.date' => 'The event start must be a valid datetime.'
+            'end.date' => 'The event start must be a valid datetime.',
+            'description.string' => 'Description has to be a string'
         ]);
 
         //handle validation failure
@@ -164,6 +169,7 @@ class HameventController extends Controller
         //update event
         $event->title = $attributes['title'];
         $event->slug = $attributes['slug'];
+        $event->description = array_key_exists('description', $attributes) ? $attributes['description'] : null;
         $event->start = \Carbon\Carbon::parse($attributes['start']);
         $event->end = \Carbon\Carbon::parse($attributes['end']);
         $event->updated_at = \Carbon\Carbon::now();

@@ -14,6 +14,10 @@
                     <input type="submit" class="btn btn-primary" value="Check">
                 </div>
             </form>
+            @if($event->description != null)
+            <h3 class="text-center mb-4" style="margin-top: 50px;">Event description:</h3>
+            <p>{!! nl2br(e($event->description)) !!}</p>
+            @endif
             <h3 class="text-center mb-4" style="margin-top: 50px;">participating callsigns:</h3>
             <table class="table table-bordered table-hover table-dark" style="margin-bottom: 60px;">
                 <thead class="thead-light">
