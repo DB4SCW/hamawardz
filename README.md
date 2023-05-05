@@ -128,6 +128,8 @@ Have a look at the rest of the env file and change other values according to you
 - APP_ENV (e.g. production or local)
 - APP_DEBUG (set to false to hide internal errors)
 - APP_URL (your URL)
+- APP_IMPRESSUM_URL (sets the impressum url in the footer, defaults to homepage if empty)
+- APP_DATA_PROTECTION_URL (sets the data protection declaration url in the footer, defaults to homepage if empty)
 
 Migrate the database and create the link for storage of award background images
 ```bash
