@@ -150,8 +150,8 @@
 
         <!-- Floating Footer -->
         <div class="footer">
-            <a class="footerelement" href="https://erklaeranlage.de/impressum">Impressum</a>
-            <a class="footerelement" href="https://erklaeranlage.de/datenschutz">Data protection declaration</a>
+            <a class="footerelement" href="{{ env('APP_IMPRESSUM_URL', '/') }}">Impressum</a>
+            <a class="footerelement" href="{{ env('APP_DATA_PROTECTION_URL', '/') }}">Data protection declaration</a>
         </div>
 
         <!-- On demand JS -->
