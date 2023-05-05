@@ -12,7 +12,7 @@ Hamwards is tested on Apache only.
 
 Hamawards is able to run using all the database engines permitted by Laravel (SQLITE, MySQL, MSSQL, Postgres, etc.). 
 
-Hamawards is tested on SQLITE (which is plenty for most users and allows hamawards to run very efficiently on tiny machines) and MySQL (used on hamawards.app because of the larger volume).
+Hamawards is tested on SQLITE (which is plenty for most users and allows hamawards to run very efficiently on tiny machines) and MySQL (used on [hamawards.net](https://hamawards.net) because of the larger volume).
 
 ## Features
 
