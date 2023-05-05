@@ -112,7 +112,7 @@ DB_USERNAME=
 DB_PASSWORD=
 ```
 
-MySQL (set your MySQL login data. Use root or a user that can change the database schema. If the hamawards-database doesn't exist yet, create it first.):
+MySQL (set your MySQL login data. Use root or a user that can change the database schema. If the hamawards-database doesn't exist yet, create it first):
 ```
 DEFAULT_CONNECTION=mysql
 
@@ -149,7 +149,7 @@ Have fun!
 
 ## Updating hamawards to a new version
 
-Just cd into your folder, git pull and afterwards, migrate the database. You are up and running the newest verstion!
+Just cd into your folder, git pull and afterwards, migrate the database. You are up and running the newest version!
 
 ```bash
 cd /var/www/hamawards
