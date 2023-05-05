@@ -70,7 +70,7 @@ class ContactController extends Controller
         $contacts->load('eventcallsign', 'mode', 'dxcc');
 
         //get filename
-        $fileName = $event->slug . '_export_contacts.csv';
+        $fileName = \Carbon\Carbon::now()->format('Ymd') . "_" . $event->slug . '_export_contacts.csv';
 
         //define headers
         $headers = array(
