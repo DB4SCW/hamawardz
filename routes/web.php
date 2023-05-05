@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/event/{event:slug}', [HameventController::class, 'showedit'])->name('showeditevent');
     Route::post('/event/{event:slug}', [HameventController::class, 'edit'])->name('editevent');
     Route::get('/event/{event:slug}/delete', [HameventController::class, 'destroy'])->name('deleteevent');
+    Route::get('/event/{event:slug}/export', [ContactController::class, 'exportcontacts'])->name('exporteventcontacts');
 
     //Event-Manager
     Route::get('/event/{event:slug}/manager/{managerid}/remove', [HameventController::class, 'removemanager'])->name('removeeventmanager');

@@ -130,8 +130,20 @@
                   @endif
               </tbody>
           </table>   
-          <p style="color:red; margin-bottom: 60px;">Attention: altering awards does not change already created and downloaded awards!</p>  
+          <p style="color:red;margin-bottom: 60px;">Attention: altering awards does not change already created and downloaded awards!</p>  
         </div>
+
+        <!-- Export all QSOs in event if admin-->
+        @if(auth()->user()->siteadmin || auth()->user()->id == $event->creator->id || in_array(auth()->user()->id, $event->eventmanagers->pluck('id')))
+            <div class="container mt-5" style="max-width: 800px; margin-bottom: 60px;">
+                <h1 class="text-center mb-4">Export contacts:</h1>
+                <div class="row justify-content-center">
+                    <div class="col-md-6" style="text-align: center;">
+                        <a href="/event/{{ $event->slug }}/export"><button class="btn btn-primary">Export all event QSOs</button></a>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <!-- Modal to add managers -->
         <div class="modal fade" id="addManagerModal" tabindex="-1" role="dialog" aria-labelledby="addManagerModalLabel" aria-hidden="true">

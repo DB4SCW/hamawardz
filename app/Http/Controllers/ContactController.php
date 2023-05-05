@@ -82,7 +82,39 @@ class ContactController extends Controller
         );
 
         //define columns
-        $columns = array('Eventcallsign', 'Operator', 'QSO_Datetime', 'Callsign', 'Callsign_Raw', 'Frequency', 'Band', 'Mode', 'Mainmode', 'RST_S', 'RST_R', );
+        $columns = array('Eventcallsign', 'Operator', 'QSO_Datetime', 'Callsign', 'Callsign_Raw', 'Frequency', 'Band', 'Mode', 'Mainmode', 'RST_S', 'RST_R', 'DXCC_ID', 'DXCC', 'Continent');
+
+        //write file
+        $callback = function() use($contacts, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($contacts as $contact) {
+
+                $row = array();
+                $row['Eventcallsign']  = $contact->eventcallsign->call;
+                $row['Operator']    = $contact->operator;
+                $row['QSO_Datetime']    = $contact->qso_datetime;
+                $row['Callsign']  = $contact->callsign;
+                $row['Callsign_Raw']  = $contact->raw_callsign;
+                $row['Frequency']  = $contact->freq;
+                $row['Band']  = $contact->band->band;
+                $row['Mode']  = $contact->mode->mode;
+                $row['Mainmode']  = $contact->mode->mainmode;
+                $row['RST_S']  = $contact->rst_s;
+                $row['RST_R']  = $contact->rst_r;
+                $row['DXCC_ID']  = $contact->dxcc->dxcc;
+                $row['DXCC']  = $contact->dxcc->name;
+                $row['Continent']  = $contact->dxcc->cont;
+
+                fputcsv($file, array($row['Eventcallsign'], $row['Operator'], $row['QSO_Datetime'], $row['Callsign'], $row['Callsign_Raw'], $row['Frequency'], $row['Band'], $row['Mode'], $row['Mainmode'], $row['RST_S'], $row['RST_R'], $row['DXCC_ID'], $row['DXCC'], $row['Continent']));
+            }
+
+            fclose($file);
+        };
+
+        //return file
+        return response()->stream($callback, 200, $headers);
         
     }
 }
