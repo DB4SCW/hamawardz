@@ -4,11 +4,15 @@
 
 Hamawards is a simple, free ham radio award checking and downloading software. It is based on the [Laravel](https://laravel.com) PHP Framework.
 
-As it is based on Laravel, it runs on pretty much all the webservers (Apache, NGINX) and on the tiniest of computers (even the raspberry pi). Hamwards is tested on Apache only.
+As it is based on Laravel, it runs on pretty much all the webservers (Apache, NGINX) and on the tiniest of computers (even the raspberry pi). 
+
+Hamwards is tested on Apache only.
 
 ## Technology
 
-Hamawards is able to run using all the database engines permitted by Laravel (SQLITE, MySQL, MSSQL, Postgres, etc.). Hamawards is tested on SQLITE (which is plenty for most users and allows hamawards to run very efficiently on tiny machines) and MySQL (used on hamawards.app because of the larger volume).
+Hamawards is able to run using all the database engines permitted by Laravel (SQLITE, MySQL, MSSQL, Postgres, etc.). 
+
+Hamawards is tested on SQLITE (which is plenty for most users and allows hamawards to run very efficiently on tiny machines) and MySQL (used on hamawards.app because of the larger volume).
 
 ## Features
 
@@ -155,7 +159,9 @@ sudo -u www-data php artisan migrate
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within Laravel itself, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). 
+
 If you discover a security vulnerability within Hamawards, please send an e-mail to DB4SCW, Stefan Wolf via [db4scw@darc.de](mailto:db4scw@darc.de). 
+
 All security vulnerabilities will be promptly addressed.
 
 ## License
