@@ -397,7 +397,6 @@ return new class extends Migration
         DB::statement("INSERT INTO `dxcc_ref` (`dxcc`, `prefix`, `name`, `cont`, `itu`, `waz`) VALUES (193, 'J9*', 'Okinawa (Ryukyu Is)', 'OC', '45', '25');");
         DB::statement("INSERT INTO `dxcc_ref` (`dxcc`, `prefix`, `name`, `cont`, `itu`, `waz`) VALUES (184, 'JZ0*', 'Netherlands N. Guinea', 'OC', '51', '28');");
         DB::statement("INSERT INTO `dxcc_ref` (`dxcc`, `prefix`, `name`, `cont`, `itu`, `waz`) VALUES (134, 'KH5(K)*', 'Kingman Reef', 'OC', '61', '31');");
-        DB::statement("INSERT INTO `dxcc_ref` (`dxcc`, `prefix`, `name`, `cont`, `itu`, `waz`) VALUES (193, 'KR(O)*', 'Okinawa (Ryukyu Is)', 'OC', '45', '25');");
         DB::statement("INSERT INTO `dxcc_ref` (`dxcc`, `prefix`, `name`, `cont`, `itu`, `waz`) VALUES (261, 'KS4(B)*', 'Swan Island', 'NA', '11', '7');");
         DB::statement("INSERT INTO `dxcc_ref` (`dxcc`, `prefix`, `name`, `cont`, `itu`, `waz`) VALUES (28, 'KZ5*', 'Canal Zone', 'NA', '11', '7');");
         DB::statement("INSERT INTO `dxcc_ref` (`dxcc`, `prefix`, `name`, `cont`, `itu`, `waz`) VALUES (218, 'OK*', 'Czechoslovakia', 'EU', '28', '15');");
