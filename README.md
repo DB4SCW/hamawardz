@@ -36,7 +36,7 @@ sudo add-apt-repository -y ppa:ondrej/php
 sudo apt-get update -y
 sudo apt-get install libapache2-mod-php php php-common php-xml php-mysql php-gd php-opcache php-mbstring php-tokenizer php-json php-bcmath php-zip php-sqlite unzip -y
 sudo a2enmod rewrite
-sudo systemctl restart apache2
+sudo service apache2 restart
 curl -sS https://getcomposer.org/installer | php 
 sudo mv composer.phar /usr/local/bin/composer
 composer --version
@@ -79,7 +79,7 @@ Activate the site and reload apache
 
 ```bash
 sudo a2ensite hamawards.conf
-sudo systemctl restart apache2
+sudo service apache2 restart
 ```
 
 ### Step 3: Install hamawards
