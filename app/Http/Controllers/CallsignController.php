@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Callsign;
+use App\Models\Dxcc;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,11 @@ class CallsignController extends Controller
         //Load all callsigns
         $callsigns = Callsign::orderBy('call', 'ASC')->with('contacts', 'uploadusers')->get();
 
+        //Load all DXCCs
+        $dxccs = Dxcc::orderBy('name', 'ASC')->get();
+
         //return view
-        return view('callsign.list', ['callsigns' => $callsigns]);
+        return view('callsign.list', ['callsigns' => $callsigns, 'dxccs' => $dxccs]);
 
     }
 
@@ -37,7 +41,8 @@ class CallsignController extends Controller
         //Validation
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
             'call' => 'string|min:3|max:20|unique:callsigns,call',
-            'cert_holder_callsign' => 'string|min:3|max:20'
+            'cert_holder_callsign' => 'string|min:3|max:20', 
+            'dxcc_id' => 'exists:dxccs,id'
 
         ], 
         [
@@ -45,6 +50,7 @@ class CallsignController extends Controller
             'call.min' => 'Callsign must be no less than 3 characters.',
             'call.max' => 'Callsign must be no more than 20 characters.',
             'call.unique' => 'Callsign is already registered.',
+            'dxcc_id.exists' => 'Unknown DXCC.'
         
         ]);
 
@@ -63,6 +69,7 @@ class CallsignController extends Controller
         $callsign->created_at = \Carbon\Carbon::now();
         $callsign->call = strtoupper($attributes['call']);
         $callsign->cert_holder_callsign = strtoupper($attributes['cert_holder_callsign']);
+        $callsign->dxcc_id = $attributes['dxcc_id'];
 
         //save callsign
         $callsign->save();
@@ -75,7 +82,8 @@ class CallsignController extends Controller
     public function show(Callsign $callsign)
     {
         $callsign->load('uploadusers');
-        return view('callsign.edit', ['callsign' => $callsign]);
+        $dxccs = Dxcc::orderBy('name', 'ASC')->get();
+        return view('callsign.edit', ['callsign' => $callsign, 'dxccs' => $dxccs]);
     }
 
     public function edit(Callsign $callsign)
@@ -90,7 +98,8 @@ class CallsignController extends Controller
         //Validation
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
             'call' => 'string|min:3|max:20|unique:callsigns,call,' . $callsign->id,
-            'cert_holder_callsign' => 'string|min:3|max:20'
+            'cert_holder_callsign' => 'string|min:3|max:20',
+            'dxcc_id' => 'exists:dxccs,id'
 
         ], 
         [
@@ -98,7 +107,7 @@ class CallsignController extends Controller
             'call.min' => 'Callsign must be no less than 3 characters.',
             'call.max' => 'Callsign must be no more than 20 characters.',
             'call.unique' => 'Callsign is already registered.',
-        
+            'dxcc_id.exists' => 'Unknown DXCC.'
         ]);
 
         //handle validation failure
@@ -113,6 +122,7 @@ class CallsignController extends Controller
         $callsign->updated_at = \Carbon\Carbon::now();
         $callsign->call = strtoupper($attributes['call']);
         $callsign->cert_holder_callsign = strtoupper($attributes['cert_holder_callsign']);
+        $callsign->dxcc_id = $attributes['dxcc_id'];
         $callsign->save();
 
         //go to edit page

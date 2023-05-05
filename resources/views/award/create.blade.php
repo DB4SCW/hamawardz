@@ -39,6 +39,22 @@
                             <input name="min_threshold" class="form-control" type="number" min="0" step="1" value="{{ old('min_threshold') }}">
                         </div>
 
+                        <!-- DXCC modes handling -->
+                        <div class="form-group">
+                            <label for="dxcc_id">DXCC (only for DXCC modes):</label>
+                            <select class="form-control" name="dxcc_id">
+                                <option value="" selected>not set</option>
+                                @foreach($dxccs as $dxcc)
+                                <option value="{{ $dxcc->id }}" {{ old('dxcc_id') == null ? '' : ( $dxcc->id == old('dxcc_id') ? 'selected' : '' ) }}>{{ $dxcc->name . ' - ' . $dxcc->prefix }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dxcc_querystring">DXCC Querystrings (only for DXSS query-modes):</label>
+                            <input name="dxcc_querystring" class="form-control" type="text" value="{{ old('dxcc_querystring') }}">
+                        </div>
+
                         <!-- Callsign formatting -->
                         <div class="form-group">
                             <label for="callsign_top_percent">Position of callsign - Top %:</label>

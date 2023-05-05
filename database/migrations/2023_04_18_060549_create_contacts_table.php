@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('rst_r', 20);
             $table->string('autoimport_db_name')->nullable();
             $table->unsignedBigInteger('autoimport_foreign_id')->nullable();
-            $table->unsignedBigInteger('dxcc')->default(0);
+            $table->unsignedBigInteger('dxcc_id')->default(0);
 
             $table->unique(['callsign_id', 'qso_datetime', 'callsign', 'band_id']);
         });

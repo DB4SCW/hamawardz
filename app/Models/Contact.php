@@ -32,4 +32,9 @@ class Contact extends Model
     {
         return $this->belongsTo(Mode::class);
     }
+
+    public function dxcc() : HasOne
+    {
+        return $this->hasOne(Dxcc::class, "id", "dxcc_id");
+    }
 }

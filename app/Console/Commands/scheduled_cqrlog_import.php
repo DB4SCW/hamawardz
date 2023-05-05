@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Band;
 use App\Models\Callsign;
 use App\Models\Contact;
+use App\Models\Dxcc;
 use App\Models\Mode;
 use App\Models\Upload;
 use Illuminate\Console\Command;
@@ -85,7 +86,7 @@ class scheduled_cqrlog_import extends Command
                 $c->rst_r = $record->rst_r;
                 $c->autoimport_db_name = $database;
                 $c->autoimport_foreign_id = $record->id_cqrlog_main;
-                $c->dxcc = $record->adif;
+                $c->dxcc_id = Dxcc::where('dxcc', $record->adif)->first()->id;
                 
                 try {
                     //if saving fails because of indexes, omit qso

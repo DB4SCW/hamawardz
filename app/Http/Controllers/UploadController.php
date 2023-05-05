@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Band;
 use App\Models\Callsign;
 use App\Models\Contact;
+use App\Models\Dxcc;
 use App\Models\Mode;
 use App\Models\Upload;
 use Illuminate\Http\Request;
@@ -116,11 +117,12 @@ class UploadController extends Controller
             $contact->freq = $record['FREQ'];
             $contact->rst_s = $record['RST_SENT'];
             $contact->rst_r = $record['RST_RCVD'];
-            $contact->dxcc = array_key_exists('DXCC', $record) ? $record['DXCC'] : 0;
+            
 
-            //try to get Band and mode
+            //try to get Band, mode and DXCC
             $band = Band::where([['start', '<=', $contact->freq], ['end', '>=', $contact->freq]])->first();
             $mode = Mode::where('submode', $record['MODE'])->first();
+            $dxcc = Dxcc::where('dxcc', array_key_exists('DXCC', $record) ? $record['DXCC'] : 0)->first();
 
             //Check for errors
             if($band == null)
@@ -137,9 +139,15 @@ class UploadController extends Controller
                 continue;
             }
 
-            //insert band and mode to contact
+            if($dxcc == null)
+            {
+                $contact->dxcc_id = Dxcc::where('dxcc', 0)->first();
+            }
+
+            //insert band, mode and dxcc to contact
             $contact->band_id = $band->id;
             $contact->mode_id = $mode->id;
+            $contact->dxcc_id = $dxcc->id;
 
             //duplicate-check
             $alreadythere = Contact::where([['callsign_id', $contact->callsign_id], ['qso_datetime', $contact->qso_datetime], ['callsign', $contact->callsign], ['band_id', $contact->band_id]]);

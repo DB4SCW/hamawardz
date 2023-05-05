@@ -17,6 +17,14 @@
                               <label for="cert_holder_callsign">Callsign of responsible operator:</label>
                               <input name="cert_holder_callsign" class="form-control" type="text" value="{{ old('cert_holder_callsign') ?? $callsign->cert_holder_callsign }}">
                           </div>
+                          <div class="form-group">
+                            <label for="dxcc_id">DXCC of Callsign:</label>
+                            <select class="form-control" id="dxcc_id" name="dxcc_id">
+                                @foreach($dxccs as $dxcc)
+                                <option value="{{$dxcc->id}}" {{ $dxcc->id == $callsign->dxcc_id ? 'selected' : '' }}>{{ $dxcc->name . ' - ' . $dxcc->prefix }}</option>
+                                @endforeach
+                            </select>
+                          </div>
                           <div class="text-center">
                               <input type="submit" class="btn btn-primary" value="Add Callsign">
                           </div>

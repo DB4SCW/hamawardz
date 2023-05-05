@@ -23,12 +23,20 @@
                 <thead class="thead-light">
                     <tr>
                         <th>Callsign</th>
+                        <th>DXCC</th>
+                        <th>Continent</th>
+                        <th>ITU</th>
+                        <th>WAZ</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($event->callsigns->sortby('call') as $callsign)
                     <tr>
                         <td>{{ $callsign->call }}</td>
+                        <td>{{ $callsign->dxcc->name }}</td>
+                        <td>{{ $callsign->dxcc->cont }}</td>
+                        <td>{{ $callsign->dxcc->itu }}</td>
+                        <td>{{ $callsign->dxcc->waz }}</td>
                     </tr>
                     @endforeach      
                 </tbody>

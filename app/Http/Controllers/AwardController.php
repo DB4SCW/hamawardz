@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Award;
 use App\Models\Awardlog;
+use App\Models\Dxcc;
 use App\Models\Hamevent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -139,8 +140,11 @@ class AwardController extends Controller
             return $permissioncheck;
         }
         
+        //Load all DXCCs
+        $dxccs = Dxcc::orderBy('name', 'ASC')->get();
+
         //return to event view
-        return view('award.create', ['event' => $event]);
+        return view('award.create', ['event' => $event, 'dxccs' => $dxccs]);
     }
 
     public function destroy(Award $award)
@@ -211,6 +215,8 @@ class AwardController extends Controller
         $award->datetime_left_percent = $attributes['datetime_left_percent'];
         $award->datetime_font_size_px = $attributes['datetime_font_size_px'];
         $award->active = $attributes['active'];
+        $award->dxcc_id = $attributes['dxcc_id'];
+        $award->dxcc_querystring = $attributes['dxcc_querystring'];
 
         //Save award
         $award->save();
@@ -232,8 +238,11 @@ class AwardController extends Controller
         //load issued awards
         $award->load('issued_awards');
 
+        //Load all DXCCs
+        $dxccs = Dxcc::orderBy('name', 'ASC')->get();
+
         //return view
-        return view('award.edit', ['award' => $award]);
+        return view('award.edit', ['award' => $award, 'dxccs' => $dxccs]);
 
     }
 
@@ -275,6 +284,8 @@ class AwardController extends Controller
         $award->datetime_left_percent = $attributes['datetime_left_percent'];
         $award->datetime_font_size_px = $attributes['datetime_font_size_px'];
         $award->active = $attributes['active'];
+        $award->dxcc_id = $attributes['dxcc_id'];
+        $award->dxcc_querystring = $attributes['dxcc_querystring'];
 
         //save award
         $award->save();
@@ -307,6 +318,8 @@ class AwardController extends Controller
             'datetime_left_percent' => 'decimal:0,3|min:0|max:100',
             'datetime_font_size_px' => 'integer|min:1',
             'active' => 'integer|min:0|max:1',
+            'dxcc_id' => 'nullable|exists:dxccs,id',
+            'dxcc_querystring' => 'nullable|string|max:20'
         ], 
         [
             'title.string' => 'Title must be a text.',
@@ -352,7 +365,10 @@ class AwardController extends Controller
             'datetime_font_size_px.min' => 'Datetime font size must be at least 1',
             'active.integer' => 'Active must be yes or no.', 
             'active.min' => 'Active must be yes or no.', 
-            'active.max' => 'Active must be yes or no.'
+            'active.max' => 'Active must be yes or no.',
+            'dxcc_id.exists' => 'Invalid DXCC.',
+            'dxcc_querystring.string' => 'DXCC Querystring must be a text.',
+            'dxcc_querystring.max' => 'DXCC Querystring must be at most 20 characters long.'
         ]);
 
         //open return class

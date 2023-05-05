@@ -76,7 +76,7 @@
                   </tr>
               </thead>
               <tbody>
-                  @if($event->awards->count() < 1)
+                  @if($event->callsigns->count() < 1)
                     <td colspan="2" style="text-align: center; ">There are no participating callsigns for this event yet.<br>Feel free to add some!</td>
                   @else
                     @foreach($event->callsigns as $callsign)

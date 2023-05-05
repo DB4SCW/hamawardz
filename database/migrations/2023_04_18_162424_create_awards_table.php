@@ -33,6 +33,8 @@ return new class extends Migration
             $table->decimal('datetime_top_percent', 6,3)->default(87);
             $table->decimal('datetime_left_percent', 6,3)->default(3.5);
             $table->unsignedInteger('datetime_font_size_px')->default(20);
+            $table->unsignedInteger('dxcc_id')->nullable();
+            $table->string('dxcc_querystring')->nullable();
 
             $table->unique(['hamevent_id', 'slug']);
             $table->unique(['hamevent_id', 'title']);

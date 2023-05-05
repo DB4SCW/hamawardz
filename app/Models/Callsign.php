@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Callsign extends Model
 {
@@ -30,6 +31,11 @@ class Callsign extends Model
     public function uploadusers() : BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function dxcc() : BelongsTo
+    {
+        return $this->belongsTo(Dxcc::class);
     }
 
 }

@@ -26,6 +26,9 @@ Hamwards offers:
 
 ## Installation
 
+### Step 0: Get a domain, or a subdomain
+You'll need one for this piece of software. The internet provides plenty of options.
+
 ### Step 1: Install Apache, PHP and Composer
 This is just the list of commands to install all those prerequisites on a new current Ubuntu system. You'll find plenty of extensive tutorials on how to to that, this is just here to get you started asap.
 
@@ -42,7 +45,9 @@ sudo mv composer.phar /usr/local/bin/composer
 composer --version
 ```
 
-If you like to use MySQL instead of SQLITE as a backend, also install MySQL:
+If you like to use MySQL instead of SQLITE as a backend, also install MySQL.
+
+You really don't have to though, because for 99,5% of users, SQLITE should be just fine.
 
 ```bash
 sudo apt-get install mysql-server -y
@@ -112,6 +117,11 @@ DB_USERNAME=
 DB_PASSWORD=
 ```
 
+Afterwards, create the sqlite file:
+```bash
+sudo -u www-data touch /var/www/hamawards/database/database.sqlite
+```
+
 MySQL (set your MySQL login data. Use root or a user that can change the database schema. If the hamawards-database doesn't exist yet, create it first):
 ```
 DEFAULT_CONNECTION=mysql
@@ -131,10 +141,11 @@ Have a look at the rest of the env file and change other values according to you
 - APP_IMPRESSUM_URL (sets the impressum url in the footer, defaults to homepage if empty)
 - APP_DATA_PROTECTION_URL (sets the data protection declaration url in the footer, defaults to homepage if empty)
 
-Migrate the database and create the link for storage of award background images
+Migrate the database and create the link for storage of award background images. After that, restart apache for good measure.
 ```bash
 sudo -u www-data php artisan migrate
 sudo -u www-data php artisan storage:link
+sudo service apache2 restart
 ```
 
 ### Step 4: Secure your hamawards installation

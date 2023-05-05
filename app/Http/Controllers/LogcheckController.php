@@ -44,7 +44,7 @@ class LogcheckController extends Controller
     public function index(Hamevent $event)
     {
         //eager-load relations
-        $event->load('callsigns');
+        $event->load('callsigns.dxcc');
         
         //render view
         return view('logcheck.selectcall', ['event' => $event]);
