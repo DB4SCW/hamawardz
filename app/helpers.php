@@ -1,4 +1,5 @@
 <?php
+use App\Models\Autoimport;
 
 function getcallsignwithoutadditionalinfo(string $input) : string
 {
@@ -50,16 +51,16 @@ function swolf_getmaxmode() : int
     return 6;
 }
 
-function getAutoImportFieldContent(stdClass $conf, string $field, stdClass $record) : ?string
+function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $record) : ?string
 {
     //check null-field
     if($field == null)
     {
         return null;
     }
-    
+
     //load classes as arrays
-    $confarray = get_object_vars($conf);
+    $confarray = $conf->getAttributes();
     $recordarray = get_object_vars($record);
 
     //get field input

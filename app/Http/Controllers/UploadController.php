@@ -19,9 +19,9 @@ class UploadController extends Controller
         //load all callsigns the user may upload to
         if(auth()->user()->siteadmin)
         {
-            $callsigns = Callsign::orderBy('call', 'ASC')->get();
+            $callsigns = Callsign::where('active', 1)->orderBy('call', 'ASC')->get();
         }else{
-            $callsigns = auth()->user()->callsigns()->orderBy('call', 'ASC')->get();
+            $callsigns = auth()->user()->callsigns()->where('active', 1)->orderBy('call', 'ASC')->get();
         }
 
         return view('upload', ['callsigns' => $callsigns]);
@@ -52,7 +52,13 @@ class UploadController extends Controller
         $attributes = $validator->validated();
 
         //Load Callsign
-        $callsign = Callsign::where('id', $attributes['callsignid'])->first();
+        $callsign = Callsign::where('id', $attributes['callsignid'])->where('active', 1)->first();
+
+        //check invalid callsign
+        if($callsign == null)
+        {
+            return redirect()->back()->with('danger', 'Callsign is inactive.');
+        }
         
         //check if user is allowed to upload for this callsign
         $allowed_callsigns = auth()->user()->callsigns;

@@ -102,7 +102,7 @@
 
                     @if(auth()->user()->siteadmin)
                     <a class="nav-link navbar-link" href="/users">User-Admin</a>
-                    <a class="nav-link navbar-link" href="/autoimport">Autoimport-Admin</a>
+                    <a class="nav-link navbar-link" href="/autoimports">Autoimport-Admin</a>
                     @endif
 
                     <a class="nav-link navbar-link" href="/callsigns">Event-Callsigns</a>

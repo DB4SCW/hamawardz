@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
@@ -19,6 +20,15 @@ class SessionController extends Controller
             'username' => 'required',
             'password' => 'required'
         ]);
+
+        //check for non-locked candidates for login check
+        $candidate = User::where([['username', $attributes['username']], ['locked', 0]])->count();
+
+        //return error if no non-locked-users are available
+        if($candidate != 1)
+        {
+            return redirect()->route('loginpage')->with('danger', 'Login unsuccessfull.')->withInput();
+        }
 
         //Attempt login - return with error message if unsuccessful
         if (! auth()->attempt($attributes)) {

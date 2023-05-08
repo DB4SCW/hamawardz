@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('mode_id')->index();
             $table->string('rst_s', 20);
             $table->string('rst_r', 20);
-            $table->string('autoimport_db_name')->nullable();
+            $table->unsignedBigInteger('autoimport_id')->nullable()->index();
             $table->unsignedBigInteger('autoimport_foreign_id')->nullable();
             $table->unsignedBigInteger('dxcc_id')->default(0);
 

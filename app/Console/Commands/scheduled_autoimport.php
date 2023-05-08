@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Autoimport;
 use App\Models\Band;
 use App\Models\Callsign;
 use App\Models\Contact;
@@ -35,28 +36,25 @@ class scheduled_autoimport extends Command
     public function handle()
     {
         //get config from database
-        $autoimportconfig = DB::table('confautoimport')->get();
+        $autoimportconfig = Autoimport::where('active', 1)->get();
 
         //repeat for every import
         foreach ($autoimportconfig as $config) {
 
-            $callsign = strtoupper($config->callsign);
-            $database = $config->databasename;
-
             //load internal Callsign id
-            $call = Callsign::where('call', $callsign)->first();
+            $call = Callsign::where('id', $config->callsign_id)->where('active', 1)->first();
 
-            //skip if callsign not configured
+            //skip if callsign not configured or inactive
             if($call == null)
             {
                 continue;
             }
 
-            //get current max legacy id
-            $maxid = Contact::where('callsign_id', $call->id)->max('autoimport_foreign_id') ?? 0;
+            //get current max autoimport foreign id
+            $maxid = $config->contacts->max('autoimport_foreign_id') ?? 0;
 
             //get all records that need to be imported
-            $records_to_import = DB::table($database . '.' . $config->tablename)->where($config->table_id, '>', $maxid)->orderBy($config->table_id, 'ASC')->get();
+            $records_to_import = DB::table($config->databasename . '.' . $config->tablename)->where($config->table_id, '>', $maxid)->orderBy($config->table_id, 'ASC')->get();
 
             //go to next database, if nothing is ready to import
             if($records_to_import->count() < 1)
@@ -138,7 +136,7 @@ class scheduled_autoimport extends Command
                 $c->dxcc_id = $dxcc == null ? 0 : $dxcc->id;
                 
                 //set database and foreign id
-                $c->autoimport_db_name = $database;
+                $c->autoimport_id = $config->id;
                 $c->autoimport_foreign_id = $record->id_cqrlog_main;
                 
                 

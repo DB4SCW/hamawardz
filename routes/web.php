@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AutoimportController;
 use App\Http\Controllers\AwardController;
 use App\Http\Controllers\CallsignController;
 use App\Http\Controllers\ContactController;
@@ -112,8 +113,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/create', [UserController::class, 'create'])->name('createuser');
 
     //Autoimport
-    Route::get('/executeautoimport', [DashboardController::class, 'autoimport'])->name('autoimport');
-    
+    Route::get('/executeautoimport', [AutoimportController::class, 'trigger'])->name('autoimport');
+    Route::get('/autoimports', [AutoimportController::class, 'index'])->name('listautoimports');
+    Route::get('/autoimports/create', [AutoimportController::class, 'showcreate'])->name('showcreateautoimport');
+    Route::post('/autoimports/create', [AutoimportController::class, 'create'])->name('createautoimport');
+    Route::get('/autoimport/{autoimport:id}/edit', [AutoimportController::class, 'showedit'])->name('showeditautoimport');
+    Route::post('/autoimport/{autoimport:id}/edit', [AutoimportController::class, 'edit'])->name('editautoimport');
+    Route::get('/autoimport/{autoimport:id}/delete', [AutoimportController::class, 'destroy'])->name('deleteautoimport');
+    Route::get('/autoimport/{autoimport:id}/toggle', [AutoimportController::class, 'toggle'])->name('toggleautoimport');
+
 });
 
 //this is a must

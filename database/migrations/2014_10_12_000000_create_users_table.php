@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('siteadmin')->default(false);
             $table->boolean('cancreateevents')->default(false);
+            $table->boolean('locked')->default(false);
         });
 
         //create initial administration user

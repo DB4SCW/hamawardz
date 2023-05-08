@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('confautoimport', function (Blueprint $table) {
+        Schema::create('autoimports', function (Blueprint $table) {
             $table->id();
-            $table->string('callsign', 200);
+            $table->unsignedBigInteger('callsign_id')->unique();
             $table->string('databasename', 255);
             $table->string('tablename', 255);
             $table->string('table_id', 52)->default('id');
@@ -27,7 +27,8 @@ return new class extends Migration
             $table->string('rst_s', 52);
             $table->string('rst_r', 52);
             $table->string('dxcc', 52)->nullable();
-            
+            $table->boolean('active')->default(true);
+            $table->unique('databasename', 'tablename');
         });
     }
 

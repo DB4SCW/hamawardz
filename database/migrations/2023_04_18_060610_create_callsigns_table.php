@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('call', 20)->unique();
             $table->string('cert_holder_callsign', 20);
             $table->unsignedBigInteger('dxcc_id')->index()->default(0);
+            $table->boolean('active')->default(true);
         });
     }
 

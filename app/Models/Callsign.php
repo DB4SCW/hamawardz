@@ -38,4 +38,9 @@ class Callsign extends Model
         return $this->belongsTo(Dxcc::class);
     }
 
+    public function autoimport() : HasOne
+    {
+        return $this->hasOne(Autoimport::class, 'callsign_id', 'id');
+    }
+
 }

@@ -37,4 +37,9 @@ class Contact extends Model
     {
         return $this->hasOne(Dxcc::class, "id", "dxcc_id");
     }
+
+    public function autoimport() : HasOne
+    {
+        return $this->hasOne(Autoimport::class, 'id', 'autoimport_id');
+    }
 }

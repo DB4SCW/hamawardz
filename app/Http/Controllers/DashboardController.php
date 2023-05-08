@@ -16,13 +16,4 @@ class DashboardController extends Controller
         //Load view
         return view('dashboard', ['uploads' => $uploads]);
     }
-
-    public function autoimport()
-    {
-        //Trigger autoimport
-        \Illuminate\Support\Facades\Artisan::call('app:scheduled_cqrlog_import', []);
-
-        //return to view
-        return redirect()->route('participant_dashboard')->with('success', 'Autoimport successful.');
-    }
 }
