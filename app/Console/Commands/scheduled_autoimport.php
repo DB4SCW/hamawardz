@@ -13,21 +13,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use stdClass;
 
-class scheduled_cqrlog_import extends Command
+class scheduled_autoimport extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:scheduled_cqrlog_import';
+    protected $signature = 'app:scheduled_autoimport';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Import specified cqrlog data';
+    protected $description = 'Import specified autoimport data';
 
     /**
      * Execute the console command.
