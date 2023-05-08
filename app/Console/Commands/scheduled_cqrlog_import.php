@@ -11,6 +11,7 @@ use App\Models\Upload;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use stdClass;
 
 class scheduled_cqrlog_import extends Command
 {
@@ -55,7 +56,7 @@ class scheduled_cqrlog_import extends Command
             $maxid = Contact::where('callsign_id', $call->id)->max('autoimport_foreign_id') ?? 0;
 
             //get all records that need to be imported
-            $records_to_import = DB::table($database . '.' . $config->tablename)->where('id_cqrlog_main', '>', $maxid)->where('qsl_s', '!=', '')->orderBy('id_cqrlog_main', 'ASC')->get();
+            $records_to_import = DB::table($database . '.' . $config->tablename)->where($config->table_id, '>', $maxid)->orderBy($config->table_id, 'ASC')->get();
 
             //go to next database, if nothing is ready to import
             if($records_to_import->count() < 1)
@@ -72,21 +73,74 @@ class scheduled_cqrlog_import extends Command
 
             //create new internal contact record for each new qso
             foreach ($records_to_import as $record) {
+                
+                //create new contact
                 $c = new Contact();
+                
+                //set Callsign id
                 $c->callsign_id = $call->id;
+                
+                //set upload id
                 $c->upload_id = $upload->id;
-                $c->operator = $record->operator ?? $call->call;
-                $c->qso_datetime = $record->qsodate . ' ' . $record->time_on;
-                $c->raw_callsign = $record->callsign;
-                $c->callsign = getcallsignwithoutadditionalinfo($record->callsign);
-                $c->freq = $record->freq;
-                $c->band_id = Band::where('band', strtolower($record->band))->first()->id;
-                $c->mode_id = Mode::where('submode', $record->mode)->first()->id;
-                $c->rst_s = $record->rst_s;
-                $c->rst_r = $record->rst_r;
+
+                //get operator callsign from DB. If invalid, use callsign of eventcall
+                $c->operator = getAutoImportFieldContent($config, "operator", $record) ?? $call->call;
+                
+                //if Date or Time is null, abort this crecord
+                if(getAutoImportFieldContent($config, "qsodate", $record) == null || getAutoImportFieldContent($config, "qsotime", $record) == null )
+                {
+                    continue;
+                }
+
+                //Set datetime of QSO
+                $c->qso_datetime = getAutoImportFieldContent($config, "qsodate", $record) . ' ' . getAutoImportFieldContent($config, "qsotime", $record);
+                
+                //get raw callsign, abort if empty
+                $c->raw_callsign = getAutoImportFieldContent($config, "qsopartner_callsign", $record);
+
+                if($c->raw_callsign == null)
+                {
+                    continue;
+                }
+
+                //strip prefix and suffix from raw callsign
+                $c->callsign = getcallsignwithoutadditionalinfo($c->raw_callsign);
+                
+                //get frequency
+                $c->freq = getAutoImportFieldContent($config, "frequency", $record);
+                
+                //get band, abort if empty
+                $band = Band::where('band', strtolower(getAutoImportFieldContent($config, "band", $record) ?? ""))->first();
+
+                if($band == null) 
+                {
+                    continue;
+                }
+
+                $c->band_id = $band->id;
+
+                //get mode, abort if empty
+                $mode = Mode::where('submode', getAutoImportFieldContent($config, "mode", $record) ?? "")->first();
+
+                if($mode == null)
+                {
+                    continue;
+                }
+
+                $c->mode_id = $mode->id;
+                
+                //get RSTs
+                $c->rst_s = getAutoImportFieldContent($config, "rst_s", $record) ?? "";
+                $c->rst_r = getAutoImportFieldContent($config, "rst_r", $record) ?? "";
+                
+                //get DXCC, 0 if empty
+                $dxcc = Dxcc::where('dxcc', getAutoImportFieldContent($config, "dxcc", $record) ?? "0")->first();
+                $c->dxcc_id = $dxcc == null ? 0 : $dxcc->id;
+                
+                //set database and foreign id
                 $c->autoimport_db_name = $database;
                 $c->autoimport_foreign_id = $record->id_cqrlog_main;
-                $c->dxcc_id = Dxcc::where('dxcc', $record->adif)->first()->id;
+                
                 
                 try {
                     //if saving fails because of indexes, omit qso

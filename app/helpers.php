@@ -49,3 +49,36 @@ function swolf_getmaxmode() : int
 {
     return 6;
 }
+
+function getAutoImportFieldContent(stdClass $conf, string $field, stdClass $record) : ?string
+{
+    //check null-field
+    if($field == null)
+    {
+        return null;
+    }
+    
+    //load classes as arrays
+    $confarray = get_object_vars($conf);
+    $recordarray = get_object_vars($record);
+
+    //get field input
+    $fieldinput = $confarray[$field];
+
+    //check for fixed input and return that
+    if(preg_match("/^'.{1,50}'$/", $fieldinput))
+    {
+        $x = preg_match('/\'([^\']*)\'/', $fieldinput, $output_array);
+        return $output_array[1];
+    }
+
+    //check if database field exists
+    if(!array_key_exists($fieldinput, $recordarray))
+    {
+        return null;
+    }
+
+    //return database value
+    return $recordarray[$fieldinput];
+
+}

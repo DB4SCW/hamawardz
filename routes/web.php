@@ -112,7 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/create', [UserController::class, 'create'])->name('createuser');
 
     //Autoimport
-    Route::get('/autoimport', [DashboardController::class, 'autoimport'])->name('autoimport');
+    Route::get('/executeautoimport', [DashboardController::class, 'autoimport'])->name('autoimport');
     
 });
 

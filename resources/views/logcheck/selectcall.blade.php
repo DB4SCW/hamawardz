@@ -8,7 +8,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="callsign">Your callsign:</label>
-                    <input name="callsign" class="form-control" type="text" value="{{ old('callsign') }}">
+                    <input name="callsign" class="form-control" type="text" placeholder="Enter your personal callsign here..." value="{{ old('callsign') }}">
                 </div>
                 <div class="text-center">
                     <input type="submit" class="btn btn-primary" value="Check">
@@ -18,7 +18,7 @@
             <h3 class="text-center mb-4" style="margin-top: 50px;">Event description:</h3>
             <p>{!! nl2br(e($event->description)) !!}</p>
             @endif
-            <h3 class="text-center mb-4" style="margin-top: 50px;">participating callsigns:</h3>
+            <h3 class="text-center mb-4" style="margin-top: 50px;">Participating callsigns:</h3>
             <table class="table table-bordered table-hover table-dark" style="margin-bottom: 60px;">
                 <thead class="thead-light">
                     <tr>

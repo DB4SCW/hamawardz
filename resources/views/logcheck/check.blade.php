@@ -10,8 +10,8 @@
             <br>
 
             <div class="form-group">
-                <label for="chosenname">Enter your name to be printed on award:</label>
-                <input id="input" name="chosenname" class="form-control" type="text" oninput="copyInputValue()" value="{{ old('chosenname') }}">
+                <label for="chosenname" style="font-size: 20px;">Enter your name to be printed on award:</label>
+                <input id="input" name="chosenname" class="form-control" type="text" placeholder="Enter your chosen name here..." oninput="copyInputValue()" value="{{ old('chosenname') }}">
             </div>
 
             <table class="table table-bordered table-hover table-dark">

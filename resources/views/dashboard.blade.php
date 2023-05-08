@@ -9,7 +9,7 @@
             </div>
             @if(auth()->user()->id == 1)
             <div class="col-md-12 text-center" style="margin-bottom: 10px;">
-              <a href="/autoimport"><button class="btn btn-danger">Trigger Auto-Import</button></a>
+              <a href="/executeautoimport"><button class="btn btn-danger">Trigger Auto-Import</button></a>
             </div>
             @endif
             <table class="table table-bordered table-hover table-dark">

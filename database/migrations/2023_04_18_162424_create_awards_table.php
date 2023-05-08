@@ -24,14 +24,14 @@ return new class extends Migration
             $table->string('background_image', 200)->default('Blank.jpg')->nullable(false);
             $table->integer('mode');
             $table->unsignedInteger('min_threshold')->nullable();
-            $table->decimal('callsign_top_percent', 6,3)->default(30);
+            $table->decimal('callsign_top_percent', 6,3)->default(41.5);
             $table->boolean('callsign_bold')->default(true);
             $table->unsignedInteger('callsign_font_size_px')->default(100);
-            $table->decimal('chosen_name_top_percent', 6,3)->default(60);
+            $table->decimal('chosen_name_top_percent', 6,3)->default(57);
             $table->boolean('chosen_name_bold')->default(false);
             $table->unsignedInteger('chosen_name_font_size_px')->default(50);
-            $table->decimal('datetime_top_percent', 6,3)->default(87);
-            $table->decimal('datetime_left_percent', 6,3)->default(3.5);
+            $table->decimal('datetime_top_percent', 6,3)->default(70);
+            $table->decimal('datetime_left_percent', 6,3)->default(13);
             $table->unsignedInteger('datetime_font_size_px')->default(20);
             $table->unsignedInteger('dxcc_id')->nullable();
             $table->string('dxcc_querystring')->nullable();
