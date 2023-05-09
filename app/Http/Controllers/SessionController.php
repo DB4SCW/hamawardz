@@ -27,19 +27,19 @@ class SessionController extends Controller
         //return error if no non-locked-users are available
         if($candidate != 1)
         {
-            return redirect()->route('loginpage')->with('danger', 'Login unsuccessfull.')->withInput();
+            return redirect()->route('loginpage')->with('danger', 'Login unsuccessful.')->withInput();
         }
 
         //Attempt login - return with error message if unsuccessful
         if (! auth()->attempt($attributes)) {
-            return redirect()->route('loginpage')->with('danger', 'Login unsuccessfull.')->withInput();
+            return redirect()->route('loginpage')->with('danger', 'Login unsuccessful.')->withInput();
         }
 
         //regenerate session
         session()->regenerate();
 
         //redirect to homepage
-        return redirect()->route('home')->with('success', 'Login successfull. Welcome back!');
+        return redirect()->route('home')->with('success', 'Login successful. Welcome back!');
     }
 
     public function logout()
@@ -51,6 +51,6 @@ class SessionController extends Controller
         }
 
         //return to home page
-        return redirect()->route('home')->with('success', 'Logout successfull. Hope to see you again soon.');
+        return redirect()->route('home')->with('success', 'Logout successful. Hope to see you again soon.');
     }
 }
