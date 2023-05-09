@@ -23,6 +23,7 @@ Hamwards offers:
 - Event callsigns participating in multiple Events at the same time
 - Multiple users permitted to upload for event callsigns
 - Multiple rulesets for different awards
+- Autoimport for QSOs, if the logbook database is accessible on the same database connection
 
 ## Installation
 
