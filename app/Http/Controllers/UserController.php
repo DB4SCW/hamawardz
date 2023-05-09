@@ -41,6 +41,16 @@ class UserController extends Controller
             {
                 return redirect()->route('listusers')->with('danger', 'You cannot lock the last administration user.');
             }
+
+            //Logout user if current user is the one being locked
+            if(auth()->user()->id == $user->id)
+            {
+                //Logout
+                auth()->logout();
+                
+                //return to home page
+                return redirect()->route('home')->with('success', 'User was logged out due to being locked. Goodbye.');
+            }
         }
         
         //toggle locked flag
