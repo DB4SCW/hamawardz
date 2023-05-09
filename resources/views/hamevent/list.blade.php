@@ -13,9 +13,10 @@
                       <th>Created by</th>
                       <th>Start</th>
                       <th>End</th>
-                      <th>callsigns</th>
-                      <th>managers</th>
-                      <th>awards</th>
+                      <th>Hide?</th>
+                      <th>Callsigns</th>
+                      <th>Managers</th>
+                      <th>Awards</th>
                       <th>Action</th>
                   </tr>
               </thead>
@@ -28,6 +29,7 @@
                       <td style="vertical-align: middle;">{{ $event->creator->username }}</td>
                       <td style="vertical-align: middle;">{{ $event->start->format('Y-m-d @ H:i') . ' UTC' }}</td>
                       <td style="vertical-align: middle;">{{ $event->end->format('Y-m-d @ H:i') . ' UTC' }}</td>
+                      <td style="vertical-align: middle;">{{ $event->hide ? 'yes' : 'no' }}</td>
                       <td style="vertical-align: middle;">{{ $event->callsigns->count() }}</td>
                       <td style="vertical-align: middle;">{{ $event->eventmanagers->count() }}</td>
                       <td style="vertical-align: middle;">{{ $event->awards->count() }}</td>

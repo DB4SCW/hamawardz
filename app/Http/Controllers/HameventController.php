@@ -102,6 +102,7 @@ class HameventController extends Controller
         $event->start = \Carbon\Carbon::parse($attributes['start']);
         $event->end = \Carbon\Carbon::parse($attributes['end']);
         $event->updated_at = \Carbon\Carbon::now();
+        $event->hide = false;
         $event->save();
 
         //Add creator to event managers
@@ -142,7 +143,8 @@ class HameventController extends Controller
             'slug' => 'string|min:3|max:200|unique:hamevents,slug,' . $event->id,
             'description' => 'nullable|string',
             'start' => 'date', 
-            'end' => 'date'
+            'end' => 'date',
+            'hide' => 'integer|min:0|max:1'
         ], 
         [
             'title.unique' => 'This event title does already exist.',
@@ -155,7 +157,10 @@ class HameventController extends Controller
             'slug.string' => 'The event slug must be a valid text.',
             'start.date' => 'The event start must be a valid datetime.',
             'end.date' => 'The event start must be a valid datetime.',
-            'description.string' => 'Description has to be a string'
+            'description.string' => 'Description has to be a string',
+            'hide.integer' => 'Invalid hide flag.',
+            'hide.min' => 'Invalid hide flag.',
+            'hide.max' => 'Invalid hide flag.',
         ]);
 
         //handle validation failure
@@ -173,6 +178,7 @@ class HameventController extends Controller
         $event->start = \Carbon\Carbon::parse($attributes['start']);
         $event->end = \Carbon\Carbon::parse($attributes['end']);
         $event->updated_at = \Carbon\Carbon::now();
+        $event->hide = $attributes['hide'];
         $event->save();
 
         //return to list

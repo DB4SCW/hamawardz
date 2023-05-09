@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTimeTz('start');
             $table->dateTimeTz('end');
             $table->boolean('homepage_default')->default(false);
+            $table->boolean('hide')->default(false);
             
         });
     }

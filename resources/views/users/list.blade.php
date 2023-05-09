@@ -9,6 +9,7 @@
               <thead class="thead-light">
                   <tr>
                       <th>Username</th>
+                      <th>Locked?</th>
                       <th>Site-Admin</th>
                       <th>Can create events</th>
                       <th>Action</th>
@@ -18,9 +19,12 @@
                   @foreach($users as $user)
                   <tr>
                       <td style="vertical-align: middle;">{{ $user->username }}</td>
+                      <td style="vertical-align: middle;">{{ $user->locked ? 'yes' : 'no' }}</td>
                       <td style="vertical-align: middle;">{{ $user->siteadmin ? 'yes' : 'no' }}</td>
                       <td style="vertical-align: middle;">{{ $user->cancreateevents ? 'yes' : 'no' }}</td>
-                      <td style="vertical-align: middle;">TODO</td>
+                      <td style="vertical-align: middle;">
+                        <a href="/users/{{ $user->id }}/toggle"><button class="btn {{ $user->locked ? 'btn-primary' : 'btn-danger' }}">Toggle Lock</button></a>
+                      </td>
                   </tr>
                   @endforeach
               </tbody>

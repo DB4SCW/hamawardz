@@ -111,6 +111,7 @@ Route::middleware('auth')->group(function () {
     //Users
     Route::get('/users', [UserController::class, 'index'])->name('listusers');
     Route::post('/users/create', [UserController::class, 'create'])->name('createuser');
+    Route::get('/users/{user:id}/toggle', [UserController::class, 'toggle'])->name('toggleusers');
 
     //Autoimport
     Route::get('/executeautoimport', [AutoimportController::class, 'trigger'])->name('autoimport');

@@ -28,6 +28,13 @@
                             <label for="end">End:</label>
                             <input name="end" class="form-control" type="datetime-local" value="{{ old('end') ?? $event->end->format('Y-m-d\TH:i') }}">
                         </div>
+                        <div class="form-group">
+                            <label for="hide">Hide?</label>
+                            <select class="form-control" name="hide">
+                                <option value="0" {{ 0 == (old('hide') ?? $event->hide) ? 'selected' : '' }}>no</option>
+                                <option value="1" {{ 1 == (old('hide') ?? $event->hide) ? 'selected' : '' }}>yes</option>
+                            </select>
+                        </div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Edit">
                         </div>

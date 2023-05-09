@@ -23,6 +23,23 @@ class UserController extends Controller
         return view('users.list', ['users' => $users]);
     }
 
+    public function toggle(User $user)
+    {
+        //check permissions
+        $check = $this->checkpermissions();
+        if($check != null)
+        {
+            return $check;
+        }
+
+        //toggle locked flag
+        $user->locked = !$user->locked;
+        $user->save();
+
+        //back to list view
+        return redirect()->route('listusers')->with('success', 'Userlock successfully toggled.');
+    }
+
     public function create()
     {
         //check permissions
@@ -71,6 +88,7 @@ class UserController extends Controller
         $user->password = bcrypt($attributes['password']);
         $user->siteadmin = $attributes['siteadmin'];
         $user->cancreateevents = $attributes['cancreateevents'];
+        $user->locked = false;
         $user->save();
 
         //back to list view

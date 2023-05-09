@@ -110,8 +110,8 @@ class AutoimportController extends Controller
             return $permissioncheck;
         }
 
-        //Load active callsigns
-        $callsigns = Callsign::where('active', 1)->orderBy('call', 'ASC')->get();
+        //Load active callsigns which are still valid for a new autoimport config (prevent duplicates)
+        $callsigns = Callsign::where('active', 1)->whereNotIn('id', Autoimport::all()->pluck('callsign_id'))->orderBy('call', 'ASC')->get();
 
         //Load view
         return view('autoimport.create', ['callsigns' => $callsigns]);
