@@ -32,6 +32,17 @@ class UserController extends Controller
             return $check;
         }
 
+        //prevent locking of the last admin user
+        if(!$user->locked)
+        {
+            $other_admins = User::whereNotIn('id', [$user->id])->where('siteadmin', true)->count();
+
+            if($other_admins < 1)
+            {
+                return redirect()->route('listusers')->with('danger', 'You cannot lock the last administration user.');
+            }
+        }
+        
         //toggle locked flag
         $user->locked = !$user->locked;
         $user->save();
