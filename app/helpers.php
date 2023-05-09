@@ -4,7 +4,7 @@ use App\Models\Autoimport;
 function getcallsignwithoutadditionalinfo(string $input) : string
 {
     $ergebnis = strtoupper($input);
-    $ergebnis = preg_replace("/^[A-Z, 0-9]{1,2}\//", "", $ergebnis); //delete prefix
+    $ergebnis = preg_replace("/^[A-Z, 0-9]{1,3}\//", "", $ergebnis); //delete prefix
     $ergebnis = preg_replace("/\/\w{0,}$/", "", $ergebnis); //delete suffix
     
     //return pure callsign
