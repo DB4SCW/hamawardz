@@ -6,13 +6,36 @@ use App\Models\Callsign;
 use App\Models\Dxcc;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CallsignController extends Controller
 {
     public function index()
     {
-        //Load all callsigns
-        $callsigns = Callsign::orderBy('call', 'ASC')->with('contacts', 'uploadusers')->get();
+        //Authorisation
+        if(auth()->user()->events_to_manage->count() < 1)
+        {
+            if(!auth()->user()->siteadmin)
+            {
+                return redirect()->back()->with('danger', 'You do not have event manager permissions on any event.');
+            }
+        }
+        
+        //load all or 
+        if(auth()->user()->siteadmin)
+        {
+            //Load all callsigns
+            $callsigns = Callsign::orderBy('call', 'ASC')->get();
+        }else
+        {
+            //Load all callsign ids for callsigns this user manages
+            $callsign_ids = DB::table('callsign_hamevent')->whereIn('hamevent_id', auth()->user()->events_to_manage->pluck('id')->toArray())->get()->pluck('callsign_id')->toArray();
+            //Load all callsigns for events with 
+            $callsigns = Callsign::whereIn('id', $callsign_ids)->orWhere('creator_id', auth()->user()->id)->orderBy('call', 'ASC')->get();
+        }
+
+        //load relationships
+        $callsigns->load('contacts', 'uploadusers');
 
         //Load all DXCCs
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
@@ -25,12 +48,9 @@ class CallsignController extends Controller
     public function permissioncheck(Callsign $callsign)
     {
         //Permission check
-        if(!auth()->user()->siteadmin)
+        if(!auth()->user()->is_manager_of_callsign($callsign))
         {
-            if(auth()->user()->id == $callsign->creator->id)
-            {
-                return redirect()->back()->with('danger', 'You are not the creator of the callsign or the sites administrator.');
-            }
+            return redirect()->back()->with('danger', 'You are not the manager of the callsign or the sites administrator.');
         }
 
         return null;
@@ -38,6 +58,16 @@ class CallsignController extends Controller
 
     public function create()
     {
+        
+        //Authorisation
+        if(auth()->user()->events_to_manage->count < 1)
+        {
+            if(!auth()->user()->siteadmin)
+            {
+                return redirect()->back()->with('danger', 'You do not have event manager permissions on any event.');
+            }
+        }
+        
         //Validation
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
             'call' => 'string|min:3|max:20|unique:callsigns,call',
@@ -81,6 +111,14 @@ class CallsignController extends Controller
 
     public function show(Callsign $callsign)
     {
+        
+        //Permission check
+        $check = $this->permissioncheck($callsign);
+        if($check != null)
+        {
+            return $check;
+        }
+
         $callsign->load('uploadusers');
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
         return view('callsign.edit', ['callsign' => $callsign, 'dxccs' => $dxccs]);

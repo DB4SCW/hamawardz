@@ -23,7 +23,7 @@
                       <td style="vertical-align: middle; ">{{ $callsign->cert_holder_callsign }}</td>
                       <td style="vertical-align: middle; ">{{ $callsign->contacts->count() }}</td>
                       <td>
-                        @if(auth()->user()->siteadmin || auth()->user()->id == $callsign->creator_id)
+                        @if(auth()->user()->is_manager_of_callsign($callsign))
                             <a href="/callsign/{{ $callsign->call }}"><button class="btn btn-warning" style="margin: 5px;">Edit</button></a>
                             @if($callsign->contacts->count() <= 0)
                                 <a href="/callsign/{{ $callsign->call }}/delete"><button class="btn btn-danger" style="margin: 5px;">DELETE</button></a>
