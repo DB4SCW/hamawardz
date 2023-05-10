@@ -69,24 +69,16 @@ class User extends Authenticatable
         }
         
         //get all events
-        $events = $this->events_to_manage;
-        $callsigns = new Collection();
+        $events = $this->events_to_manage()->with('callsigns')->get();
 
         //load all distinct callsigns
         foreach ($events as $event) {
-            foreach ($event->callsigns as $callsignx) {
-                if(!$callsigns->contains($callsignx)){
-                    $callsigns->add($callsignx);
-                }
+            if($event->callsigns->contains($callsign))
+            {
+                return true;
             }
         }
 
-        //return true if callsign is in any managed events
-        if($callsigns->contains($callsign))
-        {
-            return true;
-        }
-        
         //return false if not
         return false;
     }
