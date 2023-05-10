@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="dxcc_querystring">DXCC Querystrings (only for DXSS query-modes):</label>
+                            <label for="dxcc_querystring">Querystring (only for Continent or Zone query-modes):</label>
                             <input name="dxcc_querystring" class="form-control" type="text" value="{{ old('dxcc_querystring') }}">
                         </div>
 

@@ -120,6 +120,9 @@ class HameventController extends Controller
         {
             return $permissioncheck;
         }
+
+        //load relations
+        $event->load('callsigns', 'awards', 'eventmanagers');
         
         //return view
         return view('hamevent.edit', ['event' => $event]);

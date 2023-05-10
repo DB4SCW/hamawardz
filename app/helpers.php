@@ -34,13 +34,9 @@ function swolf_getawardmodetext(int $mode, $threshold = null) : string
         case 6:
             return "Each callsign counts 1 on each band and each mainmode (CW, VOICE, DIGITAL). (min: " . ($threshold ?? 0) . ")";
         case 7:
-            return "Each callsign counts 1 on each band and each mainmode (CW, VOICE, DIGITAL). (min: " . ($threshold ?? 0) . ")";
+            return "Each callsign of the chosen dxcc counts 1. (min: " . ($threshold ?? 0) . ")";
         case 8:
-            return "Each callsign counts 1 on each band and each mainmode (CW, VOICE, DIGITAL). (min: " . ($threshold ?? 0) . ")";
-        case 9:
-            return "Each callsign counts 1 on each band and each mainmode (CW, VOICE, DIGITAL). (min: " . ($threshold ?? 0) . ")";
-        case 10:
-            return "Each callsign counts 1 on each band and each mainmode (CW, VOICE, DIGITAL). (min: " . ($threshold ?? 0) . ")";
+            return "Each callsign of the chosen continent counts 1. (min: " . ($threshold ?? 0) . ")";
         default:
             return "error";
     }
@@ -48,7 +44,7 @@ function swolf_getawardmodetext(int $mode, $threshold = null) : string
 
 function swolf_getmaxmode() : int
 {
-    return 6;
+    return 8;
 }
 
 function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $record) : ?string

@@ -57,6 +57,10 @@ class Award extends Model
                 return $this->eligible_mode_5($callsign);
             case 6:
                 return $this->eligible_mode_6($callsign);
+            case 7:
+                return $this->eligible_mode_7($callsign);
+            case 8:
+                return $this->eligible_mode_8($callsign);
             default:
                 return false;
         }
@@ -81,6 +85,10 @@ class Award extends Model
                 return $this->aggregate_count_mode_5($callsign);
             case 6:
                 return $this->aggregate_count_mode_6($callsign);
+            case 7:
+                return $this->aggregate_count_mode_7($callsign);
+            case 8:
+                return $this->aggregate_count_mode_8($callsign);
             default:
                 return 0;
         }
@@ -176,6 +184,26 @@ class Award extends Model
         ->count();
     }
 
+    public function aggregate_count_mode_7(string $callsign) : int
+    {
+        return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+        ->whereIn('callsign_id', $this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray())
+        ->groupBy('callsign_id')
+        ->get()
+        ->count();
+    }
+
+    public function aggregate_count_mode_8(string $callsign) : int
+    {
+        return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+        ->whereIn('callsign_id', $this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray())
+        ->groupBy('callsign_id')
+        ->get()
+        ->count();
+    }
+
     public function eligible_mode_0(string $callsign) : bool
     {
         if($this->min_threshold == null)
@@ -244,6 +272,26 @@ class Award extends Model
         }
 
         return $this->aggregate_count_mode_6($callsign) >= $this->min_threshold;
+    }
+
+    public function eligible_mode_7(string $callsign) : bool
+    {
+        if($this->min_threshold == null)
+        {
+            return false;
+        }
+
+        return $this->aggregate_count_mode_7($callsign) >= $this->min_threshold;
+    }
+
+    public function eligible_mode_8(string $callsign) : bool
+    {
+        if($this->min_threshold == null)
+        {
+            return false;
+        }
+
+        return $this->aggregate_count_mode_8($callsign) >= $this->min_threshold;
     }
 
 

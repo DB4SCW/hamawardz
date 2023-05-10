@@ -164,6 +164,13 @@ class AwardController extends Controller
 
         //save event
         $event = $award->event;
+        
+        //delete awardbackground
+        if($award->background_image != 'Blank.jpg'){
+            if(\Illuminate\Support\Facades\File::exists(str_replace('public/', 'storage/', $award->background_image))){
+                \Illuminate\Support\Facades\File::delete(str_replace('public/', 'storage/', $award->background_image));
+            }
+        }
 
         //delete award
         $award->delete();

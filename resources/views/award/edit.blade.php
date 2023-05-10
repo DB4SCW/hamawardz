@@ -5,7 +5,7 @@
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <h1 class="text-center mb-4">Edit award:</h1>
+                    <h1 class="text-center mb-4">Edit award for<br><a href="/event/{{ $award->event->slug }}" style="color: white;">{{ $award->event->title }}</a>:</h1>
                     <h4 class="text-center mb-4">{{ $award->title }}</h4>
                     <form action="/awards/{{ $award->slug }}/edit" method="post">
                         @csrf
@@ -51,8 +51,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="dxcc_querystring">DXCC Querystrings (only for DXCC query-modes):</label>
-                            <input name="dxcc_querystring" class="form-control" type="text" value="{{ old('dxcc_querystring') }}">
+                            <label for="dxcc_querystring">Querystring (only for Continent or Zone query-modes):</label>
+                            <input name="dxcc_querystring" class="form-control" type="text" value="{{ old('dxcc_querystring') ?? $award->dxcc_querystring }}">
                         </div>
 
                         <!-- Callsign formatting -->

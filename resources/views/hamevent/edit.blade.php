@@ -122,7 +122,7 @@
                   @if($event->awards->count() < 1)
                     <td colspan="2" style="text-align: center; ">There are no registered awards for this event yet.<br>Feel free to create some!</td>
                   @else
-                    @foreach($event->awards as $award)
+                    @foreach($event->awards->sortBy('ranking') as $award)
                     <tr>
                         <td style="vertical-align: middle;">{{ $award->title }}</td>
                         <td style="vertical-align: middle; max-width: 320px;">{{ $award->mode_text() }}</td>
