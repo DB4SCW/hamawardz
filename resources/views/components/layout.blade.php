@@ -111,6 +111,7 @@
                     @if(auth()->user()->events_to_manage->count() > 0 || auth()->user()->siteadmin)
                     <a class="nav-link navbar-link" href="/callsigns">Event-Callsigns</a>
                     @endif
+                    
                     <a class="nav-link navbar-link" href="/profile">{{ auth()->user()->username }} Profile</a>
                     <a class="nav-link navbar-link" href="/dashboard">Log-Upload</a>
                     <a class="nav-link navbar-link" href="/logout">Logout</a>

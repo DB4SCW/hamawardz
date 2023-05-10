@@ -111,7 +111,9 @@ Route::middleware('auth')->group(function () {
     //Users
     Route::get('/users', [UserController::class, 'index'])->name('listusers');
     Route::post('/users/create', [UserController::class, 'create'])->name('createuser');
-    Route::get('/users/{user:id}/toggle', [UserController::class, 'toggle'])->name('toggleusers');
+    Route::get('/user/{user:id}/toggle', [UserController::class, 'toggle'])->name('toggleusers');
+    Route::get('/user/{user:id}', [UserController::class, 'showedit'])->name('showedituser');
+    Route::post('/user/{user:id}', [UserController::class, 'edit'])->name('edituser');
 
     //Autoimport
     Route::get('/executeautoimport', [AutoimportController::class, 'trigger'])->name('autoimport');

@@ -23,7 +23,8 @@
                       <td style="vertical-align: middle;">{{ $user->siteadmin ? 'yes' : 'no' }}</td>
                       <td style="vertical-align: middle;">{{ $user->cancreateevents ? 'yes' : 'no' }}</td>
                       <td style="vertical-align: middle;">
-                        <a href="/users/{{ $user->id }}/toggle"><button class="btn {{ $user->locked ? 'btn-primary' : 'btn-danger' }}">Toggle Lock</button></a>
+                        <a href="/user/{{ $user->id }}"><button class="btn btn-warning">Edit</button></a>
+                        <a href="/user/{{ $user->id }}/toggle"><button class="btn {{ $user->locked ? 'btn-primary' : 'btn-danger' }}">Toggle Lock</button></a>
                       </td>
                   </tr>
                   @endforeach
