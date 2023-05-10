@@ -11,7 +11,7 @@ class LogcheckController extends Controller
 
     public function home()
     {
-        $events = Hamevent::where('hide', 0)->get();
+        $events = Hamevent::where('hide', 0)->orderBy('title', 'ASC')->get();
 
         return view('logcheck.home', ['events' => $events]);
     }
