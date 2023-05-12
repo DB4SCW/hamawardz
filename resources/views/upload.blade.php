@@ -21,6 +21,13 @@
                             <input name="operator" class="form-control" type="text" value="{{ old('operator') }}">
                         </div>
                         <div class="form-group">
+                            <label for="ignoreduplicates">Ignore duplicate error messages?</label>
+                            <select class="form-control" name="ignoreduplicates">
+                                <option value="0" selected>no</option>
+                                <option value="1">yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="file">ADIF File:</label>
                             <input type="file" class="form-control" id="file" name="file">
                         </div>

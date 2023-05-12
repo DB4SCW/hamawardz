@@ -33,14 +33,18 @@ class UploadController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
             'callsignid' => 'exists:callsigns,id',
             'operator' => 'string|min:3|max:20',
-            'file' => 'required'
+            'file' => 'required', 
+            'ignoreduplicates' => 'integer|min:0|max:1'
         ], 
         [
             'callsignid.exists' => 'This callsign does not exist. Sorry.',
             'operator.string' => 'Operator must be a text.',
             'operator.min' => 'Operator must be at least 3 characters long.',
             'operator.max' => 'Operator must be at most 20 characters long.',
-            'file.required' => 'No file provided.'
+            'file.required' => 'No file provided.',
+            'ignoreduplicates.string' => 'Invalid flag to hide duplicate error messages.',
+            'ignoreduplicates.min' => 'Invalid flag to hide duplicate error messages.',
+            'ignoreduplicates.max' => 'Invalid flag to hide duplicate error messages.',
         ]);
 
         //handle validation failure
@@ -50,6 +54,9 @@ class UploadController extends Controller
 
         //get validated attributes
         $attributes = $validator->validated();
+
+        //load ignore duplicate flag
+        $ignore_duplicates = $attributes['ignoreduplicates'] == 1 ? true : false;
 
         //Load Callsign
         $callsign = Callsign::where('id', $attributes['callsignid'])->where('active', 1)->first();
@@ -160,7 +167,11 @@ class UploadController extends Controller
 
             if($alreadythere->count() > 0)
             {
-                array_push($errors, 'Record ' . $i+1 . ', Callsign ' . $contact->raw_callsign . ' on ' . $contact->qso_datetime->format('Y-m-d @ H:i') . ' UTC: QSO already exists in the database. Skipping.');
+                if(!$ignore_duplicates)
+                {
+                    array_push($errors, 'Record ' . $i+1 . ', Callsign ' . $contact->raw_callsign . ' on ' . $contact->qso_datetime->format('Y-m-d @ H:i') . ' UTC: QSO already exists in the database. Skipping.');
+                }
+                
                 $i++;
                 continue;
             }
