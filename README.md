@@ -75,9 +75,9 @@ In the file, create the virtual host. Of course, customize directories, Domains 
 <VirtualHost *:80>
     ServerAdmin admin@example.com
     ServerName mydomain.com
-    DocumentRoot "/var/www/laravel/public"
+    DocumentRoot "/var/www/hamawards/public"
 
-    <Directory /var/www/laravel>
+    <Directory /var/www/hamawards>
     Options Indexes MultiViews FollowSymLinks
     AllowOverride All
     Order allow,deny
