@@ -141,7 +141,7 @@
         </div>
 
         <!-- Export all QSOs in event if admin-->
-        @if(auth()->user()->siteadmin || auth()->user()->id == $event->creator->id || in_array(auth()->user()->id, $event->eventmanagers->pluck('id')))
+        @if(auth()->user()->siteadmin || auth()->user()->id == $event->creator->id || in_array(auth()->user()->id, $event->eventmanagers->pluck('id')->toArray()))
             <div class="container mt-5" style="max-width: 800px; margin-bottom: 60px;">
                 <h1 class="text-center mb-4">Export contacts:</h1>
                 <div class="row justify-content-center">

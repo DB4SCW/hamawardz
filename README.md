@@ -20,12 +20,19 @@ Hamawards is tested on SQLITE (which is plenty for most users and allows hamawar
 
 Hamwards offers:
 
-- Checking of your eligibility for multiple awards
-- Downloading of customizable awards as PDF
-- Event callsigns participating in multiple Events at the same time
-- Multiple users permitted to upload for event callsigns
-- Multiple rulesets for different awards
-- Autoimport for QSOs, if the logbook database is accessible on the same database connection
+- Checking of your eligibility for multiple awards in one go without logging in or having to create a account
+- Downloading of customizable (landscape) awards as PDF
+- Event callsigns participating in multiple events at the same time
+- Multiple users permitted to upload for 1 event callsigns
+- Ability to have multiple event manager accounts for 1 event
+- Multiple rulesets for different awards in 1 event
+- Fully configurable autoimport for QSOs from other log programs, if the logbook database is accessible on the same database connection
+
+## Hamawards is not for you, if...
+
+- Your event does not have fixed participants (hamawards requires each event callsign to be explicitly registered in the software)
+- Your award rules are something like "Have x QSOs with any random German operator"
+- Your ruleset requires that the applicants for awards have to send in their logs instead of the event callsign operators
 
 ## Installation
 
