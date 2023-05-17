@@ -34,13 +34,13 @@ class LogcheckController extends Controller
         //get validated attributes
         $attributes = $validator->validated();
 
+        if(!array_key_exists('eventid', $attributes))
+        {
+            return redirect()->back()->with('danger', 'Eventid not found.');
+        }
+
         //get event
         $event = Hamevent::where('id', $attributes['eventid'])->first();
-
-        if($event == null)
-        {
-            return redirect()->back()->with('danger', 'Event not found');
-        }
 
         //show event
         return redirect()->route('select_logcheck', ['event' => $event->slug]);
