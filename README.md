@@ -1,24 +1,24 @@
-# Hamawards
+# Hamawardz
 
-## About Hamawards
+## About Hamawardz
 
-Hamawards is a simple, free ham radio award checking and downloading software. It is based on the [Laravel](https://laravel.com) PHP Framework.
+Hamawardz is a simple, free ham radio award checking and downloading software. It is based on the [Laravel](https://laravel.com) PHP Framework.
 
 As it is based on Laravel, it runs on pretty much all the webservers (Apache, NGINX) and on the tiniest of computers (even the raspberry pi). 
 
-Hamwards is tested on Apache only.
+Hamawardz is tested on Apache only.
 
 Read about how this project came to be on my [Blog](https://www.db4scw.de/creating-hamawards/).
 
 ## Technology
 
-Hamawards is able to run using all the database engines permitted by Laravel (SQLITE, MySQL, MSSQL, Postgres, etc.). 
+Hamawardz is able to run using all the database engines permitted by Laravel (SQLITE, MySQL, MSSQL, Postgres, etc.). 
 
-Hamawards is tested on SQLITE (which is plenty for most users and allows hamawards to run very efficiently on tiny machines) and MySQL (used on [hamawards.net](https://hamawards.net) because of the larger volume).
+Hamawardz is tested on SQLITE (which is plenty for most users and allows Hamawardz to run very efficiently on tiny machines) and MySQL (used on [hamawardz.app](https://hamawardz.app) because of the larger volume).
 
 ## Features
 
-Hamwards offers:
+Hamawardz offers:
 
 - Checking of your eligibility for multiple awards in one go without logging in or having to create a account
 - Downloading of customizable (landscape) awards as PDF
@@ -28,9 +28,9 @@ Hamwards offers:
 - Multiple rulesets for different awards in 1 event
 - Fully configurable autoimport for QSOs from other log programs, if the logbook database is accessible on the same database connection
 
-## Hamawards is not for you, if...
+## Hamawardz is not for you, if...
 
-- Your event does not have fixed participants (hamawards requires each event callsign to be explicitly registered in the software)
+- Your event does not have fixed participants (hamawardz requires each event callsign to be explicitly registered in the software)
 - Your award rules are something like "Have x QSOs with any random German operator"
 - Your ruleset requires that the applicants for awards have to send in their logs instead of the event callsign operators
 
@@ -65,9 +65,9 @@ sudo mysql_secure_installation
 ```
 
 ### Step 2: Configure Apache
-First, create a vhost configuration file for hamawards. Of course, you can substitute the name of the file with whatever you like:
+First, create a vhost configuration file for hamawardz. Of course, you can substitute the name of the file with whatever you like:
 ```bash
-sudo nano /etc/apache2/sites-available/hamawards.conf
+sudo nano /etc/apache2/sites-available/hamawardz.conf
 ```
 
 In the file, create the virtual host. Of course, customize directories, Domains and Admin-Emails to your liking.
@@ -75,9 +75,9 @@ In the file, create the virtual host. Of course, customize directories, Domains 
 <VirtualHost *:80>
     ServerAdmin admin@example.com
     ServerName mydomain.com
-    DocumentRoot "/var/www/hamawards/public"
+    DocumentRoot "/var/www/hamawardz/public"
 
-    <Directory /var/www/hamawards>
+    <Directory /var/www/hamawardz>
     Options Indexes MultiViews FollowSymLinks
     AllowOverride All
     Order allow,deny
@@ -93,17 +93,17 @@ In the file, create the virtual host. Of course, customize directories, Domains 
 Activate the site and reload apache
 
 ```bash
-sudo a2ensite hamawards.conf
+sudo a2ensite hamawardz.conf
 sudo service apache2 restart
 ```
 
-### Step 3: Install hamawards
+### Step 3: Install hamawardz
 Clone this repo
 
 ```bash
 cd /var/www
-sudo -u www-data git clone https://git.erklaeranlage.de/Erklaeranlage/hamawards.git hamawards
-cd hamawards
+sudo -u www-data git clone https://git.erklaeranlage.de/Erklaeranlage/hamawardz.git hamawardz
+cd hamawardz
 sudo -u www-data composer install --no-dev
 sudo -u www-data cp .env.example .env
 sudo -u www-data php artisan key:generate
@@ -122,24 +122,24 @@ DEFAULT_CONNECTION=sqlite
 DB_CONNECTION=sqlite
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=/var/www/hamawards/database/database.sqlite
+DB_DATABASE=/var/www/hamawardz/database/database.sqlite
 DB_USERNAME=
 DB_PASSWORD=
 ```
 
 Afterwards, create the sqlite file:
 ```bash
-sudo -u www-data touch /var/www/hamawards/database/database.sqlite
+sudo -u www-data touch /var/www/hamawardz/database/database.sqlite
 ```
 
-MySQL (set your MySQL login data. Use root or a user that can change the database schema. If the hamawards-database doesn't exist yet, create it first):
+MySQL (set your MySQL login data. Use root or a user that can change the database schema. If the hamawardz-database doesn't exist yet, create it first):
 ```
 DEFAULT_CONNECTION=mysql
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=hamawards
+DB_DATABASE=hamawardz
 DB_USERNAME=root
 DB_PASSWORD=RootP#ssword
 ```
@@ -158,24 +158,24 @@ sudo -u www-data php artisan storage:link
 sudo service apache2 restart
 ```
 
-### Step 4: Secure your hamawards installation
+### Step 4: Secure your hamawardz installation
 
 Configure your apache server with a Let's Encrypt SSL certificate using certbot (plenty of guides out there), or place your install behind a reverse proxy (if you choose that, I think you know what to do already).
 
 ### Step 5: Finished
 
-Login to Hamawards, using username "administrator" and password "welcome#01". Please remember to change that password immediately.
+Login to Hamawardz, using username "administrator" and password "welcome#01". Please remember to change that password immediately.
 
 Have fun!
 
 73, de Stefan, DB4SCW
 
-## Updating hamawards to a new version
+## Updating hamawardz to a new version
 
 Just cd into your folder, git pull and afterwards, migrate the database. You are up and running the newest version!
 
 ```bash
-cd /var/www/hamawards
+cd /var/www/hamawardz
 sudo -u www-data git pull origin master --rebase
 sudo -u www-data php artisan migrate
 ```
@@ -183,7 +183,7 @@ sudo -u www-data php artisan migrate
 
 If you discover a security vulnerability within Laravel itself, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). 
 
-If you discover a security vulnerability within Hamawards, please send an e-mail to DB4SCW, Stefan Wolf via [db4scw@darc.de](mailto:db4scw@darc.de). 
+If you discover a security vulnerability within Hamawardz, please send an e-mail to DB4SCW, Stefan Wolf via [db4scw@darc.de](mailto:db4scw@darc.de). 
 
 All security vulnerabilities will be promptly addressed.
 
