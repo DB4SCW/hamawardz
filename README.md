@@ -8,7 +8,7 @@ As it is based on Laravel, it runs on pretty much all the webservers (Apache, NG
 
 Hamawardz is tested on Apache only.
 
-Read about how this project came to be on my [Blog](https://www.db4scw.de/creating-hamawards/).
+Read about how this project came to be on my [Blog](https://www.db4scw.de/creating-hamawardz/).
 
 ## Technology
 
