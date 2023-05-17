@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot name="title">Hamawards - Dashboard for {{ auth()->user()->username }}</x-slot>
+    <x-slot name="title">Hamawardz - Dashboard for {{ auth()->user()->username }}</x-slot>
 
     <x-slot name="slot">
         <div class="container mt-5" style="margin-bottom: 60px;">

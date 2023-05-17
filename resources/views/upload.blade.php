@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot name="title">Hamawards - New Upload</x-slot>
+    <x-slot name="title">Hamawardz - New Upload</x-slot>
 
     <x-slot name="slot">
         <div class="container mt-5">
