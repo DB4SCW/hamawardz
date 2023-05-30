@@ -3,12 +3,9 @@
 
     <x-slot name="slot">
 
-        <div class="container mt-5" >
-            <button style="display: block; margin: auto;" class="btn btn-primary text-center" onclick="$('#addCallsignModal').modal('show');">Add new Callsign</button>
-        </div>
-
         <div class="container mt-5" style="margin-bottom: 60px;">
             <h1 class="text-center mb-4">List of all callsigns:</h1>
+            <button style="display: block; margin: auto;" class="btn btn-primary text-center" onclick="$('#addCallsignModal').modal('show');">Add new Callsign</button>
             <table class="table table-bordered table-hover table-dark" style="margin-bottom: 60px;">
               <thead class="thead-light">
                   <tr>
