@@ -25,8 +25,8 @@
                         <th>Callsign</th>
                         <th>DXCC</th>
                         <th>Continent</th>
-                        <th>ITU</th>
-                        <th>WAZ</th>
+                        <th>ITU Zone</th>
+                        <th>CQ-Zone</th>
                     </tr>
                 </thead>
                 <tbody>
