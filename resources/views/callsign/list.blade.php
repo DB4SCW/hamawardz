@@ -5,7 +5,7 @@
 
         <div class="container mt-5" style="margin-bottom: 60px;">
             <h1 class="text-center mb-4">List of all callsigns:</h1>
-            <button style="display: block; margin: auto;" class="btn btn-primary text-center" onclick="$('#addCallsignModal').modal('show');">Add new Callsign</button>
+            <button style="display: block; margin: auto; margin-bottom: 15px;" class="btn btn-primary text-center" onclick="$('#addCallsignModal').modal('show');">Add new Callsign</button>
             <table class="table table-bordered table-hover table-dark" style="margin-bottom: 60px;">
               <thead class="thead-light">
                   <tr>
