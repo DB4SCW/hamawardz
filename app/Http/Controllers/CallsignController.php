@@ -60,7 +60,7 @@ class CallsignController extends Controller
     {
         
         //Authorisation
-        if(auth()->user()->events_to_manage->count < 1)
+        if(auth()->user()->events_to_manage->count() < 1)
         {
             if(!auth()->user()->siteadmin)
             {
