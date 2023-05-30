@@ -26,7 +26,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 //handle link from main homepage
-Route::get('/frommainwebsite', function() { return redirect('/503'); });
+Route::get('/frommainwebsite', function() { return redirect('/'); });
 
 //Logcheck Handling - Open for all
 Route::get('/', [LogcheckController::class, 'home'])->name('home');
