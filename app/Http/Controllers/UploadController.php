@@ -32,7 +32,7 @@ class UploadController extends Controller
         //validate
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
             'callsignid' => 'exists:callsigns,id',
-            'operator' => 'string|min:3|max:20',
+            'operator' => 'nullable|string|min:3|max:20',
             'file' => 'required', 
             'ignoreduplicates' => 'integer|min:0|max:1'
         ], 
@@ -123,7 +123,6 @@ class UploadController extends Controller
             $contact = new Contact();
             $contact->callsign_id = $callsign->id;
             $contact->upload_id = $upload->id;
-            $contact->operator = strtoupper($attributes['operator']);
             $contact->qso_datetime = \Carbon\Carbon::parse($record['QSO_DATE'] . ' ' . substr($record['TIME_ON'],0,2) . ':' . substr($record['TIME_ON'], 2, 2));
             $contact->raw_callsign = $record['CALL'];
             $contact->callsign = getcallsignwithoutadditionalinfo($record['CALL']);
@@ -131,6 +130,38 @@ class UploadController extends Controller
             $contact->rst_s = $record['RST_SENT'];
             $contact->rst_r = $record['RST_RCVD'];
             
+            //operator handling
+            $operator = "";
+            if($attributes['operator'] != null)
+            {
+                $operator = strtoupper($attributes['operator']);
+            }else
+            {
+                if(array_key_exists('OPERATOR', $record))
+                {
+                    if($record['OPERATOR'] != null)
+                    {
+                        if(strlen($record['OPERATOR']) > 0)
+                        {
+                            $operator = strtoupper($record['OPERATOR']);
+                        }else
+                        {
+                            $operator = $callsign->call;
+                        }
+                        
+                    }else
+                    {
+                        $operator = $callsign->call;
+                    }
+                    
+                }else
+                {
+                    $operator = $callsign->call;
+                }
+            }
+
+            //set operator
+            $contact->operator = $operator;
 
             //try to get Band, mode and DXCC
             $band = Band::where([['start', '<=', $contact->freq], ['end', '>=', $contact->freq]])->first();

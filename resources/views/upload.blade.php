@@ -18,7 +18,7 @@
                         </div>
                         <div class="form-group">
                             <label for="operator">Operator:</label>
-                            <input name="operator" class="form-control" type="text" value="{{ old('operator') }}">
+                            <input name="operator" class="form-control" type="text" placeholder="Enter Operator call here. If empty, OPERATOR field of ADIF is used" value="{{ old('operator') }}">
                         </div>
                         <div class="form-group">
                             <label for="ignoreduplicates">Ignore duplicate error messages?</label>
