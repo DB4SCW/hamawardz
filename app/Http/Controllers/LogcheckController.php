@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Hamevent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LogcheckController extends Controller
 {
@@ -110,6 +111,9 @@ class LogcheckController extends Controller
         {
             return redirect()->route('select_logcheck', ['event' => $event->slug])->with('danger', 'Callsign contains invalid characters.')->withInput();
         }
+
+        //TODO: Remove
+        Log::info("Logcheck for " . $callsign);
         
         //get awards in ranking order
         $awards = $event->awards()->where('active', 1)->orderBy('ranking', 'ASC')->get();
