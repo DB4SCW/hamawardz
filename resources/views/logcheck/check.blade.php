@@ -4,7 +4,7 @@
     <x-slot name="slot">
         <div class="container mt-5">
             @if($event->info_url != null)
-            <h1 class="text-center mb-4">Logcheck for: <a href="{{ $event->info_url }}" style="color: white;">{{ $event->title }}</a></h1>
+            <h1 class="text-center mb-4">Logcheck for: <a href="{{ $event->info_url }}" style="color: white;  text-decoration: underline;">{{ $event->title }}</a></h1>
             @else
             <h1 class="text-center mb-4">Logcheck for: {{ $event->title }}</h1>
             @endif

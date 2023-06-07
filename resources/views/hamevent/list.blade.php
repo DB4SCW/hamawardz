@@ -24,7 +24,7 @@
                   @foreach($events as $event)
                   <tr>
                       @if($event->info_url != null)
-                      <td style="vertical-align: middle;"><a href="{{ $event->info_url }}" style="color: white;">{{ $event->title }}</a></td>
+                      <td style="vertical-align: middle;"><a href="{{ $event->info_url }}" style="color: white;  text-decoration: underline;">{{ $event->title }}</a></td>
                       @else
                       <td style="vertical-align: middle;">{{ $event->title }}</td>
                       @endif

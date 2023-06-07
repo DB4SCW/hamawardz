@@ -20,7 +20,7 @@
             @endif
             @if($event->info_url != null)
             <h3 class="text-center mb-4" style="margin-top: 50px;">More information:</h3>
-            <p class="text-center">Event Homepage: <a href="{{ $event->info_url }}">{{ $event->info_url }}</a></p>
+            <p class="text-center">Event Homepage: <a href="{{ $event->info_url }}" style="color: white; text-decoration: underline;">{{ $event->info_url }}</a></p>
             @endif
             <h3 class="text-center mb-4" style="margin-top: 50px;">Participating callsigns ({{ $event->callsigns->count() }}):</h3>
             <table class="table table-bordered table-hover table-dark" style="margin-bottom: 60px;">
