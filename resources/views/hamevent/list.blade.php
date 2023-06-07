@@ -23,7 +23,11 @@
               <tbody>
                   @foreach($events as $event)
                   <tr>
+                      @if($event->info_url != null)
+                      <td style="vertical-align: middle;"><a href="{{ $event->info_url }}" style="color: white;">{{ $event->title }}</a></td>
+                      @else
                       <td style="vertical-align: middle;">{{ $event->title }}</td>
+                      @endif
                       <td style="vertical-align: middle;">{{ $event->slug }}</td>
                       <td style="vertical-align: middle;">{{ $event->created_at->format('Y-m-d @ H:i') . ' UTC' }}</td>
                       <td style="vertical-align: middle;">{{ $event->creator->username }}</td>

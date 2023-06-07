@@ -17,6 +17,10 @@
                             <input name="slug" class="form-control" type="text" value="{{ old('slug') }}">
                         </div>
                         <div class="form-group">
+                            <label for="info_url">Info-URL:</label>
+                            <input name="info_url" class="form-control" type="text" value="{{ old('info_url') }}">
+                        </div>
+                        <div class="form-group">
                             <label for="description">Description:</label>
                             <textarea name="description" class="form-control" style="height: 150px;">{{ old('description') }}</textarea>
                         </div>

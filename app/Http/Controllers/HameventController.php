@@ -65,6 +65,7 @@ class HameventController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make($requestinput, [
             'title' => 'string|min:5|max:200|unique:hamevents,title',
             'slug' => 'string|min:3|max:200|unique:hamevents,slug',
+            'info_url' => 'nullable|string|min:3|max:255',
             'description' => 'nullable|string',
             'start' => 'date', 
             'end' => 'date'
@@ -80,7 +81,10 @@ class HameventController extends Controller
             'slug.string' => 'The event slug must be a valid text.',
             'start.date' => 'The event start must be a valid datetime.',
             'end.date' => 'The event start must be a valid datetime.',
-            'description.string' => 'Description has to be a string'
+            'description.string' => 'Description has to be a string',
+            'info_url.min' => 'URL must be at least 3 characters long.',
+            'info_url.max' => 'URL must be at most 255 characters long.',
+            'info_url.string' => 'URL must be a text.'
         ]);
 
         //handle validation failure
@@ -90,6 +94,15 @@ class HameventController extends Controller
 
         //get validated attributes
         $attributes = $validator->validated();
+
+        //custom check for valid url
+        if($attributes['info_url'] != null)
+        {
+            if(!filter_var($attributes['info_url'], FILTER_VALIDATE_URL))
+            {
+                return redirect()->back()->with('danger', 'Provided URL is not a valid URL.')->withInput();
+            }
+        }
 
         //create new event
         $event = new Hamevent();
@@ -103,6 +116,7 @@ class HameventController extends Controller
         $event->end = \Carbon\Carbon::parse($attributes['end']);
         $event->updated_at = \Carbon\Carbon::now();
         $event->hide = false;
+        $event->info_url = $attributes['info_url'];
         $event->save();
 
         //Add creator to event managers
@@ -144,6 +158,7 @@ class HameventController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make($requestinput, [
             'title' => 'string|min:5|max:200|unique:hamevents,title,' . $event->id,
             'slug' => 'string|min:3|max:200|unique:hamevents,slug,' . $event->id,
+            'info_url' => 'nullable|string|min:3|max:255',
             'description' => 'nullable|string',
             'start' => 'date', 
             'end' => 'date',
@@ -164,6 +179,9 @@ class HameventController extends Controller
             'hide.integer' => 'Invalid hide flag.',
             'hide.min' => 'Invalid hide flag.',
             'hide.max' => 'Invalid hide flag.',
+            'info_url.min' => 'URL must be at least 3 characters long.',
+            'info_url.max' => 'URL must be at most 255 characters long.',
+            'info_url.string' => 'URL must be a text.'
         ]);
 
         //handle validation failure
@@ -174,6 +192,16 @@ class HameventController extends Controller
         //get validated attributes
         $attributes = $validator->validated();
 
+        //custom check for valid url
+        if($attributes['info_url'] != null)
+        {
+            if(!filter_var($attributes['info_url'], FILTER_VALIDATE_URL))
+            {
+                return redirect()->back()->with('danger', 'Provided URL is not a valid URL.')->withInput();
+            }
+        }
+        
+
         //update event
         $event->title = $attributes['title'];
         $event->slug = $attributes['slug'];
@@ -182,6 +210,7 @@ class HameventController extends Controller
         $event->end = \Carbon\Carbon::parse($attributes['end']);
         $event->updated_at = \Carbon\Carbon::now();
         $event->hide = $attributes['hide'];
+        $event->info_url = $attributes['info_url'];
         $event->save();
 
         //return to list

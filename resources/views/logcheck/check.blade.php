@@ -3,7 +3,11 @@
 
     <x-slot name="slot">
         <div class="container mt-5">
+            @if($event->info_url != null)
+            <h1 class="text-center mb-4">Logcheck for: <a href="{{ $event->info_url }}" style="color: white;">{{ $event->title }}</a></h1>
+            @else
             <h1 class="text-center mb-4">Logcheck for: {{ $event->title }}</h1>
+            @endif
             <p class="text-center">Event duration: {{ $event->start->format('Y-m-d') }} to {{ $event->end->format('Y-m-d') }}</p>
             <h2 class="text-center mb-4">Your Callsign: {{ $callsign }}</h2>
             
