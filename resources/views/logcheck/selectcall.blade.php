@@ -36,7 +36,7 @@
                 <tbody>
                     @foreach($event->callsigns->sortby('call') as $callsign)
                     <tr>
-                        <td>{{ $callsign->call }}</td>
+                        <td><a href="https://www.qrz.com/db/{{$callsign->call}}" style="color: white;">{{ $callsign->call }}</a></td>
                         <td>{{ $callsign->dxcc->name }}</td>
                         <td>{{ $callsign->dxcc->cont }}</td>
                         <td>{{ $callsign->dxcc->itu }}</td>
