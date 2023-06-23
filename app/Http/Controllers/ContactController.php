@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Models\Hamevent;
 use App\Models\Upload;
+use App\Models\Dxcc;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -116,5 +117,40 @@ class ContactController extends Controller
         //return file
         return response()->stream($callback, 200, $headers);
         
+    }
+
+    function fixmissingdxccs() {
+        
+        //only for admins
+        if(!auth()->user()->siteadmin)
+        {
+            return redirect()->back();
+        }
+
+        //get output
+        $output = [];
+
+        //missing DXCCs holen
+        $todo = Contact::where('dxcc_id', 1)->get();
+
+        //fix contacts
+        foreach ($todo as $contact) {
+            //load info from API
+            $dxccinfo = file_get_contents("https://www.hamqth.com/dxcc.php?callsign=" . urlencode($contact->raw_callsign));
+            $xmlObject = simplexml_load_string($dxccinfo);
+            $adif = (integer)$xmlObject->dxcc->adif;
+            
+            //Load DXCC Model
+            $dxcc = Dxcc::where('dxcc', $adif)->first();
+            
+            //write data to contact an dsave
+            $contact->dxcc_id = $dxcc->id;
+            $contact->save();
+
+        }
+
+        //Return with success message
+        return redirect("/")->with('success', 'Fixed DXCCs');
+
     }
 }

@@ -125,6 +125,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/autoimport/{autoimport:id}/delete', [AutoimportController::class, 'destroy'])->name('deleteautoimport');
     Route::get('/autoimport/{autoimport:id}/toggle', [AutoimportController::class, 'toggle'])->name('toggleautoimport');
 
+    //FixDXCCs
+    Route::get("/fixdxccs", [ContactController::class, 'fixmissingdxccs'])->name('fixdxccs');
+
 });
 
 //this is a must
