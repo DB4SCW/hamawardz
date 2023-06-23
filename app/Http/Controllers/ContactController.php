@@ -127,11 +127,11 @@ class ContactController extends Controller
             return redirect()->back();
         }
 
-        //Trigger autoimport
+        //Trigger dxcc fix
         \Illuminate\Support\Facades\Artisan::call('app:scheduled_dxcc_fix', []);
 
         //return to view
-        return redirect("/")->with('success', 'Fixed DXCCs');
+        return redirect()->route('showprofile')->with('success', 'Fixed DXCCs');
 
     }
 }

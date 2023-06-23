@@ -27,6 +27,14 @@
 
             <br>
 
+            @if(auth()->user()->siteadmin)
+            <h3>Admin options:</h3>
+            <div class="col-md-12 text-center" style="margin-bottom: 10px;">
+                <a href="/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
+            </div>
+            <br>
+            @endif
+
             <h3>You are permitted to upload QSOs for these callsigns:</h3>
             <table class="table table-bordered table-hover table-dark" style="margin-bottom: 60px;">
                 <thead class="thead-light">
