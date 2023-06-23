@@ -127,29 +127,10 @@ class ContactController extends Controller
             return redirect()->back();
         }
 
-        //get output
-        $output = [];
+        //Trigger autoimport
+        \Illuminate\Support\Facades\Artisan::call('app:scheduled_dxcc_fix', []);
 
-        //missing DXCCs holen
-        $todo = Contact::where('dxcc_id', 1)->get();
-
-        //fix contacts
-        foreach ($todo as $contact) {
-            //load info from API
-            $dxccinfo = file_get_contents("https://www.hamqth.com/dxcc.php?callsign=" . urlencode($contact->raw_callsign));
-            $xmlObject = simplexml_load_string($dxccinfo);
-            $adif = (integer)$xmlObject->dxcc->adif;
-            
-            //Load DXCC Model
-            $dxcc = Dxcc::where('dxcc', $adif)->first();
-            
-            //write data to contact an dsave
-            $contact->dxcc_id = $dxcc->id;
-            $contact->save();
-
-        }
-
-        //Return with success message
+        //return to view
         return redirect("/")->with('success', 'Fixed DXCCs');
 
     }
