@@ -121,12 +121,6 @@ class ContactController extends Controller
 
     function fixmissingdxccs() {
         
-        //only for admins
-        if(!auth()->user()->siteadmin)
-        {
-            return redirect()->back();
-        }
-
         //Trigger dxcc fix
         \Illuminate\Support\Facades\Artisan::call('app:scheduled_dxcc_fix', []);
 
