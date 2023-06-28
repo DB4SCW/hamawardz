@@ -29,13 +29,14 @@ class scheduled_dxcc_fix extends Command
     public function handle()
     {
 
-        //missing DXCCs holen
+        //get missing DXCCs on contacts
         $todo = Contact::where('dxcc_id', 1)->get();
 
         //fix contacts
         foreach ($todo as $contact) {
             
-            $dxcc = $this->getdxccid($contact->raw_callsign);
+            //get dxcc from API
+            $dxcc = $this->getdxcc($contact->raw_callsign);
             
             //write data to contact an dsave
             $contact->dxcc_id = $dxcc->id;
@@ -43,10 +44,14 @@ class scheduled_dxcc_fix extends Command
 
         }
 
+        //get missing DXCCs on Awardlogs
         $todo = Awardlog::where('dxcc_id', null)->get();
 
+        //fix Awardlogs
         foreach ($todo as $awardlog) {
-            $dxcc = $this->getdxccid($awardlog->callsign);
+
+            //get dxcc from API
+            $dxcc = $this->getdxcc($awardlog->callsign);
             
             //write data to contact an dsave
             $awardlog->dxcc_id = $dxcc->id;
@@ -55,13 +60,13 @@ class scheduled_dxcc_fix extends Command
 
     }
 
-    function getdxccid(string $callsign) : \App\Models\Dxcc {
+    function getdxcc(string $callsign) : Dxcc {
         //load info from API
         $dxccinfo = file_get_contents("https://www.hamqth.com/dxcc.php?callsign=" . urlencode($callsign));
         $xmlObject = simplexml_load_string($dxccinfo);
         $adif = (integer)$xmlObject->dxcc->adif;
         
         //Load DXCC Model
-        return \App\Models\Dxcc::where('dxcc', $adif)->first();
+        return Dxcc::where('dxcc', $adif)->first();
     }
 }
