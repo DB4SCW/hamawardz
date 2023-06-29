@@ -16,4 +16,9 @@ class Awardlog extends Model
     {
         return $this->hasOne(Dxcc::class, "id", "dxcc_id");
     }
+
+    public function award() : HasOne
+    {
+        return $this->hasOne(Award::class, "id", "award_id");
+    }
 }
