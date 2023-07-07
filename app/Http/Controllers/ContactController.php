@@ -125,7 +125,7 @@ class ContactController extends Controller
         \Illuminate\Support\Facades\Artisan::call('app:scheduled_dxcc_fix', []);
 
         //return to view
-        return redirect()->route('showprofile')->with('success', 'Fixed DXCCs');
+        return redirect()->back()->with('success', 'Fixed DXCCs');
 
     }
 }

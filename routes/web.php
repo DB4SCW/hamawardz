@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -125,7 +126,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/autoimport/{autoimport:id}/delete', [AutoimportController::class, 'destroy'])->name('deleteautoimport');
     Route::get('/autoimport/{autoimport:id}/toggle', [AutoimportController::class, 'toggle'])->name('toggleautoimport');
 
-    
+    //Statistics
+    Route::get('/event/{event:slug}/stats', [StatisticsController::class, 'statisticsdashboard'])->name('statisticsdashboard');
+    Route::get('/event/{event:slug}/stat/qso_leaderboard', [StatisticsController::class, 'qso_leaderboard'])->name('statisticsqso_leaderboard');
+    Route::get('/event/{event:slug}/stat/callsign_leaderboard', [StatisticsController::class, 'callsign_leaderboard'])->name('statisticscallsign_leaderboard');
+    Route::get('/event/{event:slug}/stat/dxcc_leaderboard', [StatisticsController::class, 'dxcc_leaderboard'])->name('statisticsdxcc_leaderboard');
+    Route::get('/event/{event:slug}/stat/continent_leaderboard', [StatisticsController::class, 'continent_leaderboard'])->name('statisticscontinent_leaderboard');
+    Route::get('/event/{event:slug}/stat/band_leaderboard', [StatisticsController::class, 'band_leaderboard'])->name('statisticsband_leaderboard');
+    Route::get('/event/{event:slug}/stat/mode_leaderboard', [StatisticsController::class, 'mode_leaderboard'])->name('statisticsmode_leaderboard');
+    Route::get('/event/{event:slug}/stat/lastuploads', [StatisticsController::class, 'lastuploads'])->name('statisticslastuploads');
 
 });
 
@@ -138,4 +147,4 @@ Route::get('/418', function() { abort(418); });
 //Maintenance page
 Route::get('/503', function() { abort(503); });
 
-Route::get('/update', function() { return view('eastereggs.update'); });
+Route::get('/update', function() { return view('eastereggs.update'); }); 
