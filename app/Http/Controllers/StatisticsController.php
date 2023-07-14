@@ -68,6 +68,8 @@ class StatisticsController extends Controller
         ->orderByraw('COUNT(contacts.id) DESC')
         ->get();
 
+        $header = $header . ' (' . $stats->count() . ')';
+
         //return view
         return view('statistics.blankstatpage', ['event' => $event, 'descriptionheader' => $description, 'dataheader' => $dataheader, 'header' => $header, 'stats' => $stats]);
     }
