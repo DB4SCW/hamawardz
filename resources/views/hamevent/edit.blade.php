@@ -83,16 +83,18 @@
               <thead class="thead-light">
                   <tr>
                       <th>Callsign</th>
+                      <th>QSO Count</th>
                       <th>Action</th>
                   </tr>
               </thead>
               <tbody>
                   @if($event->callsigns->count() < 1)
-                    <td colspan="2" style="text-align: center; ">There are no participating callsigns for this event yet.<br>Feel free to add some!</td>
+                    <td colspan="3" style="text-align: center; ">There are no participating callsigns for this event yet.<br>Feel free to add some!</td>
                   @else
                     @foreach($event->callsigns as $callsign)
                     <tr>
                         <td style="vertical-align: middle;">{{ $callsign->call }}</td>
+                        <td style="vertical-align: middle;">{{ $callsign->contacts->count() }}</td>
                         <td style="text-align: center;">
                             <a href="/event/{{ $event->slug }}/callsign/{{ $callsign->call }}/remove"><button class="btn btn-danger">Remove Callsign</button></a>
                         </td>
