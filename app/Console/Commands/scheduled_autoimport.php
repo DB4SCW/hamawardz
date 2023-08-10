@@ -152,6 +152,9 @@ class scheduled_autoimport extends Command
             $upload->overall_qso_count = $upload->contacts->count();
             $upload->save();
 
+            
+            Callsign::find($upload->callsign_id)->setlastupload();
+
         }
     }
 }

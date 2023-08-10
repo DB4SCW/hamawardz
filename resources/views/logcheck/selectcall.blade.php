@@ -42,7 +42,7 @@
                         <td><a href="https://www.qrz.com/db/{{$callsign->call}}" style="color: white;">{{ $callsign->call }}</a></td>
                         <td>{{ $callsign->dxcc->name }}</td>
                         <td>{{ $callsign->dxcc->cont }}</td>
-                        <td>{{ $callsign->uploads->max('created_at') == null ? '' : $callsign->uploads->max('created_at')->format('Y-m-d @ H:i') . ' UTC' }}</td>
+                        <td>{{ $callsign->last_upload == null ? '' : $callsign->last_upload->format('Y-m-d @ H:i') . ' UTC' }}</td>
                     </tr>
                     @endforeach      
                 </tbody>

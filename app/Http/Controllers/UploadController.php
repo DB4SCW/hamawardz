@@ -91,6 +91,9 @@ class UploadController extends Controller
         $upload->overall_qso_count = count($data);
         $upload->save();
 
+        //write data to callsign
+        $callsign->setlastupload();
+
         //prepare Error Collection
         $errors = [];
 
@@ -268,7 +271,11 @@ class UploadController extends Controller
 
         //delete upload record itself
         $id = $upload->id;
+        $callsign_id = $upload->callsign_id;
         $upload->delete();
+
+        //write data to callsign
+        Callsign::find($callsign_id)->setlastupload();
 
         //return back
         return redirect()->back()->with('success', 'Upload ' . $id . ' was successfully deleted.');

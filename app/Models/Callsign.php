@@ -13,6 +13,8 @@ class Callsign extends Model
 {
     use HasFactory;
 
+    protected $casts = ['last_upload' => 'datetime'];
+
     public function contacts() : HasMany
     {
         return $this->hasMany(Contact::class);
@@ -46,6 +48,13 @@ class Callsign extends Model
     public function uploads() : HasMany
     {
         return $this->hasMany(Upload::class);
+    }
+
+    public function setlastupload()
+    {
+        $this->refresh();
+        $this->last_upload = $this->uploads->max('created_at');
+        $this->save();
     }
 
 }
