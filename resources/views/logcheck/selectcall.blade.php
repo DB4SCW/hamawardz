@@ -33,8 +33,7 @@
                         <th>Callsign</th>
                         <th>DXCC</th>
                         <th>Continent</th>
-                        <th>ITU Zone</th>
-                        <th>CQ-Zone</th>
+                        <th>Last QSO upload</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,8 +42,7 @@
                         <td><a href="https://www.qrz.com/db/{{$callsign->call}}" style="color: white;">{{ $callsign->call }}</a></td>
                         <td>{{ $callsign->dxcc->name }}</td>
                         <td>{{ $callsign->dxcc->cont }}</td>
-                        <td>{{ $callsign->dxcc->itu }}</td>
-                        <td>{{ $callsign->dxcc->waz }}</td>
+                        <td>{{ $callsign->uploads->max('created_at') == null ? '' : $callsign->uploads->max('created_at')->format('Y-m-d @ H:i') . ' UTC' }}</td>
                     </tr>
                     @endforeach      
                 </tbody>

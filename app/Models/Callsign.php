@@ -43,4 +43,9 @@ class Callsign extends Model
         return $this->hasOne(Autoimport::class, 'callsign_id', 'id');
     }
 
+    public function uploads() : HasMany
+    {
+        return $this->hasMany(Upload::class);
+    }
+
 }

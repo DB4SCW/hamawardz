@@ -136,7 +136,7 @@ class HameventController extends Controller
         }
 
         //load relations
-        $event->load('callsigns', 'awards', 'eventmanagers');
+        $event->load('callsigns.contacts', 'awards', 'eventmanagers');
         
         //return view
         return view('hamevent.edit', ['event' => $event]);
