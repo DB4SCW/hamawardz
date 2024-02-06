@@ -45,17 +45,6 @@ class CallsignController extends Controller
 
     }
 
-    public function permissioncheck(Callsign $callsign)
-    {
-        //Permission check
-        if(!auth()->user()->is_manager_of_callsign($callsign))
-        {
-            return redirect()->back()->with('danger', 'You are not the manager of the callsign or the sites administrator.');
-        }
-
-        return null;
-    }
-
     public function create()
     {
         
@@ -112,12 +101,8 @@ class CallsignController extends Controller
     public function show(Callsign $callsign)
     {
         
-        //Permission check
-        $check = $this->permissioncheck($callsign);
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         $callsign->load('uploadusers');
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
@@ -126,12 +111,8 @@ class CallsignController extends Controller
 
     public function edit(Callsign $callsign)
     {
-        //Permission check
-        $check = $this->permissioncheck($callsign);
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         //Validation
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
@@ -169,12 +150,8 @@ class CallsignController extends Controller
 
     public function destroy(Callsign $callsign)
     {
-        //Permission check
-        $check = $this->permissioncheck($callsign);
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         //prevent deletion if callsign has contacts
         if($callsign->contacts->count() > 0)
@@ -194,12 +171,8 @@ class CallsignController extends Controller
 
     public function removeuploader(Callsign $callsign, int $uploaderid)
     {
-        //Permission check
-        $check = $this->permissioncheck($callsign);
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         try {
             $uploader = User::findOrFail($uploaderid);
@@ -217,12 +190,8 @@ class CallsignController extends Controller
 
     public function adduploader(Callsign $callsign)
     {
-        //Permission check
-        $check = $this->permissioncheck($callsign);
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('manage', $callsign)) { abort(403); }
         
         //validate
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [

@@ -87,11 +87,7 @@ class AwardController extends Controller
     {
         
         //check permissions
-        $permissioncheck = $this->checkpermissions($award->event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        if(request()->user()->cannot('edit', $award->event)) { abort(403); }    
 
         //Prepare data array
         $data = [
@@ -115,30 +111,10 @@ class AwardController extends Controller
         return $pdf->stream( $data['issue_datetime']->format('Ymd') . '_EXAMPLE_' . $award->slug . '_award.pdf');
     }
 
-    public function checkpermissions(Hamevent $event)
-    {
-        if(!auth()->user()->siteadmin)
-        {
-            if(!auth()->user()->id == $event->creator_id ) 
-            {
-                if(!$event->eventmanagers->contains(auth()->user()))
-                {
-                    return redirect()->back()->with('danger', 'You do not have event manager permissions for this event.');
-                }
-            }
-        }
-
-        return null;
-    }
-
     public function showcreate(Hamevent $event)
     {
         //check permissions
-        $permissioncheck = $this->checkpermissions($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        if(request()->user()->cannot('edit', $event)) { abort(403); }
         
         //Load all DXCCs
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
@@ -150,11 +126,7 @@ class AwardController extends Controller
     public function destroy(Award $award)
     {
         //check permissions
-        $permissioncheck = $this->checkpermissions($award->event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        if(request()->user()->cannot('edit', $award->event)) { abort(403); }
 
         //dont delete if there are already awards printed
         if($award->issued_awards->count() > 0)
@@ -182,11 +154,7 @@ class AwardController extends Controller
     public function create(Hamevent $event)
     {
         //check permissions
-        $permissioncheck = $this->checkpermissions($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        if(request()->user()->cannot('edit', $event)) { abort(403); }
 
         //Validate request
         $validationresult = $this->validateawardrequest(request()->all());
@@ -236,11 +204,7 @@ class AwardController extends Controller
     public function showedit(Award $award)
     {
         //check permissions
-        $permissioncheck = $this->checkpermissions($award->event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        if(request()->user()->cannot('edit', $award->event)) { abort(403); }
 
         //load issued awards
         $award->load('issued_awards');
@@ -256,11 +220,7 @@ class AwardController extends Controller
     public function edit(Award $award)
     {
         //check permissions
-        $permissioncheck = $this->checkpermissions($award->event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        if(request()->user()->cannot('edit', $award->event)) { abort(403); }
 
         //Validate request
         $validationresult = $this->validateawardrequest(request()->all(), $award->id);
@@ -402,11 +362,7 @@ class AwardController extends Controller
     {
         
         //check permissions
-        $permissioncheck = $this->checkpermissions($award->event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        if(request()->user()->cannot('edit', $award->event)) { abort(403); }
         
         //Validation
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [

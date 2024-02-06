@@ -18,13 +18,13 @@ class HameventPolicy
 
     public function eventadmin(User $user) : Response
     {
-        if ($user->events_to_manage->count() <= 0) { return Response::deny('Kein Recht zum Anzeigen von Events'); };
+        if ($user->events_to_manage->count() <= 0) { return Response::deny('No permission to show events'); };
         return Response::allow();
     }
 
     public function create(User $user) : Response
     {
-        if (!$user->cancreateevents) { return Response::deny('Kein Recht zum Anlegen von Events'); };
+        if (!$user->cancreateevents) { return Response::deny('No permission to create events'); };
         return Response::allow();
     }
 
@@ -42,7 +42,7 @@ class HameventPolicy
 
     }
 
-    //Administrator darf alles
+    //Administrator is allowed for anything
     public function before(User $user, string $ability) : bool|null
     {
         if ($user->siteadmin) {
