@@ -39,7 +39,7 @@ class SessionController extends Controller
         session()->regenerate();
 
         //redirect to homepage
-        return redirect()->route('home')->with('success', 'Login successful. Welcome back!');
+        return redirect()->intended('/')->with('success', 'Login successful. Welcome back!');
     }
 
     public function logout()

@@ -95,22 +95,22 @@
             
             <div class="navbar-element">
                 @if(auth()->check())
-                    @if(auth()->user()->events_to_manage->count() > 0 || auth()->user()->siteadmin)
+                    @can('eventadmin', App\Models\Hamevent::class)
                         <a class="nav-link navbar-link" href="/events">Events-Admin</a>
-                    @endif
+                    @endcan
                     
-                    @if(auth()->user()->cancreateevents || auth()->user()->siteadmin)
+                    @can('create', App\Models\Hamevent::class)
                     <a class="nav-link navbar-link" href="/events/create">Create Event</a>
-                    @endif
+                    @endcan
 
                     @if(auth()->user()->siteadmin)
                     <a class="nav-link navbar-link" href="/users">User-Admin</a>
                     <a class="nav-link navbar-link" href="/autoimports">Autoimport-Admin</a>
                     @endif
 
-                    @if(auth()->user()->events_to_manage->count() > 0 || auth()->user()->siteadmin)
+                    @can('eventadmin', App\Models\Hamevent::class)
                     <a class="nav-link navbar-link" href="/callsigns">Event-Callsigns</a>
-                    @endif
+                    @endcan
                     
                     <a class="nav-link navbar-link" href="/profile">{{ auth()->user()->username }} Profile</a>
                     <a class="nav-link navbar-link" href="/dashboard">Log-Upload</a>

@@ -37,12 +37,8 @@ class HameventController extends Controller
     
     public function showcreate()
     {
-        //permission check for creation
-        $check = $this->permissioncheck_create();
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('create', Hamevent::class)) { abort(403); }
         
         //return view
         return view('hamevent.create');
@@ -51,12 +47,8 @@ class HameventController extends Controller
     public function create()
     {
         
-        //permission check for creation
-        $check = $this->permissioncheck_create();
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('create', Hamevent::class)) { abort(403); }
 
         //manipulate the slug before validation
         $requestinput = request()->all();
@@ -128,12 +120,8 @@ class HameventController extends Controller
 
     public function showedit(Hamevent $event)
     {
-        //permission check
-        $permissioncheck = $this->permissioncheck($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('edit', $event)) { abort(403); }
 
         //load relations
         $event->load('callsigns.contacts', 'awards', 'eventmanagers');
@@ -144,12 +132,8 @@ class HameventController extends Controller
 
     public function edit(Hamevent $event)
     {
-        //permission check
-        $permissioncheck = $this->permissioncheck($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('edit', $event)) { abort(403); }
 
         //manipulate the slug before validation
         $requestinput = request()->all();
@@ -217,45 +201,11 @@ class HameventController extends Controller
         return redirect()->route('showeditevent', ['event' => $event->slug])->with('success', 'Event ' . $event->title . ' has been saved successfully.');
     }
 
-    public function permissioncheck(Hamevent $event)
-    {
-        //permission check
-        if(!auth()->user()->siteadmin)
-        {
-            if($event->creator_id != auth()->user()->id)
-            {
-                if(!$event->eventmanagers->contains(auth()->user()))
-                {
-                    return redirect()->back()->with('danger', 'You do not have permission to edit this event.');
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public function permissioncheck_create()
-    {
-        if(!auth()->user()->siteadmin)
-        {
-            if(!auth()->user()->cancreateevents)
-            {
-                return back()->with('danger', 'You are not allowed to create events on this website.');
-            }
-        }
-
-        return null;
-    }
-
     public function removemanager(Hamevent $event, int $managerid)
     {
 
-        //permission check
-        $permissioncheck = $this->permissioncheck($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('edit', $event)) { abort(403); }
         
         //dont know why I can't use the autofind in function header but here we are...
         try {
@@ -286,12 +236,8 @@ class HameventController extends Controller
 
     public function addmanager(Hamevent $event)
     {
-        //permission check
-        $permissioncheck = $this->permissioncheck($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }        
+        //Berechtigung checken
+        if(request()->user()->cannot('edit', $event)) { abort(403); }    
         
         //validate
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
@@ -338,12 +284,8 @@ class HameventController extends Controller
     public function removeeventparticipant(Hamevent $event, Callsign $callsign)
     {
 
-        //permission check
-        $permissioncheck = $this->permissioncheck($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('edit', $event)) { abort(403); }
         
         //check if User is even a current eventmanger
         if(!$event->callsigns->contains($callsign))
@@ -361,12 +303,8 @@ class HameventController extends Controller
 
     public function addeventparticipant(Hamevent $event)
     {
-        //permission check
-        $permissioncheck = $this->permissioncheck($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }        
+        //Berechtigung checken
+        if(request()->user()->cannot('edit', $event)) { abort(403); } 
         
         //validate
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
@@ -412,12 +350,8 @@ class HameventController extends Controller
 
     public function destroy(Hamevent $event)
     {
-        //permission check
-        $permissioncheck = $this->permissioncheck($event);
-        if($permissioncheck != null)
-        {
-            return $permissioncheck;
-        }      
+        //Berechtigung checken
+        if(request()->user()->cannot('edit', $event)) { abort(403); }  
 
         //check relations
         if($event->callsigns->count() > 0 || $event->awards->count() > 0)
