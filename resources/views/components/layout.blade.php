@@ -103,8 +103,11 @@
                     <a class="nav-link navbar-link" href="/events/create">Create Event</a>
                     @endcan
 
-                    @if(auth()->user()->siteadmin)
+                    @can('see', App\Models\User::class)
                     <a class="nav-link navbar-link" href="/users">User-Admin</a>
+                    @endcan
+
+                    @if(auth()->user()->siteadmin)
                     <a class="nav-link navbar-link" href="/autoimports">Autoimport-Admin</a>
                     @endif
 

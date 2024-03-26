@@ -3,7 +3,11 @@
 
     <x-slot name="slot">
         <div class="container admincontainer mt-5">
+            @if(auth()->user()->siteadmin)
             <h1 class="text-center mb-4">Registered users</h1>
+            @else
+            <h1 class="text-center mb-4">Registered users you created</h1>
+            @endif
             <button style="display: block; margin: auto; margin-bottom: 15px;" class="btn btn-primary text-center" onclick="$('#addUserModal').modal('show');">Add new user</button>
             <table class="table table-bordered table-hover table-dark" style="margin-bottom: 60px;">
               <thead class="thead-light">
@@ -23,8 +27,12 @@
                       <td style="vertical-align: middle;">{{ $user->siteadmin ? 'yes' : 'no' }}</td>
                       <td style="vertical-align: middle;">{{ $user->cancreateevents ? 'yes' : 'no' }}</td>
                       <td style="vertical-align: middle;">
+                        @can('updatebasic', $user)
                         <a href="/user/{{ $user->id }}"><button class="btn btn-warning">Edit</button></a>
+                        @endcan
+                        @can('updateadmindata', $user)
                         <a href="/user/{{ $user->id }}/toggle"><button class="btn {{ $user->locked ? 'btn-primary' : 'btn-danger' }}">Toggle Lock</button></a>
+                        @endcan
                       </td>
                   </tr>
                   @endforeach
@@ -52,6 +60,7 @@
                             <label for="password">Password:</label>
                             <input name="password" class="form-control" type="password" value="">
                         </div>
+                        @if(auth()->user()->siteadmin)
                         <div class="form-group">
                             <label for="siteadmin">Site-Admin:</label>
                             <select class="form-control" name="siteadmin">
@@ -66,6 +75,10 @@
                                 <option value="1">yes</option>
                             </select>
                         </div>
+                        @else
+                        <input type="hidden" id="siteadmin" name="siteadmin" value="0">
+                        <input type="hidden" id="cancreateevents" name="cancreateevents" value="0">
+                        @endif
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Add User">
                         </div>

@@ -9,28 +9,27 @@ class UserController extends Controller
 {
     public function index()
     {
-        //check permissions
-        $check = $this->checkpermissions();
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('see', User::class)) { abort(403); }
         
-        //Load all users
-        $users = User::all();
-
+        if(auth()->user()->siteadmin)
+        {
+            //Load all users
+            $users = User::all();
+        }else
+        {
+            //load only the user itself and all users that this user created
+            $users = User::where('id', auth()->user()->id)->orWhere('creator_id', auth()->user()->id)->get();
+        }
+    
         //Load view
         return view('users.list', ['users' => $users]);
     }
 
     public function toggle(User $user)
     {
-        //check permissions
-        $check = $this->checkpermissions();
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('updateadmindata', User::class)) { abort(403); }
 
         //prevent locking of the last admin user
         if(!$user->locked)
@@ -63,12 +62,8 @@ class UserController extends Controller
 
     public function create()
     {
-        //check permissions
-        $check = $this->checkpermissions();
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('create', User::class)) { abort(403); }
         
         //manipulate request data before validation
         $data = request()->all();
@@ -107,11 +102,20 @@ class UserController extends Controller
         $user = new User();
         $user->username = $attributes['username'];
         $user->password = bcrypt($attributes['password']);
-        $user->siteadmin = $attributes['siteadmin'];
-        $user->cancreateevents = $attributes['cancreateevents'];
         $user->locked = false;
+        $user->siteadmin = false;
+        $user->cancreateevents = false;
+        $user->creator_id = auth()->user()->id;
         $user->save();
 
+        //only save admin data if permissible, if not disregard it
+        if(request()->user()->can('updateadmindata', $user))
+        {
+            $user->siteadmin = $attributes['siteadmin'];
+            $user->cancreateevents = $attributes['cancreateevents'];
+            $user->save();
+        }
+        
         //back to list view
         return redirect()->route('listusers')->with('success', 'User successfully registered.');
 
@@ -119,17 +123,16 @@ class UserController extends Controller
 
     public function showedit(User $user)
     {
+        //Berechtigung checken
+        if(request()->user()->cannot('updatebasic', $user)) { abort(403); }
+        
         return view('users.edit', ['user' => $user]);
     }
 
     public function edit(User $user)
     {
-        //check permissions
-        $check = $this->checkpermissions();
-        if($check != null)
-        {
-            return $check;
-        }
+        //Berechtigung checken
+        if(request()->user()->cannot('updatebasic', $user)) { abort(403); }
         
         //manipulate request data before validation
         $data = request()->all();
@@ -180,23 +183,19 @@ class UserController extends Controller
         //save new data
         $user->username = $attributes['username'];
         $user->password = $attributes['password'] == null ? $user->password : bcrypt($attributes['password']);
-        $user->siteadmin = $attributes['siteadmin'];
-        $user->cancreateevents = $attributes['cancreateevents'];
-        $user->locked = $attributes['locked'];
         $user->save();
 
+        //only save admin data if permissible, if not, disregard
+        if(request()->user()->can('updateadmindata', $user))
+        {
+            $user->siteadmin = $attributes['siteadmin'];
+            $user->cancreateevents = $attributes['cancreateevents'];
+            $user->locked = $attributes['locked'];
+            $user->save();
+        }
+        
         //back to list view
         return redirect()->route('listusers')->with('success', 'User saved successfully.');
 
-    }
-
-    public function checkpermissions()
-    {
-        if(!auth()->user()->siteadmin)
-        {
-            return redirect()->back()->with('danger', 'You do not have site administrator privileges.');
-        }
-
-        return null;
     }
 }

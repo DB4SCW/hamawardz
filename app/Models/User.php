@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -54,6 +55,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Callsign::class);
     }
 
+    public function created_users() : HasMany
+    {
+        return $this->hasMany(User::class, 'creator_id', 'id');
+    }
+
     public function is_manager_of_callsign(Callsign $callsign) : bool
     {
         //Siteadmin manages all
@@ -63,7 +69,7 @@ class User extends Authenticatable
         }
 
         //creator stays manager forever
-        if($callsign->creator_id = $this->id)
+        if($callsign->creator_id == $this->id)
         {
             return true;
         }

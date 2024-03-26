@@ -16,6 +16,7 @@
                             <label for="password">Password:</label>
                             <input name="password" class="form-control" type="password" value="{{ old('password') }}">
                         </div>
+                        @can('updateadmindata', $user)
                         <div class="form-group">
                             <label for="siteadmin">Siteadmin?</label>
                             <select class="form-control" name="siteadmin">
@@ -37,6 +38,11 @@
                                 <option value="1" {{ 1 == (old('locked') ?? $user->locked) ? 'selected' : '' }}>yes</option>
                             </select>
                         </div>
+                        @else
+                        <input type="hidden" id="siteadmin" name="siteadmin" value="{{ $user->siteadmin }}">
+                        <input type="hidden" id="cancreateevents" name="cancreateevents" value="{{ $user->cancreateevents }}">
+                        <input type="hidden" id="locked" name="locked" value="{{ $user->locked }}">
+                        @endcan
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Edit">
                         </div>
