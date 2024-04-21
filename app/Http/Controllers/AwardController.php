@@ -180,6 +180,7 @@ class AwardController extends Controller
         $award->ranking = $attributes['ranking'];
         $award->mode = $attributes['mode'];
         $award->min_threshold = $attributes['min_threshold'];
+        $award->excluded_callsigns = swolf_sanitizecallsignstring($attributes['excluded_callsigns']);
         $award->callsign_top_percent = $attributes['callsign_top_percent'];
         $award->callsign_bold = $attributes['callsign_bold'];
         $award->callsign_font_size_px = $attributes['callsign_font_size_px'];
@@ -234,6 +235,15 @@ class AwardController extends Controller
         //fetch attributes
         $attributes = $validationresult->attributes;
 
+        //delete all award subtimeframes if award no longer uses this ruleset
+        if($award->mode == 9 and $attributes['mode'] != 9)
+        {
+            foreach ($award->awardtimeframes as $timeframe) {
+                $timeframe->delete();
+            }
+        }
+
+        //edit attributes of award
         $award->updated_at = \Carbon\Carbon::now();
         $award->slug = $attributes['slug'];
         $award->title = $attributes['title'];
@@ -241,6 +251,7 @@ class AwardController extends Controller
         $award->ranking = $attributes['ranking'];
         $award->mode = $attributes['mode'];
         $award->min_threshold = $attributes['min_threshold'];
+        $award->excluded_callsigns = swolf_sanitizecallsignstring($attributes['excluded_callsigns']);
         $award->callsign_top_percent = $attributes['callsign_top_percent'];
         $award->callsign_bold = $attributes['callsign_bold'];
         $award->callsign_font_size_px = $attributes['callsign_font_size_px'];
@@ -275,6 +286,7 @@ class AwardController extends Controller
             'ranking' => 'integer|min:0',
             'mode' => 'integer|min:0|max:' . swolf_getmaxmode(),
             'min_threshold' => 'integer|min:1',
+            'excluded_callsigns' => 'string|max:255|nullable',
             'callsign_top_percent' => 'decimal:0,3|min:0|max:100',
             'callsign_bold' => 'integer|min:0|max:1',
             'callsign_font_size_px' => 'integer|min:1',
@@ -306,6 +318,8 @@ class AwardController extends Controller
             'mode.max' => 'Invalid mode.',
             'min_threshold.integer' => 'Threshold must be a whole number.',
             'min_threshold.min' => 'Threshold must be a positive number.',
+            'excluded_callsigns.string' => 'Excluded callsigns must be a valid string.',
+            'excluded_callsigns.max' => 'List of excluded callsigns may not be longer than 255 characters.',
             'callsign_top_percent.decimal' => 'Callsign Top % must be a number.',
             'callsign_top_percent.min' => 'Callsign Top % must be at least 0%.',
             'callsign_top_percent.max' => 'Callsign Top % must be at most 100%.',

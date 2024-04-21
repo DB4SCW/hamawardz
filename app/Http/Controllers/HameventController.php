@@ -37,7 +37,7 @@ class HameventController extends Controller
     
     public function showcreate()
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('create', Hamevent::class)) { abort(403); }
         
         //return view
@@ -47,7 +47,7 @@ class HameventController extends Controller
     public function create()
     {
         
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('create', Hamevent::class)) { abort(403); }
 
         //manipulate the slug before validation
@@ -120,7 +120,7 @@ class HameventController extends Controller
 
     public function showedit(Hamevent $event)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('edit', $event)) { abort(403); }
 
         //load relations
@@ -132,7 +132,7 @@ class HameventController extends Controller
 
     public function edit(Hamevent $event)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('edit', $event)) { abort(403); }
 
         //manipulate the slug before validation
@@ -204,7 +204,7 @@ class HameventController extends Controller
     public function removemanager(Hamevent $event, int $managerid)
     {
 
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('edit', $event)) { abort(403); }
         
         //dont know why I can't use the autofind in function header but here we are...
@@ -236,7 +236,7 @@ class HameventController extends Controller
 
     public function addmanager(Hamevent $event)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('edit', $event)) { abort(403); }    
         
         //validate
@@ -284,7 +284,7 @@ class HameventController extends Controller
     public function removeeventparticipant(Hamevent $event, Callsign $callsign)
     {
 
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('edit', $event)) { abort(403); }
         
         //check if User is even a current eventmanger
@@ -303,7 +303,7 @@ class HameventController extends Controller
 
     public function addeventparticipant(Hamevent $event)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('edit', $event)) { abort(403); } 
         
         //validate
@@ -350,7 +350,7 @@ class HameventController extends Controller
 
     public function destroy(Hamevent $event)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('edit', $event)) { abort(403); }  
 
         //check relations

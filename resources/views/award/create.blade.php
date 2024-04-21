@@ -39,6 +39,11 @@
                             <input name="min_threshold" class="form-control" type="number" min="0" step="1" value="{{ old('min_threshold') }}">
                         </div>
 
+                        <div class="form-group">
+                            <label for="excluded_callsigns">Exclude these callsigns from award computation:</label>
+                            <input name="excluded_callsigns" class="form-control" type="text" value="{{ old('excluded_callsigns') ?? $award->excluded_callsigns }}">
+                        </div>
+
                         <!-- DXCC modes handling -->
                         <div class="form-group">
                             <label for="dxcc_id">DXCC (only for DXCC modes):</label>

@@ -12,6 +12,8 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\AwardtimeframeController;
+use App\Models\Awardtimeframe;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -98,6 +100,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/awards/{award:slug}/exampleaward', [AwardController::class, 'printexample'])->name('printexampleaward');
     Route::post('/awards/{award:slug}/edit', [AwardController::class, 'edit'])->name('editaward');
     Route::post('/awards/{award:slug}/uploadbackground', [AwardController::class, 'uploadbackground'])->name('uploadawardbackground');
+
+    //Awardtimeframes
+    Route::post('/award/{award:id}/addsubtimeframe', [AwardtimeframeController::class, 'create'])->name('createawardsubtimeframe');
+    Route::get('/awardtimeframe/{awardtimeframe:id}/delete', [AwardtimeframeController::class, 'delete'])->name('deleteawardsubtimeframe');
 
     //Callsigns
     Route::get('/callsigns', [CallsignController::class, 'index'])->name('showcallsigns');

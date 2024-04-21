@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('see', User::class)) { abort(403); }
         
         if(auth()->user()->siteadmin)
@@ -28,7 +28,7 @@ class UserController extends Controller
 
     public function toggle(User $user)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('updateadmindata', User::class)) { abort(403); }
 
         //prevent locking of the last admin user
@@ -62,7 +62,7 @@ class UserController extends Controller
 
     public function create()
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('create', User::class)) { abort(403); }
         
         //manipulate request data before validation
@@ -123,7 +123,7 @@ class UserController extends Controller
 
     public function showedit(User $user)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('updatebasic', $user)) { abort(403); }
         
         return view('users.edit', ['user' => $user]);
@@ -131,7 +131,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('updatebasic', $user)) { abort(403); }
         
         //manipulate request data before validation

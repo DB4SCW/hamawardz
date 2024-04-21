@@ -39,6 +39,11 @@
                             <input name="min_threshold" class="form-control" type="number" min="0" step="1" value="{{ old('min_threshold') ?? $award->min_threshold }}">
                         </div>
 
+                        <div class="form-group">
+                            <label for="excluded_callsigns">Exclude these callsigns from award computation:</label>
+                            <input name="excluded_callsigns" class="form-control" type="text" value="{{ old('excluded_callsigns') ?? $award->excluded_callsigns }}">
+                        </div>
+
                         <!-- DXCC modes handling -->
                         <div class="form-group">
                             <label for="dxcc_id">DXCC (only for DXCC modes):</label>
@@ -117,10 +122,36 @@
                         </div>
                     </form>
                     <br>
+                    <!-- only for award mode 9 -->
+                    @if($award->mode == 9)
+                    <h3>Award subtimeframes:</h3>
+                    <table class="table table-bordered table-hover table-dark" style="margin-bottom: 20px;">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Start (UTC)</th>
+                                <th>End (UTC)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($award->awardtimeframes as $timeframe)
+                            <tr>
+                                <td style="vertical-align: middle;">{{ $timeframe->start->format('Y-m-d @ H:i') . ' UTC' }}</td>
+                                <td style="vertical-align: middle;">{{ $timeframe->end->format('Y-m-d @ H:i') . ' UTC' }}</td>
+                                <td>
+                                    <a href="/awardtimeframe/{{ $timeframe->id }}/delete"><button class="btn btn-danger" style="margin: 5px;">Delete</button></a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>     
+                    <button style="display: block; margin: auto;" class="btn btn-warning text-center" onclick="$('#addAwardSubTimeframe').modal('show');">Add new award subtimeframe</button>     
+                    <br>
+                    @endif
+                    <h3>Background image:</h3>
                     <form action="/awards/{{ $award->slug }}/uploadbackground" method="post"enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label for="file">Background Image:</label>
                             <input type="file" class="form-control" id="file" name="file">
                         </div>
                         <div class="text-center">
@@ -134,6 +165,42 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal for  adding subtimeframe only for mode 9-->
+        @if($award->mode == 9)
+        <div class="modal fade" id="addAwardSubTimeframe" tabindex="-1" role="dialog" aria-labelledby="addAwardSubTimeframeLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dark" role="document">
+              <div class="modal-content">
+                <div class="modal-header modal-dark">
+                  <h5 class="modal-title" id="addCallsignModalLabel">Add new award subtimeframe:</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="message">
+                    <form action="/award/{{ $award->id }}/addsubtimeframe" method="post">
+                        @csrf
+                        <div class="form-group">
+                            <label for="start">Start (UTC):</label>
+                            <input name="start" class="form-control" type="datetime-local">
+                        </div>
+                        <div class="form-group">
+                            <label for="end">End (UTC):</label>
+                            <input name="end" class="form-control" type="datetime-local">
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Add Timeframe">
+                        </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        @endif
+
     </x-slot>
 
 </x-layout>

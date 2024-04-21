@@ -102,7 +102,7 @@ class scheduled_autoimport extends Command
                 }
 
                 //strip prefix and suffix from raw callsign
-                $c->callsign = getcallsignwithoutadditionalinfo($c->raw_callsign);
+                $c->callsign = swolf_getcallsignwithoutadditionalinfo($c->raw_callsign);
                 
                 //get frequency
                 $c->freq = getAutoImportFieldContent($config, "frequency", $record);

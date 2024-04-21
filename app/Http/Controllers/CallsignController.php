@@ -101,7 +101,7 @@ class CallsignController extends Controller
     public function show(Callsign $callsign)
     {
         
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         $callsign->load('uploadusers');
@@ -111,7 +111,7 @@ class CallsignController extends Controller
 
     public function edit(Callsign $callsign)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         //Validation
@@ -150,7 +150,7 @@ class CallsignController extends Controller
 
     public function destroy(Callsign $callsign)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         //prevent deletion if callsign has contacts
@@ -171,7 +171,7 @@ class CallsignController extends Controller
 
     public function removeuploader(Callsign $callsign, int $uploaderid)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
         try {
@@ -190,7 +190,7 @@ class CallsignController extends Controller
 
     public function adduploader(Callsign $callsign)
     {
-        //Berechtigung checken
+        //check permission
         if(request()->user()->cannot('manage', $callsign)) { abort(403); }
         
         //validate

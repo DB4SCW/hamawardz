@@ -76,7 +76,7 @@ class LogcheckController extends Controller
         $attributes = $validator->validated();
 
         //get owner callsign 
-        $callsign = getcallsignwithoutadditionalinfo($attributes['callsign']);
+        $callsign = swolf_getcallsignwithoutadditionalinfo($attributes['callsign']);
 
         //check valid callsign
         if(!preg_match("/^[A-Z, 0-9]{3,20}$/", $callsign))

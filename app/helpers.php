@@ -1,14 +1,31 @@
 <?php
 use App\Models\Autoimport;
 
-function getcallsignwithoutadditionalinfo(string $input) : string
+function swolf_getcallsignwithoutadditionalinfo(string $input) : string
 {
-    $ergebnis = strtoupper($input);
-    $ergebnis = preg_replace("/^[A-Z, 0-9]{1,3}\//", "", $ergebnis); //delete prefix
-    $ergebnis = preg_replace("/\/\w{0,}$/", "", $ergebnis); //delete suffix
+    $result = strtoupper($input);
+    $result = preg_replace("/^[A-Z, 0-9]{1,3}\//", "", $result); //delete prefix
+    $result = preg_replace("/\/\w{0,}$/", "", $result); //delete suffix
     
     //return pure callsign
-    return $ergebnis;
+    return $result;
+}
+
+function swolf_getcallsignsfromstring(?string $input)
+{
+    return explode(",", swolf_sanitizecallsignstring($input) ?? '');
+}
+
+function swolf_sanitizecallsignstring(?string $input) : ?string
+{
+    if($input == null) { return null; }
+    $callsignstrings_raw = str_replace(" ", "", $input);
+    $callsignstrings_raw = str_replace(";", ",", $callsignstrings_raw);
+    $callsignstrings_raw = str_replace("-", ",", $callsignstrings_raw);
+    $callsignstrings_raw = str_replace("/", ",", $callsignstrings_raw);
+    $callsignstrings_raw = str_replace("\\", ",", $callsignstrings_raw);
+    $callsignstrings_raw = str_replace("_", ",", $callsignstrings_raw);
+    return strtoupper($callsignstrings_raw);
 }
 
 function swolf_validatorerrors(\Illuminate\Validation\Validator $validator) : string
@@ -37,6 +54,8 @@ function swolf_getawardmodetext(int $mode, $threshold = null) : string
             return "Each callsign of the chosen dxcc counts 1. (min: " . ($threshold ?? 0) . ")";
         case 8:
             return "Each callsign of the chosen continent counts 1. (min: " . ($threshold ?? 0) . ")";
+        case 9:
+            return "Any number of QSOs inside one defined award subtimeframe counts as 1. (min: " . ($threshold ?? 0) . ")";
         default:
             return "error";
     }
@@ -44,7 +63,7 @@ function swolf_getawardmodetext(int $mode, $threshold = null) : string
 
 function swolf_getmaxmode() : int
 {
-    return 8;
+    return 9;
 }
 
 function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $record) : ?string

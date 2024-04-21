@@ -28,6 +28,11 @@ class Award extends Model
         return $this->hasMany(Awardlog::class);
     }
 
+    public function awardtimeframes() : HasMany
+    {
+        return $this->hasMany(Awardtimeframe::class);
+    }
+
     public function mode_text()
     {
         return swolf_getawardmodetext($this->mode, $this->min_threshold ?? 0);
@@ -61,6 +66,8 @@ class Award extends Model
                 return $this->eligible_mode_7($callsign);
             case 8:
                 return $this->eligible_mode_8($callsign);
+            case 9:
+                return $this->eligible_mode_9($callsign);
             default:
                 return false;
         }
@@ -89,6 +96,8 @@ class Award extends Model
                 return $this->aggregate_count_mode_7($callsign);
             case 8:
                 return $this->aggregate_count_mode_8($callsign);
+            case 9:
+                return $this->aggregate_count_mode_9($callsign);
             default:
                 return 0;
         }
@@ -107,6 +116,13 @@ class Award extends Model
         
     }
 
+    public function getexcludedcallsignids()
+    {
+        $callsigns_raw = swolf_getcallsignsfromstring($this->excludedcallsigns ?? '') ;
+        $callsignids = Callsign::whereIn('call', $callsigns_raw)->get()->pluck('id');
+        return $callsignids->toArray();
+    }
+
     public function aggregate_count_mode_0(string $callsign) : int
     {
         return Contact::where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())->count();
@@ -116,7 +132,7 @@ class Award extends Model
     {
         return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('callsign_id')
         ->get()
         ->count();
@@ -128,7 +144,7 @@ class Award extends Model
         ->join('modes', 'modes.id', '=', 'contacts.mode_id')
         ->select(DB::raw('contacts.callsign_id, modes.mode, count(contacts.id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('contacts.callsign_id', 'modes.mode')
         ->get()
         ->count();
@@ -140,7 +156,7 @@ class Award extends Model
         ->join('bands', 'bands.id', '=', 'contacts.band_id')
         ->select(DB::raw('contacts.callsign_id, bands.band, count(contacts.id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('contacts.callsign_id', 'bands.band')
         ->get()
         ->count();
@@ -153,7 +169,7 @@ class Award extends Model
         ->join('modes', 'modes.id', '=', 'contacts.mode_id')
         ->select(DB::raw('contacts.callsign_id, bands.band, modes.mode, count(contacts.id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mode')
         ->get()
         ->count();
@@ -165,7 +181,7 @@ class Award extends Model
         ->join('modes', 'modes.id', '=', 'contacts.mode_id')
         ->select(DB::raw('contacts.callsign_id, modes.mainmode, count(contacts.id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('contacts.callsign_id', 'modes.mainmode')
         ->get()
         ->count();
@@ -178,7 +194,7 @@ class Award extends Model
         ->join('modes', 'modes.id', '=', 'contacts.mode_id')
         ->select(DB::raw('contacts.callsign_id, bands.band, modes.mainmode, count(contacts.id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mainmode')
         ->get()
         ->count();
@@ -188,7 +204,7 @@ class Award extends Model
     {
         return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('callsign_id')
         ->get()
         ->count();
@@ -198,8 +214,23 @@ class Award extends Model
     {
         return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
         ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', $this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray())
+        ->whereIn('callsign_id', array_diff($this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
         ->groupBy('callsign_id')
+        ->get()
+        ->count();
+    }
+
+    public function aggregate_count_mode_9(string $callsign) : int
+    {
+        return DB::table('awardtimeframes')
+        ->leftJoin('contacts', function($join) {
+            $join->on('contacts.qso_datetime', '>=', 'awardtimeframes.start')
+                 ->on('contacts.qso_datetime', '<=', 'awardtimeframes.end');
+        })
+        ->select('awardtimeframes.id', DB::raw('COUNT(contacts.id) AS COUNT'))
+        ->where([['awardtimeframes.award_id', $this->id], ['contacts.callsign', $callsign]])
+        ->whereIn('contacts.callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
+        ->groupBy('awardtimeframes.id')
         ->get()
         ->count();
     }
@@ -292,6 +323,16 @@ class Award extends Model
         }
 
         return $this->aggregate_count_mode_8($callsign) >= $this->min_threshold;
+    }
+
+    public function eligible_mode_9(string $callsign) : bool
+    {
+        if($this->min_threshold == null)
+        {
+            return false;
+        }
+
+        return $this->aggregate_count_mode_9($callsign) >= $this->min_threshold;
     }
 
 
