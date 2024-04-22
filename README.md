@@ -44,7 +44,7 @@ Hamawardz offers:
 7. Each callsign counts one on each band and main mode (CW, DIGITAL, VOICE). Means you can work one callsign on different bands main modes for additional credit.
 8. Each callsign of one DXCC counts as 1. Same as Ruleset 2, but only counts a certain DXCC. Classic "work all German callsigns".
 9. Each callsign of one continent counts as 1. Same as Ruleset 2, but only counts a certain continent. Classic "work all Oceanian callsigns".
-10. Any number of QSOs inside a certain subtimeframe counts 1. Classic for "work this callsign at least once in each timeframe".
+10. BETA: Any number of QSOs inside a certain subtimeframe counts 1. Classic for "work this callsign at least once in each timeframe". Requires additional configuration.
 
 ## Installation
 
