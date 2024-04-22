@@ -35,11 +35,11 @@ Hamawardz offers:
 - Your ruleset requires that the applicants for awards have to send in their logs instead of the event callsign operators
 
 ## Currently supported rulesets:
-1. Each QSO counts. No fuss: Get 15 QSOs, count 15 QSOs. Duples, bands, modes, everything goes.
-2. Each distinct callsign counts. The classic for "work each event callsign at least once"-type of awards.
-3. Each callsign counts one on each mode. Means you can work one callsign on different modes for additional credit.
-4. Each callsign counts one on each band. Means you can work one callsign on different bands for additional credit.
-5. Each callsign counts one on each band and mode. Means you can work one callsign on different bands and modes for additional credit.
+1. Each QSO counts. No fuss: Get 15 QSOs, count 15 QSOs. Dupes, bands, modes, everything goes.
+2. Each distinct callsign counts only once. The classic for "work each event callsign at least once"-type of awards. Dupes get discarded.
+3. Each callsign counts one on each mode. Means you can work one callsign on different modes for additional credit. Multiple QSOs with one callsign on the same mode get discarded.
+4. Each callsign counts one on each band. Means you can work one callsign on different bands for additional credit. Multiple QSOs with one callsign on the same band get discarded.
+5. Each callsign counts one on each band and mode. Means you can work one callsign on different bands and modes for additional credit. 
 6. Each callsign counts one on each main mode (CW, DIGITAL, VOICE). Means you can work one callsign on different mainmodes for additional credit.
 7. Each callsign counts one on each band and main mode (CW, DIGITAL, VOICE). Means you can work one callsign on different bands main modes for additional credit.
 8. Each callsign of one DXCC counts as 1. Same as Ruleset 2, but only counts a certain DXCC. Classic "work all German callsigns".
