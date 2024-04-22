@@ -34,6 +34,18 @@ Hamawardz offers:
 - Your award rules are something like "Have x QSOs with any random German operator"
 - Your ruleset requires that the applicants for awards have to send in their logs instead of the event callsign operators
 
+## Currently supported rulesets:
+1. Each QSO counts. No fuss: Get 15 QSOs, count 15 QSOs. Duples, bands, modes, everything goes.
+2. Each distinct callsign counts. The classic for "work each event callsign at least once"-type of awards.
+3. Each callsign counts one on each mode. Means you can work one callsign on different modes for additional credit.
+4. Each callsign counts one on each band. Means you can work one callsign on different bands for additional credit.
+5. Each callsign counts one on each band and mode. Means you can work one callsign on different bands and modes for additional credit.
+6. Each callsign counts one on each main mode (CW, DIGITAL, VOICE). Means you can work one callsign on different mainmodes for additional credit.
+7. Each callsign counts one on each band and main mode (CW, DIGITAL, VOICE). Means you can work one callsign on different bands main modes for additional credit.
+8. Each callsign of one DXCC counts as 1. Same as Ruleset 2, but only counts a certain DXCC. Classic "work all German callsigns".
+9. Each callsign of one continent counts as 1. Same as Ruleset 2, but only counts a certain continent. Classic "work all Oceanian callsigns".
+10. Any number of QSOs inside a certain subtimeframe counts 1. Classic for "work this callsign at least once in each timeframe".
+
 ## Installation
 
 ### Step 0: Get a domain, or a subdomain
