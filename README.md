@@ -52,7 +52,7 @@ Hamawardz offers:
 You'll need one for this piece of software. The internet provides plenty of options.
 
 ### Step 1: Install Apache, PHP and Composer
-This is just the list of commands to install all those prerequisites on a new current Ubuntu system. You'll find plenty of extensive tutorials on how to to that, this is just here to get you started asap.
+This is just the list of commands to install all those prerequisites on a new current Ubuntu system. You'll find plenty of extensive tutorials on how to do that, this is just here to get you started asap.
 
 ```bash
 sudo apt-get update -y
