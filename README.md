@@ -30,11 +30,11 @@ Hamawardz offers:
 
 ## Hamawardz is not for you, if...
 
-- Your event does not have fixed participants (hamawardz requires each event callsign to be explicitly registered in the software)
+- Your event does not have fixed participants (hamawardz requires each event callsign to be explicitly registered in the software and to actively upload logs)
 - Your award rules are something like "Have x QSOs with any random German operator"
 - Your ruleset requires that the applicants for awards have to send in their logs instead of the event callsign operators
 
-## Currently supported rulesets:
+## Currently supported award rulesets:
 1. Each QSO counts. No fuss: Get 15 QSOs, count 15 QSOs. Dupes, bands, modes, everything goes.
 2. Each distinct callsign counts only once. The classic for "work each event callsign at least once"-type of awards. Dupes get discarded.
 3. Each callsign counts one on each mode. Means you can work one callsign on different modes for additional credit. Multiple QSOs with one callsign on the same mode get discarded.
