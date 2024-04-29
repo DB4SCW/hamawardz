@@ -89,7 +89,7 @@ In the file, create the virtual host. Of course, customize directories, Domains 
     ServerName mydomain.com
     DocumentRoot "/var/www/hamawardz/public"
 
-    <Directory /var/www/hamawardz>
+    <Directory /var/www/hamawardz/public>
     Options Indexes MultiViews FollowSymLinks
     AllowOverride All
     Order allow,deny
