@@ -344,7 +344,7 @@ class HameventController extends Controller
         $event->callsigns()->attach($new_participant);
 
         //return to view
-        return redirect()->route('showeditevent', ['event' => $event->slug])->with('success', 'User ' . $new_participant->call . ' is now an event participant.');
+        return redirect()->route('showeditevent', ['event' => $event->slug])->with('success', 'Callsign ' . $new_participant->call . ' is now an event participant.');
 
     }
 
