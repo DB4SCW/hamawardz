@@ -41,7 +41,7 @@
 
                         <div class="form-group">
                             <label for="excluded_callsigns">Exclude these callsigns from award computation:</label>
-                            <input name="excluded_callsigns" class="form-control" type="text" value="{{ old('excluded_callsigns') ?? $award->excluded_callsigns }}">
+                            <input name="excluded_callsigns" class="form-control" type="text" value="{{ old('excluded_callsigns')}}">
                         </div>
 
                         <!-- DXCC modes handling -->
