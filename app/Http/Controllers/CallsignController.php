@@ -61,7 +61,9 @@ class CallsignController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
             'call' => 'string|min:3|max:20|unique:callsigns,call',
             'cert_holder_callsign' => 'string|min:3|max:20', 
-            'dxcc_id' => 'exists:dxccs,id'
+            'dxcc_id' => 'exists:dxccs,id',
+            'valid_from' => 'date|nullable',
+            'valid_to' => 'date|after:valid_from|nullable'
 
         ], 
         [
@@ -69,7 +71,10 @@ class CallsignController extends Controller
             'call.min' => 'Callsign must be no less than 3 characters.',
             'call.max' => 'Callsign must be no more than 20 characters.',
             'call.unique' => 'Callsign is already registered.',
-            'dxcc_id.exists' => 'Unknown DXCC.'
+            'dxcc_id.exists' => 'Unknown DXCC.',
+            'valid_from.date' => 'Start of validity must be a valid datetime.',
+            'valid_to.date' => 'End of validity must be a valid datetime.',
+            'valid_to.after' => 'End of validity must be after start of validity.'
         
         ]);
 
@@ -89,6 +94,8 @@ class CallsignController extends Controller
         $callsign->call = strtoupper($attributes['call']);
         $callsign->cert_holder_callsign = strtoupper($attributes['cert_holder_callsign']);
         $callsign->dxcc_id = $attributes['dxcc_id'];
+        $callsign->valid_from = $attributes['valid_from'] != null ? \Carbon\Carbon::parse($attributes['valid_from']) : null;
+        $callsign->valid_to = $attributes['valid_to'] != null ? \Carbon\Carbon::parse($attributes['valid_to']) : null;
 
         //save callsign
         $callsign->save();
@@ -118,7 +125,9 @@ class CallsignController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
             'call' => 'string|min:3|max:20|unique:callsigns,call,' . $callsign->id,
             'cert_holder_callsign' => 'string|min:3|max:20',
-            'dxcc_id' => 'exists:dxccs,id'
+            'dxcc_id' => 'exists:dxccs,id',
+            'valid_from' => 'date|nullable',
+            'valid_to' => 'date|after:valid_from|nullable'
 
         ], 
         [
@@ -126,7 +135,10 @@ class CallsignController extends Controller
             'call.min' => 'Callsign must be no less than 3 characters.',
             'call.max' => 'Callsign must be no more than 20 characters.',
             'call.unique' => 'Callsign is already registered.',
-            'dxcc_id.exists' => 'Unknown DXCC.'
+            'dxcc_id.exists' => 'Unknown DXCC.',
+            'valid_from.date' => 'Start of validity must be a valid datetime.',
+            'valid_to.date' => 'End of validity must be a valid datetime.',
+            'valid_to.after' => 'End of validity must be after start of validity.'
         ]);
 
         //handle validation failure
@@ -142,6 +154,8 @@ class CallsignController extends Controller
         $callsign->call = strtoupper($attributes['call']);
         $callsign->cert_holder_callsign = strtoupper($attributes['cert_holder_callsign']);
         $callsign->dxcc_id = $attributes['dxcc_id'];
+        $callsign->valid_from = $attributes['valid_from'] != null ? \Carbon\Carbon::parse($attributes['valid_from']) : null;
+        $callsign->valid_to = $attributes['valid_to'] != null ? \Carbon\Carbon::parse($attributes['valid_to']) : null;
         $callsign->save();
 
         //go to edit page

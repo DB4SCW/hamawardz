@@ -25,8 +25,16 @@
                                 @endforeach
                             </select>
                           </div>
+                          <div class="form-group">
+                            <label for="valid_from">Validity start (UTC):</label>
+                            <input name="valid_from" class="form-control" type="datetime-local" value="{{ old('valid_from') ?? $callsign->valid_from }}">
+                          </div>
+                          <div class="form-group">
+                            <label for="valid_to">Validity end (UTC):</label>
+                            <input name="valid_to" class="form-control" type="datetime-local" value="{{ old('valid_to') ?? $callsign->valid_to }}">
+                          </div>
                           <div class="text-center">
-                              <input type="submit" class="btn btn-primary" value="Add Callsign">
+                              <input type="submit" class="btn btn-primary" value="Edit Callsign">
                           </div>
                         </form>   
                     </div>

@@ -66,6 +66,10 @@ class UploadController extends Controller
         {
             return redirect()->back()->with('danger', 'Callsign is inactive.');
         }
+
+        //dummyfill null values
+        $valid_from = $callsign->valid_from == null ? \Carbon\Carbon::parse('1900-01-01') : $callsign->valid_from;
+        $valid_to = $callsign->valid_to == null ? \Carbon\Carbon::now()->addyears(99) : $callsign->valid_to;
         
         //check if user is allowed to upload for this callsign
         $allowed_callsigns = auth()->user()->callsigns;
@@ -132,6 +136,14 @@ class UploadController extends Controller
             $contact->freq = $record['FREQ'];
             $contact->rst_s = $record['RST_SENT'];
             $contact->rst_r = $record['RST_RCVD'];
+
+            //check date validity
+            if($contact->qso_datetime < $valid_from or $contact->qso_datetime > $valid_to)
+            {
+                array_push($errors, 'Record ' . $i+1 . ', Callsign ' . $contact->raw_callsign . ' on ' . $contact->qso_datetime->format('Y-m-d @ H:i') . ' UTC: Callsign is not valid for this QSO datetime. Skipping.');
+                $i++;
+                continue;
+            }
             
             //operator handling
             $operator = "";
