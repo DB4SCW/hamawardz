@@ -96,6 +96,13 @@
 
                         <!-- datetime formatting -->
                         <div class="form-group">
+                            <label for="datetime_print">print datetime?:</label>
+                            <select class="form-control" name="datetime_print">
+                                <option value="0" {{ 0 == old('datetime_print') ? 'selected' : '' }}>no</option>
+                                <option value="1" {{ 1 == old('datetime_print') ? 'selected' : '' }}>yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="datetime_top_percent">Datetime - Top %:</label>
                             <input name="datetime_top_percent" class="form-control" type="number" min="0" max="100" step="0.01" value="{{ old('datetime_top_percent') }}">
                         </div>

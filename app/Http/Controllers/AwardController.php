@@ -187,6 +187,7 @@ class AwardController extends Controller
         $award->chosen_name_top_percent = $attributes['chosen_name_top_percent'];
         $award->chosen_name_bold = $attributes['chosen_name_bold'];
         $award->chosen_name_font_size_px = $attributes['chosen_name_font_size_px'];
+        $award->datetime_print = $attributes['datetime_print'];
         $award->datetime_top_percent = $attributes['datetime_top_percent'];
         $award->datetime_left_percent = $attributes['datetime_left_percent'];
         $award->datetime_font_size_px = $attributes['datetime_font_size_px'];
@@ -258,6 +259,7 @@ class AwardController extends Controller
         $award->chosen_name_top_percent = $attributes['chosen_name_top_percent'];
         $award->chosen_name_bold = $attributes['chosen_name_bold'];
         $award->chosen_name_font_size_px = $attributes['chosen_name_font_size_px'];
+        $award->datetime_print = $attributes['datetime_print'];
         $award->datetime_top_percent = $attributes['datetime_top_percent'];
         $award->datetime_left_percent = $attributes['datetime_left_percent'];
         $award->datetime_font_size_px = $attributes['datetime_font_size_px'];
@@ -298,7 +300,8 @@ class AwardController extends Controller
             'datetime_font_size_px' => 'integer|min:1',
             'active' => 'integer|min:0|max:1',
             'dxcc_id' => 'nullable|exists:dxccs,id',
-            'dxcc_querystring' => 'nullable|string|max:20'
+            'dxcc_querystring' => 'nullable|string|max:20',
+            'datetime_print' => 'integer|min:0|max:1'
         ], 
         [
             'title.string' => 'Title must be a text.',
@@ -349,7 +352,10 @@ class AwardController extends Controller
             'active.max' => 'Active must be yes or no.',
             'dxcc_id.exists' => 'Invalid DXCC.',
             'dxcc_querystring.string' => 'DXCC Querystring must be a text.',
-            'dxcc_querystring.max' => 'DXCC Querystring must be at most 20 characters long.'
+            'dxcc_querystring.max' => 'DXCC Querystring must be at most 20 characters long.',
+            'datetime_print.integer' => 'Invalid datetime print type.',
+            'datetime_print.min' => 'Invalid datetime print type.',
+            'datetime_print.max' => 'Invalid datetime print type.'
         ]);
 
         //open return class

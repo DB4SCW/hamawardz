@@ -76,6 +76,8 @@
     <!-- The overlays -->
     <div class="callsign horicentre">{{ $callsign }}</div>
     <div class="chosenname horicentre">{{ $chosenname ?? '' }}</div>
+    @if($award->datetime_print)
     <div class="datetime">{{ $issue_datetime->format('Y-m-d @ H:i') . ' UTC' }}</div>
+    @endif
 </body>
 </html>
