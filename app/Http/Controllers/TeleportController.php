@@ -12,7 +12,7 @@ class TeleportController extends Controller
     public function dumpalluploads()
     {
         //only siteadmin may do that
-        if(!auth()->user()->siteadmin) { abort(503); }
+        if(!auth()->user()->siteadmin) { abort(403); }
         
         //get all uploads
         $uploads = Upload::all();
@@ -45,7 +45,7 @@ class TeleportController extends Controller
     public function teleportout()
     {
         //only siteadmin may do that
-        if(!auth()->user()->siteadmin) { abort(503); }
+        if(!auth()->user()->siteadmin) { abort(403); }
         
         //define all tables to be dumped to json
         $tables = ['autoimports', 'awardlogs', 'awards', 'awardtimeframes', 'bands', 'callsigns', 'callsign_hamevent', 'callsign_user', 'contacts', 'dxccs', 'hamevents', 'hamevent_user', 'modes', 'phonetics', 'uploads', 'users']; 
@@ -85,7 +85,7 @@ class TeleportController extends Controller
     public function teleportin()
     {
         //only siteadmin may do that
-        if(!auth()->user()->siteadmin) { abort(503); }
+        if(!auth()->user()->siteadmin) { abort(403); }
         
         //validate inputs
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
