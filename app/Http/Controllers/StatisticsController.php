@@ -158,14 +158,33 @@ class StatisticsController extends Controller
         $dataheader = 'Callsign, name and (re)creation date';
         $header = 'Created awards';
 
-        //load data
+        //load award ids for event
         $awardids = $event->awards->pluck('id');
-        $stats = DB::table('awardlogs')
-        ->selectRaw('awards.title, CONCAT(awardlogs.callsign, " - ", awardlogs.chosen_name, " @ ", awardlogs.updated_at) as Data')
-        ->join('awards', 'awards.id', 'award_id')
-        ->whereIn('award_id', $awardids)
-        ->orderBy('awardlogs.updated_at', 'DESC')
-        ->get();
+
+        //get database type
+        $databaseType = DB::getDriverName();
+        if($databaseType === 'mysql')
+        {
+            //load data
+            $stats = DB::table('awardlogs')
+            ->selectRaw('awards.title, CONCAT(awardlogs.callsign, " - ", awardlogs.chosen_name, " @ ", awardlogs.updated_at) as Data')
+            ->join('awards', 'awards.id', 'award_id')
+            ->whereIn('award_id', $awardids)
+            ->orderBy('awardlogs.updated_at', 'DESC')
+            ->get();
+        }elseif($databaseType === 'sqlite')
+        {
+            //load data
+            $stats = DB::table('awardlogs')
+            ->selectRaw('awards.title, awardlogs.callsign || " - " || awardlogs.chosen_name || " @ " || awardlogs.updated_at as Data')
+            ->join('awards', 'awards.id', 'award_id')
+            ->whereIn('award_id', $awardids)
+            ->orderBy('awardlogs.updated_at', 'DESC')
+            ->get();
+        }else
+        {
+            return redirect()->back()->with('warning', 'Only Sqlite and MySQL databases are supported for this function');
+        }
 
         //return view
         return view('statistics.blankstatpage', ['event' => $event, 'descriptionheader' => $description, 'dataheader' => $dataheader, 'header' => $header, 'stats' => $stats]);

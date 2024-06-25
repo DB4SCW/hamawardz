@@ -21,6 +21,14 @@ class SessionController extends Controller
             'password' => 'required'
         ]);
 
+        //Username manipulation before checking. "administrator" is the only legal lowercase user
+        if(strtolower($attributes['username']) != 'administrator')
+        {
+            $attributes['username'] = strtoupper($attributes['username']);
+        }else{
+            $attributes['username'] = strtolower($attributes['username']);
+        }
+
         //check for non-locked candidates for login check
         $candidate = User::where([['username', $attributes['username']], ['locked', 0]])->count();
 
