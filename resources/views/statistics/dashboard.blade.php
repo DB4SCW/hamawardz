@@ -49,7 +49,11 @@
                     <tr>
                         <td>Event callsigns last ADIF upload</td>
                         <td><a href="/event/{{ $event->slug }}/stat/lastuploads"><button class="btn btn-primary" style="margin: 5px;">Show</button></a></td>
-                    </tr>               
+                    </tr>    
+                    <tr>
+                        <td>List created awards</td>
+                        <td><a href="/event/{{ $event->slug }}/stat/createdawards"><button class="btn btn-primary" style="margin: 5px;">Show</button></a></td>
+                    </tr>              
                 </tbody>
             </table>          
 

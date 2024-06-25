@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Awardlog;
 use App\Models\Hamevent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -144,6 +145,26 @@ class StatisticsController extends Controller
         ->whereRaw("uploads.callsign_id IN (SELECT callsign_hamevent.callsign_id FROM callsign_hamevent WHERE callsign_hamevent.hamevent_id = ?)", [$event->id])
         ->groupBy('callsigns.call')  
         ->orderByraw('MAX(uploads.created_at) DESC')
+        ->get();
+
+        //return view
+        return view('statistics.blankstatpage', ['event' => $event, 'descriptionheader' => $description, 'dataheader' => $dataheader, 'header' => $header, 'stats' => $stats]);
+    }
+
+    public function createdawards(Hamevent $event)
+    {
+        //define header
+        $description = 'Award';
+        $dataheader = 'Callsign, name and (re)creation date';
+        $header = 'Created awards';
+
+        //load data
+        $awardids = $event->awards->pluck('id');
+        $stats = DB::table('awardlogs')
+        ->selectRaw('awards.title, CONCAT(awardlogs.callsign, " - ", awardlogs.chosen_name, " @ ", awardlogs.updated_at) as Data')
+        ->join('awards', 'awards.id', 'award_id')
+        ->whereIn('award_id', $awardids)
+        ->orderBy('awardlogs.updated_at', 'DESC')
         ->get();
 
         //return view

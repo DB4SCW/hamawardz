@@ -33,6 +33,21 @@
                 <a href="/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
             </div>
             <br>
+            <h4>Teleport</h4>
+            <div class="col-md-12 text-center" style="margin-bottom: 10px;">
+                <a href="/dumpalladifs"><button class="btn btn-primary">Dump all uploads as ADIF</button></a>
+                <a href="/teleportout"><button class="btn btn-primary">Teleport out</button></a>
+                <form style="margin-top: 10px;" action="/teleportin" method="post"enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <input type="file" class="form-control" id="data_file" name="data_file">
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-warning" value="Teleport in">
+                    </div>
+                </form>
+            </div>
+            <br>
             @endif
 
             <h3>You are permitted to upload QSOs for these callsigns:</h3>
@@ -53,7 +68,8 @@
                     @endforeach
                     @endif                    
                 </tbody>
-            </table>         
+            </table>    
+        
         </div>
     
         
