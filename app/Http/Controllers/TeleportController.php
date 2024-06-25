@@ -17,12 +17,6 @@ class TeleportController extends Controller
         //get all uploads
         $uploads = Upload::all();
 
-        //define header
-        $headers = [
-            'Content-Type' => 'application/octet-stream',
-            'Content-Disposition' => 'attachment; filename="adifdump.zip"',
-        ];
-
         //dump all adifs, zip it and stream it
         $response = new StreamedResponse(function() use ($uploads) {
             $zip = new \ZipArchive();
@@ -39,7 +33,10 @@ class TeleportController extends Controller
 
             readfile($zipFileName);
             unlink($zipFileName);
-        }, 200, $headers);
+        }, 200, [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="adifdump.zip"',
+        ]);
 
         //return stream
         return $response;
@@ -47,21 +44,36 @@ class TeleportController extends Controller
 
     public function teleportout()
     {
+        //define all tables to be dumped to json
         $tables = ['autoimports', 'awardlogs', 'awards', 'awardtimeframes', 'bands', 'callsigns', 'callsign_hamevent', 'callsign_user', 'contacts', 'dxccs', 'hamevents', 'hamevent_user', 'modes', 'phonetics', 'uploads', 'users']; 
 
+        //dump database content and .env file, zip it and stream it
         $response = new StreamedResponse(function() use ($tables) {
-            $handle = fopen('php://output', 'w');
+            $zip = new \ZipArchive();
+            $zipFileName = tempnam(sys_get_temp_dir(), '') . '.zip';
+            $zip->open($zipFileName, \ZipArchive::CREATE);
 
+            //stream database contents to json
+            $fileName = 'database_content.json';
             $data = [];
             foreach ($tables as $table) {
                 $data[$table] = DB::table($table)->get()->toArray();
             }
+            $fileContent = json_encode($data, JSON_PRETTY_PRINT);
+            $zip->addFromString($fileName, $fileContent);
 
-            fwrite($handle, json_encode($data, JSON_PRETTY_PRINT));
-            fclose($handle);
+            //add .env file
+            $zip->addFromString('.env', file_get_contents(base_path('.env')));
+
+            //close zip
+            $zip->close();
+
+            //read to stream and delete after
+            readfile($zipFileName);
+            unlink($zipFileName);
         }, 200, [
-            'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="teleport_out.json"',
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="teleport_out.zip"',
         ]);
 
         return $response;
@@ -92,26 +104,26 @@ class TeleportController extends Controller
 
         $databaseType = DB::getDriverName();
 
-            // Disable foreign key checks
-            if ($databaseType === 'mysql') {
-                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            } elseif ($databaseType === 'sqlite') {
-                DB::statement('PRAGMA foreign_keys = OFF;');
-            }
+        // Disable foreign key checks
+        if ($databaseType === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        } elseif ($databaseType === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        }
 
-            foreach ($data as $table => $rows) {
-                DB::table($table)->truncate();
-                foreach ($rows as $row) {
-                    DB::table($table)->insert($row);
-                }
+        foreach ($data as $table => $rows) {
+            DB::table($table)->truncate();
+            foreach ($rows as $row) {
+                DB::table($table)->insert($row);
             }
+        }
 
-            // Enable foreign key checks
-            if ($databaseType === 'mysql') {
-                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-            } elseif ($databaseType === 'sqlite') {
-                DB::statement('PRAGMA foreign_keys = ON;');
-            }
+        // Enable foreign key checks
+        if ($databaseType === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } elseif ($databaseType === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        }
 
         return redirect()->route('showprofile')->with('success', 'Data imported successfully.');
     }
