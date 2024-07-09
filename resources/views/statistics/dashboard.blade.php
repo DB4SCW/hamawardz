@@ -9,6 +9,7 @@
             <h1 class="text-center mb-4">Statistics for: {{ $event->title }}</h1>
             @endif
             <p class="text-center">Event duration: {{ $event->start->format('Y-m-d') }} to {{ $event->end->format('Y-m-d') }}</p>
+            <p class="text-center">Database: {{ $databasetype }}</p>
            
             <br>
 

@@ -13,7 +13,7 @@ class StatisticsController extends Controller
     {
 
         //return view
-        return view('statistics.dashboard', ['event' => $event]);
+        return view('statistics.dashboard', ['event' => $event, 'databasetype' => DB::getDriverName() ]);
     }
 
     public function qso_leaderboard(Hamevent $event)
