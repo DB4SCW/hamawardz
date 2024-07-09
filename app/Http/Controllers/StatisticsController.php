@@ -181,9 +181,19 @@ class StatisticsController extends Controller
             ->whereIn('award_id', $awardids)
             ->orderBy('awardlogs.updated_at', 'DESC')
             ->get();
-        }else
+        }elseif($databaseType === 'pgsql')
         {
-            return redirect()->back()->with('warning', 'Only Sqlite and MySQL databases are supported for this function');
+            //load data
+            $stats = DB::table('awardlogs')
+            ->selectRaw('awards.title, CONCAT(awardlogs.callsign, \' - \', awardlogs.chosen_name, \' @ \', awardlogs.updated_at) as Data')
+            ->join('awards', 'awards.id', 'award_id')
+            ->whereIn('award_id', $awardids)
+            ->orderBy('awardlogs.updated_at', 'DESC')
+            ->get();
+        }
+        else
+        {
+            return redirect()->back()->with('warning', 'Only Sqlite, Postgresql and MySQL databases are supported for this function');
         }
 
         //return view
