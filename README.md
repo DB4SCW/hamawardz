@@ -14,7 +14,7 @@ Read about how this project came to be on my [Blog](https://www.db4scw.de/creati
 
 Hamawardz is able to run using all the database engines permitted by Laravel (SQLITE, MySQL, MSSQL, Postgres, etc.). 
 
-Hamawardz is tested on SQLITE (which is plenty for most users and allows Hamawardz to run very efficiently on tiny machines) and MySQL (used on [hamawardz.app](https://hamawardz.app) because of the larger volume).
+Hamawardz is tested on SQLITE (which is plenty for most users and allows Hamawardz to run very efficiently on tiny machines) and MySQL (used on [hamawardz.app](https://hamawardz.app) because of the larger volume). Postgres should also be fine for 99,99% of operations (BETA at the moment).
 
 ## Features
 
@@ -59,7 +59,7 @@ sudo apt-get update -y
 sudo apt-get install apache2 -y
 sudo add-apt-repository -y ppa:ondrej/php
 sudo apt-get update -y
-sudo apt-get install libapache2-mod-php php php-common php-xml php-mysql php-gd php-opcache php-mbstring php-tokenizer php-json php-bcmath php-zip php-sqlite unzip -y
+sudo apt-get install libapache2-mod-php php php-common php-xml php-mysql php-pgsql php-gd php-opcache php-mbstring php-tokenizer php-json php-bcmath php-zip php-sqlite unzip -y
 sudo a2enmod rewrite
 sudo service apache2 restart
 curl -sS https://getcomposer.org/installer | php 
@@ -114,7 +114,7 @@ Clone this repo
 
 ```bash
 cd /var/www
-sudo -u www-data git clone https://git.erklaeranlage.de/Erklaeranlage/hamawardz.git hamawardz
+sudo -u www-data git clone https://git.erklaeranlage.de/Erklaeranlage/hamawards.git hamawardz
 cd hamawardz
 sudo -u www-data composer install --no-dev
 sudo -u www-data cp .env.example .env
