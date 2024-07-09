@@ -118,9 +118,11 @@ class TeleportController extends Controller
 
         foreach ($data as $table => $rows) {
             DB::table($table)->truncate();
+            if($databaseType === 'sqlsrv') { DB::unprepared('SET IDENTITY_INSERT dbo.' . $table . ' ON;'); }
             foreach ($rows as $row) {
                 DB::table($table)->insert($row);
             }
+            if($databaseType === 'sqlsrv') { DB::unprepared('SET IDENTITY_INSERT dbo.' . $table . ' OFF;'); }
         }
 
         // Enable foreign key checks
