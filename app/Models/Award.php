@@ -118,7 +118,7 @@ class Award extends Model
 
     public function getexcludedcallsignids()
     {
-        $callsigns_raw = swolf_getcallsignsfromstring($this->excludedcallsigns ?? '') ;
+        $callsigns_raw = swolf_getcallsignsfromstring($this->excluded_callsigns ?? '') ;
         $callsignids = Callsign::whereIn('call', $callsigns_raw)->get()->pluck('id');
         return $callsignids->toArray();
     }
