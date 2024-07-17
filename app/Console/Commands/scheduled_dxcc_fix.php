@@ -38,10 +38,11 @@ class scheduled_dxcc_fix extends Command
             //get dxcc from API
             $dxcc = $this->getdxcc($contact->raw_callsign);
             
-            //write data to contact an dsave
-            $contact->dxcc_id = $dxcc->id;
-            $contact->save();
-
+            //write data to contact and save without updating timestamps
+            Contact::withoutTimestamps(function () use($contact, $dxcc) {
+                $contact->dxcc_id = $dxcc->id;
+                $contact->save();
+            });
         }
 
         //get missing DXCCs on Awardlogs
@@ -53,9 +54,11 @@ class scheduled_dxcc_fix extends Command
             //get dxcc from API
             $dxcc = $this->getdxcc($awardlog->callsign);
             
-            //write data to contact an dsave
-            $awardlog->dxcc_id = $dxcc->id;
-            $awardlog->save();
+            //write data to contact and save without updating timestamps
+            Awardlog::withoutTimestamps(function () use($awardlog, $dxcc) {
+                $awardlog->dxcc_id = $dxcc->id;
+                $awardlog->save();
+            });
         }
 
     }
