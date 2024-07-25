@@ -54,6 +54,24 @@ class StatisticsController extends Controller
         return view('statistics.blankstatpage', ['event' => $event, 'descriptionheader' => $description, 'dataheader' => $dataheader, 'header' => $header, 'stats' => $stats]);
     }
 
+    public function operator_leaderboard(Hamevent $event)
+    {
+        //Define header
+        $description = 'Operator';
+        $dataheader = 'QSO Count';
+        $header = 'QSO Count for each operator';
+
+        $stats = DB::table('contacts')
+        ->selectRaw('contacts.operator AS Operator, COUNT(contacts.id) AS QSO_Count')
+        ->whereRaw("contacts.qso_datetime >= ? AND contacts.qso_datetime <= ? AND contacts.callsign_id IN (SELECT callsign_hamevent.callsign_id FROM callsign_hamevent WHERE callsign_hamevent.hamevent_id = ?)", [$event->start, $event->end, $event->id])
+        ->groupBy('contacts.operator')  
+        ->orderByraw('COUNT(contacts.id) DESC')
+        ->get();
+
+        //return view
+        return view('statistics.blankstatpage', ['event' => $event, 'descriptionheader' => $description, 'dataheader' => $dataheader, 'header' => $header, 'stats' => $stats]);
+    }
+
     public function dxcc_leaderboard(Hamevent $event)
     {
         //Define header

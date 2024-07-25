@@ -32,6 +32,10 @@
                         <td><a href="/event/{{ $event->slug }}/stat/callsign_leaderboard"><button class="btn btn-primary" style="margin: 5px;">Show</button></a></td>
                     </tr>
                     <tr>
+                        <td>Event operator QSO Leaderboard</td>
+                        <td><a href="/event/{{ $event->slug }}/stat/operator_leaderboard"><button class="btn btn-primary" style="margin: 5px;">Show</button></a></td>
+                    </tr>
+                    <tr>
                         <td>Partipant DXCC Leaderboard (if unknow data is present, click "Fix DXCCs")</td>
                         <td><a href="/event/{{ $event->slug }}/stat/dxcc_leaderboard"><button class="btn btn-primary" style="margin: 5px;">Show</button></a></td>
                     </tr>

@@ -137,6 +137,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/event/{event:slug}/stats', [StatisticsController::class, 'statisticsdashboard'])->name('statisticsdashboard');
     Route::get('/event/{event:slug}/stat/qso_leaderboard', [StatisticsController::class, 'qso_leaderboard'])->name('statisticsqso_leaderboard');
     Route::get('/event/{event:slug}/stat/callsign_leaderboard', [StatisticsController::class, 'callsign_leaderboard'])->name('statisticscallsign_leaderboard');
+    Route::get('/event/{event:slug}/stat/operator_leaderboard', [StatisticsController::class, 'operator_leaderboard'])->name('statisticsoperator_leaderboard');
     Route::get('/event/{event:slug}/stat/dxcc_leaderboard', [StatisticsController::class, 'dxcc_leaderboard'])->name('statisticsdxcc_leaderboard');
     Route::get('/event/{event:slug}/stat/continent_leaderboard', [StatisticsController::class, 'continent_leaderboard'])->name('statisticscontinent_leaderboard');
     Route::get('/event/{event:slug}/stat/band_leaderboard', [StatisticsController::class, 'band_leaderboard'])->name('statisticsband_leaderboard');
