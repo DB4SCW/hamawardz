@@ -12,6 +12,8 @@ class Upload extends Model
 {
     use HasFactory;
 
+    protected $fillable = array('type');
+
     public function contacts() : HasMany
     {
         return $this->hasMany(Contact::class);
