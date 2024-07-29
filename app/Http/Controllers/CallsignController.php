@@ -35,7 +35,7 @@ class CallsignController extends Controller
         }
 
         //load relationships
-        $callsigns->load('contacts', 'uploadusers');
+        $callsigns->load('contacts', 'uploadusers', 'callsignapis');
 
         //Load all DXCCs
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
@@ -111,7 +111,7 @@ class CallsignController extends Controller
         //check permission
         if(request()->user()->cannot('manage', $callsign)) { abort(403); }
 
-        $callsign->load('uploadusers');
+        $callsign->load('uploadusers', 'callsignapis');
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
         return view('callsign.edit', ['callsign' => $callsign, 'dxccs' => $dxccs]);
     }

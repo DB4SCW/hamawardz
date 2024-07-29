@@ -17,8 +17,9 @@
                     <tr>
                         <th>Upload ID</th>
                         <th>Uploaded At</th>
+                        <th>Type</th>
                         <th>Callsign</th>
-                        <th>Number of QSOs (Errors)</th>
+                        <th># of QSOs (Errors)</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -27,14 +28,16 @@
                     <tr>
                         <td>{{ $upload->id }}</td>
                         <td>{{ $upload->created_at->format('Y-m-d @ H:i') . ' UTC' }}</td>
+                        <td>{{ $upload->type }}</td>
                         <td>{{ $upload->callsign->call }}</td>
-                        <td>{{ $upload->contacts->count() }} ({{ $upload->overall_qso_count - $upload->contacts->count() }})</td>
+                        @if($upload->overall_qso_count - $upload->contacts->count() == 0)
+                        <td>{{ $upload->contacts->count() }}</td>
+                        @else
+                        <td>{{ $upload->contacts->count() }} <a href="/uploads/{{$upload->id}}/showerrors" style="color: red; text-decoration: underline;">({{ $upload->overall_qso_count - $upload->contacts->count() }} Errors)</a></td>
+                        @endif
                         <td>
                             <button class="btn btn-danger" onclick="showConfirmDeleteModal({{ $upload->id }})">Delete</button>
                             <a href="/uploads/{{$upload->id}}/showcontacts"><button class="btn btn-success">Show QSOs</button></a>
-                            @if($upload->overall_qso_count - $upload->contacts->count() > 0)
-                            <a href="/uploads/{{$upload->id}}/showerrors"><button class="btn btn-warning">Show Errors</button></a>
-                            @endif
                         </td>
                     </tr>
                     @endforeach

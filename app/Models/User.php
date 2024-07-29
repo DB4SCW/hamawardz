@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'creator_id', 'id');
     }
 
+    public function callsignapis() : HasMany
+    {
+        return $this->hasMany(Callsignapidetail::class, 'context_userid', 'id');
+    }
+
     public function is_manager_of_callsign(Callsign $callsign) : bool
     {
         //Siteadmin manages all

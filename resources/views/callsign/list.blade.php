@@ -12,6 +12,7 @@
                       <th>Eventcallsign</th>
                       <th>Responsible operator</th>
                       <th>Number of QSOs</th>
+                      <th>Active APIs</th>
                       <th>Actions</th>
                   </tr>
               </thead>
@@ -24,6 +25,7 @@
                       <td style="vertical-align: middle; ">{{ $callsign->call }}</td>
                       <td style="vertical-align: middle; ">{{ $callsign->cert_holder_callsign }}</td>
                       <td style="vertical-align: middle; ">{{ $callsign->contacts->count() }}</td>
+                      <td style="vertical-align: middle; ">{{ $callsign->callsignapis->where('active', true)->count() }}</td>
                       <td>
                         @if(auth()->user()->is_manager_of_callsign($callsign))
                             <a href="/callsign/{{ $callsign->call }}"><button class="btn btn-warning" style="margin: 5px;">Edit</button></a>

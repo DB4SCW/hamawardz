@@ -50,6 +50,11 @@ class Callsign extends Model
         return $this->hasMany(Upload::class);
     }
 
+    public function callsignapis() : HasMany
+    {
+        return $this->hasMany(Callsignapidetail::class, 'callsign_id', 'id');
+    }
+
     public function setlastupload()
     {
         $this->refresh();

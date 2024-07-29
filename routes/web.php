@@ -13,6 +13,7 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\AwardtimeframeController;
+use App\Http\Controllers\CallsignapidetailController;
 use App\Http\Controllers\TeleportController;
 use App\Models\Awardtimeframe;
 use Illuminate\Support\Facades\Route;
@@ -144,6 +145,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/event/{event:slug}/stat/mode_leaderboard', [StatisticsController::class, 'mode_leaderboard'])->name('statisticsmode_leaderboard');
     Route::get('/event/{event:slug}/stat/lastuploads', [StatisticsController::class, 'lastuploads'])->name('statisticslastuploads');
     Route::get('/event/{event:slug}/stat/createdawards', [StatisticsController::class, 'createdawards'])->name('statisticscreatedawards');
+
+    //CallsignAPIs
+    Route::get('/callsignapi/{api:id}', [CallsignapidetailController::class, 'show'])->name('showcallsignapi');
+    Route::post('/callsignapi/{callsign:call}', [CallsignapidetailController::class, 'create'])->name('createcallsignapi');
+    Route::post('/callsignapi/{api:id}/edit', [CallsignapidetailController::class, 'edit'])->name('editcallsignapi');
+    Route::get('/callsignapi/{api:id}/delete', [CallsignapidetailController::class, 'destroy'])->name('deletecallsignapi');
 
     //Maintenance
     Route::get('/dumpalladifs', [TeleportController::class, 'dumpalluploads'])->name('dumpalladifs');

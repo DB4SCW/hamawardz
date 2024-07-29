@@ -12,8 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:scheduled_autoimport')->everyMinute();//->dailyAt('09:00');;
+        //$schedule->command('app:scheduled_autoimport')->everyMinute();//->dailyAt('09:00');;
         $schedule->command('app:scheduled_dxcc_fix')->dailyAt('05:00');
+        //$schedule->command('app:scheduled_api_pull')->dailyAt('22:00');
     }
 
     /**
