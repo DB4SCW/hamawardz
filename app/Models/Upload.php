@@ -51,6 +51,9 @@ class Upload extends Model
 
     public function process(string $forcedoperator = null, bool $ignoreduplicates = false) : int
     {
+        //prevent processing if there already are contacts associated with this upload - send back 0 correct records
+        if($this->contacts->count() > 0) { return 0; }
+        
         //load file content
         $data = (new Parser())->parse($this->file_content);
 
