@@ -18,7 +18,7 @@
               </thead>
               <tbody>
                   @if($contacts->count() < 1)
-                      <td colspan="7" style="text-align: center; ">There are no registered QSOs for this callsign yet. Try again later.</td>
+                      <td colspan="7" style="text-align: center; ">There are no registered QSOs for this upload yet. This can only happen if all the contacts are duplicates. Check you Adif!</td>
                   @else
                   @foreach($contacts as $contact)
                   <tr>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Callsignapidetail extends Model
 {
@@ -22,42 +23,77 @@ class Callsignapidetail extends Model
         return $this->hasOne(User::class, 'id', 'context_userid');
     }
 
-    public function pull() : int
+    public function errorlogs() : HasMany
+    {
+        return $this->hasMany(Callsignapierrorlog::class);
+    }
+
+    public function pull() : ?Upload
     {
         //call each specific API implementation depending on the api type
         switch ($this->type) {
             case 'wavelog':
                 return $this->pull_wavelog();
             default:
-                return -1;
+                return null;
         }
     }
 
-    public function pull_wavelog() : int
+    public function pull_wavelog() : ?Upload
     {
-        
-        //get payload from moddel
+        //get payload from model
         $payload = json_decode($this->payload);
         $goalpost = (int)$this->goalpost;
 
-        $response = Http::post($this->url, [
-            'key' => $payload['key'],
-            'station_id' => $payload['station_id'], 
-            'goalpost' => $goalpost
-        ]);
+        //create json body
+        $bodytype = "application/json";
+        
+        $body_content = [ 'key' => $payload->key, 'station_id' => $payload->station_id, 'goalpost' => $goalpost];
+        $json_body = json_encode($body_content);
+
+        //get data from Wavelog
+        $response = Http::acceptJson()->withBody($json_body , $bodytype)->post($this->url);
+
+        switch ($response->status()) {
+            case 200:
+                //einfach weitermachen
+                break;
+            case 400:
+                $this->createerrorlog($response->status(), $response['reason']);
+                return null;
+            case 401:
+                $this->createerrorlog($response->status(), $response['reason']);
+                return null;
+            case 404:
+                $this->createerrorlog($response->status(), 'Page not found');
+                return null;
+            case 500:
+                $this->createerrorlog($response->status(), 'Internal server error');
+                return null;
+            default:
+                $this->createerrorlog($response->status(), 'Something unexpected');
+                return null;
+        }
 
         //get new goalpost from api
+        $qso_count = $response['exported_qsos'];
         $newgoalpost = $response['newgoalpost'];
         $adif_content = $response['adif'];
 
+        //dont create upload for 0 QSOs
+        if($qso_count < 1)
+        {
+            return null;
+        }
+
         //save data to uplaod and proess data
-        $correct_qsos = $this->saveupload($adif_content, $newgoalpost);
+        $upload = $this->saveupload('Wavelog API', $adif_content, $newgoalpost);
      
-        //return correct QSO count
-        return $correct_qsos;
+        //return $upload;
+        return $upload;
     }
 
-    public function saveupload($adif_content, $newgoalpost) : int
+    public function saveupload($type, $adif_content, $newgoalpost) : Upload
     {
         //create a new upload record
         $upload = new Upload();
@@ -65,10 +101,10 @@ class Callsignapidetail extends Model
         $upload->callsign_id = $this->callsign->id;
         $upload->file_content = $adif_content;
         $upload->overall_qso_count = 0;
-        $upload->type = 'Wavelog API';
+        $upload->type = $type;
         $upload->save();
 
-        //process upload
+        //process upload, take operator from adif and ignore duplicates
         $correct = $upload->process(null, true);
 
         //set qso count in upload object to match imported QSO Count
@@ -83,6 +119,17 @@ class Callsignapidetail extends Model
         $this->goalpost = strval($newgoalpost);
         $this->save();
 
-        return $correct;
+        return $upload;
+    }
+
+    public function createerrorlog(int $statuscode, string $message) : Callsignapierrorlog
+    {
+        //create errorlog and return
+        $log = new Callsignapierrorlog();
+        $log->callsignapierrorlogs = $this->id;
+        $log->statuscode = $statuscode;
+        $log->message = $message;
+        $log->save();
+        return $log;
     }
 }

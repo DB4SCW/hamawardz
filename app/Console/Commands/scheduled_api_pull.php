@@ -29,9 +29,14 @@ class scheduled_api_pull extends Command
         //load relevant APIs
         $active_apis = Callsignapidetail::whereRelation('contextuser', 'locked', false)->whereRelation('callsign', 'active', true)->where('active', true)->get();
 
+        //collect all created uploads
+        $created_uploads = [];
+
         //call each api
         foreach ($active_apis as $api) {
-            $api->pull();
+            $upload = $api->pull();
+            array_push($created_uploads, $upload);
         }
+
     }
 }
