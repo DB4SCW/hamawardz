@@ -48,15 +48,16 @@ class Callsignapidetail extends Model
         //create json body
         $bodytype = "application/json";
         
-        $body_content = [ 'key' => $payload->key, 'station_id' => $payload->station_id, 'goalpost' => $goalpost];
+        $body_content = [ 'key' => $payload->key, 'station_id' => $payload->station_id, 'fetchfromid' => $goalpost];
         $json_body = json_encode($body_content);
 
         //get data from Wavelog
         $response = Http::acceptJson()->withBody($json_body , $bodytype)->post($this->url);
 
+        //react to response status
         switch ($response->status()) {
             case 200:
-                //einfach weitermachen
+                //just continue
                 break;
             case 400:
                 $this->createerrorlog($response->status(), $response['reason']);
@@ -77,7 +78,7 @@ class Callsignapidetail extends Model
 
         //get new goalpost from api
         $qso_count = $response['exported_qsos'];
-        $newgoalpost = $response['newgoalpost'];
+        $newgoalpost = $response['lastfetchedid'];
         $adif_content = $response['adif'];
 
         //dont create upload for 0 QSOs
@@ -87,37 +88,33 @@ class Callsignapidetail extends Model
         }
 
         //save data to uplaod and proess data
-        $upload = $this->saveupload('Wavelog API', $adif_content, $newgoalpost);
+        $upload = $this->saveupload('Wavelog API', $qso_count, $adif_content);
+
+        //save info in API config
+        $this->last_run = \Carbon\Carbon::now();
+        $this->goalpost = strval($newgoalpost);
+        $this->save();
      
         //return $upload;
         return $upload;
     }
 
-    public function saveupload($type, $adif_content, $newgoalpost) : Upload
+    public function saveupload($type, $qso_count, $adif_content) : Upload
     {
         //create a new upload record
         $upload = new Upload();
         $upload->uploader_id = $this->contextuser->id;
         $upload->callsign_id = $this->callsign->id;
         $upload->file_content = $adif_content;
-        $upload->overall_qso_count = 0;
+        $upload->overall_qso_count = $qso_count;
         $upload->type = $type;
         $upload->save();
 
         //process upload, take operator from adif and ignore duplicates
         $correct = $upload->process(null, true);
 
-        //set qso count in upload object to match imported QSO Count
-        $upload->overall_qso_count = $correct;
-        $upload->save();
-
         //write data to callsign
         $upload->callsign->setlastupload();
-
-        //save info in API config
-        $this->last_run = \Carbon\Carbon::now();
-        $this->goalpost = strval($newgoalpost);
-        $this->save();
 
         return $upload;
     }

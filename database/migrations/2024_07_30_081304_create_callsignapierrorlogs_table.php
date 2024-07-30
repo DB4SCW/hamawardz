@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('callsignapidetail_id');
             $table->integer('statuscode');
-            $table->string('logmessage', 255);
+            $table->string('message', 255);
         });
     }
 
