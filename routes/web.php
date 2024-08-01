@@ -160,8 +160,9 @@ Route::middleware('auth')->group(function () {
 
 });
 
-//FixDXCCs
+//Trigger Jobs
 Route::get("/fixdxccs", [ContactController::class, 'fixmissingdxccs'])->name('fixdxccs');
+Route::get("/runpullapis", [CallsignapidetailController::class, 'runtask'])->name('runpullapis');
 
 //this is a must
 Route::get('/418', function() { abort(418); });

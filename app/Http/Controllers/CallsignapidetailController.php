@@ -157,4 +157,14 @@ class CallsignapidetailController extends Controller
         return redirect()->route('showeditcallsign', ['callsign' => $callsignraw])->with('success', 'Successfully added Callsign API.');
     }
 
+    function runtask() {
+        
+        //Trigger dxcc fix
+        \Illuminate\Support\Facades\Artisan::call('app:scheduled_api_pull', []);
+
+        //return to view
+        return redirect()->back()->with('success', 'Pull APIs successfull.');
+
+    }
+
 }
