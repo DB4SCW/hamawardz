@@ -111,6 +111,22 @@ class AwardController extends Controller
         return $pdf->stream( $data['issue_datetime']->format('Ymd') . '_EXAMPLE_' . $award->slug . '_award.pdf');
     }
 
+    public function duplicate(Award $award)
+    {
+        //check permissions
+        if(request()->user()->cannot('edit', $award->event)) { abort(403); }
+
+        //create a not-yet-saved duplicate of the award
+        $new_award = $award->duplicate();
+
+        //save it
+        $new_award->save();
+
+        //return to award view
+        return redirect()->route('showeditaward', ['award' => $new_award->slug])->with('success', 'Award was successfully duplicated.');
+
+    }
+    
     public function showcreate(Hamevent $event)
     {
         //check permissions

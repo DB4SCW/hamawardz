@@ -335,5 +335,24 @@ class Award extends Model
         return $this->aggregate_count_mode_9($callsign) >= $this->min_threshold;
     }
 
+    public function duplicate() : Award
+    {
+        //replicate this award
+        $new_award = $this->replicate();
+
+        //create a unique id for the fields that have to be unique
+        $uid = str_replace('.','', uniqid('', true));
+
+        //change relevant fields
+        $new_award->creator_id = auth()->user()->id;
+        $new_award->created_at = \Carbon\Carbon::now();
+        $new_award->updated_at = \Carbon\Carbon::now();
+        $new_award->title = $uid;
+        $new_award->slug = $uid;
+        
+        //return new award. Save must be done in controller
+        return $new_award;
+    }
+
 
 }

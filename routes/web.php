@@ -102,6 +102,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/awards/{award:slug}/exampleaward', [AwardController::class, 'printexample'])->name('printexampleaward');
     Route::post('/awards/{award:slug}/edit', [AwardController::class, 'edit'])->name('editaward');
     Route::post('/awards/{award:slug}/uploadbackground', [AwardController::class, 'uploadbackground'])->name('uploadawardbackground');
+    Route::get('/awards/{award:slug}/duplicate', [AwardController::class, 'duplicate'])->name('duplicateaward');
 
     //Awardtimeframes
     Route::post('/award/{award:id}/addsubtimeframe', [AwardtimeframeController::class, 'create'])->name('createawardsubtimeframe');

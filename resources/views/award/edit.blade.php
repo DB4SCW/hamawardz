@@ -7,6 +7,11 @@
                 <div class="col-md-6">
                     <h1 class="text-center mb-4">Edit award for<br><a href="/event/{{ $award->event->slug }}" style="color: white;">{{ $award->event->title }}</a>:</h1>
                     <h4 class="text-center mb-4">{{ $award->title }}</h4>
+
+                    <div class="col-md-12 text-center" style="margin-bottom: 20px;">
+                        <a href="/awards/{{ $award->slug }}/duplicate"><button class="btn btn-warning">Duplicate award</button></a>
+                    </div>
+
                     <form action="/awards/{{ $award->slug }}/edit" method="post">
                         @csrf
                         <!-- Basic event data -->
