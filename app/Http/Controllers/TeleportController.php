@@ -48,7 +48,7 @@ class TeleportController extends Controller
         if(!auth()->user()->siteadmin) { abort(403); }
         
         //define all tables to be dumped to json
-        $tables = ['autoimports', 'awardlogs', 'awards', 'awardtimeframes', 'bands', 'callsigns', 'callsign_hamevent', 'callsign_user', 'contacts', 'dxccs', 'hamevents', 'hamevent_user', 'modes', 'phonetics', 'uploads', 'users']; 
+        $tables = ['autoimports', 'awardlogs', 'awards', 'awardtimeframes', 'bands', 'callsigns', 'callsign_hamevent', 'callsign_user', 'contacts', 'dxccs', 'hamevents', 'hamevent_user', 'modes', 'phonetics', 'uploads', 'users', 'callsignapidetails', 'callsignapierrorlogs']; 
 
         //dump database content and .env file, zip it and stream it
         $response = new StreamedResponse(function() use ($tables) {

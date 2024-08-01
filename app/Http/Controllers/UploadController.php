@@ -91,7 +91,7 @@ class UploadController extends Controller
         $upload->save();
 
         //load ignore duplicate flag
-        $ignore_duplicates = $attributes['ignoreduplicates'] == 1 ? true : false;
+        $ignore_duplicates = ($attributes['ignoreduplicates'] == 1);
 
         //process upload
         $correct = $upload->process($attributes['operator'], $ignore_duplicates);
