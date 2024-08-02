@@ -77,9 +77,14 @@ class Callsignapidetail extends Model
         }
 
         //get new goalpost from api
-        $qso_count = $response['exported_qsos'];
-        $newgoalpost = $response['lastfetchedid'];
-        $adif_content = $response['adif'];
+        try {
+            $qso_count = $response['exported_qsos'];
+            $newgoalpost = $response['lastfetchedid'];
+            $adif_content = $response['adif'];
+        } catch (\Throwable $th) {
+            return null;
+        }
+        
 
         //dont create upload for 0 QSOs
         if($qso_count < 1)
