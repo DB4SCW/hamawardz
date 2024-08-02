@@ -30,7 +30,7 @@
             @if(auth()->user()->siteadmin)
             <h3>Admin options:</h3>
             <div class="col-md-12 text-center" style="margin-bottom: 10px;">
-                <a href="/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
+                <a href="/runtask/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
             </div>
             <br>
             <h4>Teleport</h4>

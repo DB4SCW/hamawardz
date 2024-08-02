@@ -63,7 +63,7 @@
             </table>          
 
             <div class="col-md-12 text-center" style="margin-bottom: 60px;">
-                <a href="/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
+                <a href="/runtask/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
                 <p style="color: red;">May take a while, depending on your data... Uses HamQTH API.</p>
             </div>
             
