@@ -37,6 +37,7 @@
             <div class="col-md-12 text-center" style="margin-bottom: 10px;">
                 <a href="/dumpalladifs"><button class="btn btn-primary">Dump all uploads as ADIF</button></a>
                 <a href="/teleportout"><button class="btn btn-primary">Teleport out</button></a>
+                <!-- Database import -->
                 <form style="margin-top: 10px;" action="/teleportin" method="post"enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
@@ -44,6 +45,16 @@
                     </div>
                     <div class="text-center">
                         <input type="submit" class="btn btn-warning" value="Teleport in">
+                    </div>
+                </form>
+                <!-- Image import -->
+                <form style="margin-top: 10px;" action="/restoreimages" method="post"enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <input type="file" class="form-control" id="data_files" name="data_files[]" multiple>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-warning" value="Restore images">
                     </div>
                 </form>
             </div>

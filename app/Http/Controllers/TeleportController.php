@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Upload;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\DB;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 
 class TeleportController extends Controller
 {
@@ -67,6 +69,25 @@ class TeleportController extends Controller
 
             //add .env file
             $zip->addFromString('.env', file_get_contents(base_path('.env')));
+
+            // add images to the zip file
+            $imagesPath = storage_path('app/public/images');
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($imagesPath),
+                RecursiveIteratorIterator::LEAVES_ONLY
+            );
+
+            foreach ($files as $name => $file) {
+                // Skip directories (they would be added automatically)
+                if (!$file->isDir()) {
+                    // Get real and relative path for current file
+                    $filePath = $file->getRealPath();
+                    $relativePath = 'images/' . substr($filePath, strlen($imagesPath) + 1);
+
+                    // Add current file to archive
+                    $zip->addFile($filePath, $relativePath);
+                }
+            }
 
             //close zip
             $zip->close();
@@ -133,5 +154,46 @@ class TeleportController extends Controller
         }
 
         return redirect()->route('showprofile')->with('success', 'Data imported successfully.');
+    }
+
+    public function restoreimages()
+    {
+        //only siteadmin may do that
+        if(!auth()->user()->siteadmin) { abort(403); }
+        
+        //validate inputs
+        $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
+            'data_file.*' => 'required|file'
+        ], 
+        [
+            'data_file.file' => 'No input file given.'
+        ]);
+
+        // define the target directory
+        $targetDirectory = storage_path('app/public/uploads');
+
+        // clear out any files in the target directory
+        $files = glob($targetDirectory . '/*'); 
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+
+        // get the uploaded files from upload
+        $uploadedFiles = request()->file('data_files');
+
+        // iterate over each file and process it
+        foreach ($uploadedFiles as $file) {
+
+            // preserve the original filename
+            $originalFilename = $file->getClientOriginalName();
+
+            // store each image to the images folder using the original filename to not loose connection to awards
+            $path = $file->storeAs('public/images', $originalFilename);
+        }
+
+        // Redirect or return response
+        return redirect()->back()->with('success', 'Restore of image files complete.');
     }
 }

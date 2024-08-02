@@ -157,6 +157,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dumpalladifs', [TeleportController::class, 'dumpalluploads'])->name('dumpalladifs');
     Route::get('/teleportout', [TeleportController::class, 'teleportout'])->name('teleportout');
     Route::post('/teleportin', [TeleportController::class, 'teleportin'])->name('teleportin');
+    Route::post('/restoreimages', [TeleportController::class, 'restoreimages'])->name('restoreimages');
 
 });
 
