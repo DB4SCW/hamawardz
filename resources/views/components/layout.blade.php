@@ -69,6 +69,12 @@
                 right: 20px;
                 z-index: 9999;
             }
+            .top-left-alert {
+                position: fixed;
+                top: 60px;
+                left: 20px;
+                z-index: 9999;
+            }
             .footer {
                 position: fixed;
                 left: 0;
@@ -154,7 +160,14 @@
             </div>
         </div>
         @endif 
-        
+        @if(session()->has('updateinfo'))
+        <div class="top-left-alert">
+            <div class="alert alert-danger">
+                A new version {{ session('updateinfo') }} got released. Please update asap following the <a href="https://hamawardz.de/docs/hamawardz/installation/#updating-hamawardz-to-a-new-version">instructions</a>.
+            </div>
+        </div>
+        @endif
+
         <!-- Main Content -->
         {{ $slot }}
 

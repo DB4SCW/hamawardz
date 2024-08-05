@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 class SessionController extends Controller
 {
@@ -46,8 +48,29 @@ class SessionController extends Controller
         //regenerate session
         session()->regenerate();
 
-        //redirect to homepage
-        return redirect()->intended('/')->with('success', 'Login successful. Welcome back!');
+        //get locally installed version
+        $versioninfo_path = storage_path('app/version.txt');
+        $installed_version = File::get($versioninfo_path);
+
+        //get globally available version
+        $available_version = $installed_version;
+        try {
+            $available_version = Http::get('https://hamawardz.de/versionfiles/hamawardz_version.txt')->body();
+        } catch (\Throwable $th) {
+            // do nothing, cannot reach info for updated version
+        }
+        
+        //check if upgrade is needed and set updateinfo for display on GUI
+        if(version_compare($available_version, $installed_version, '>'))
+        {
+            //redirect to homepage
+            return redirect()->intended('/')->with('success', 'Login successful. Welcome back!')->with('updateinfo', $available_version);
+        }else{
+            //redirect to homepage
+            return redirect()->intended('/')->with('success', 'Login successful. Welcome back!');
+        }
+
+        
     }
 
     public function logout()
