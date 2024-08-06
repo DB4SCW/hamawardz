@@ -157,7 +157,7 @@ class CallsignapidetailController extends Controller
         return redirect()->route('showeditcallsign', ['callsign' => $callsignraw])->with('success', 'Successfully added Callsign API.');
     }
 
-    function runtask() {
+    public function runtask() {
         
         //Trigger dxcc fix
         \Illuminate\Support\Facades\Artisan::call('app:scheduled_api_pull', []);
@@ -165,6 +165,25 @@ class CallsignapidetailController extends Controller
         //return to view
         return redirect()->back()->with('success', 'Pull APIs successfull.');
 
+    }
+
+    public function run(Callsignapidetail $api)
+    {
+        //check permission
+        if(request()->user()->cannot('manage', $api->callsign)) { abort(403); }
+
+        //run API
+        $result = $api->pull();
+
+        //return result
+        if($result != null)
+        {
+            //return to view
+            return redirect()->back()->with('success', 'API ran successfully and returned a new Upload.');
+        }else{
+            //return to view
+            return redirect()->back()->with('danger', 'API ran into an error or did not return any QSOs.');
+        }
     }
 
 }

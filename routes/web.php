@@ -149,6 +149,7 @@ Route::middleware('auth')->group(function () {
 
     //CallsignAPIs
     Route::get('/callsignapi/{api:id}', [CallsignapidetailController::class, 'show'])->name('showcallsignapi');
+    Route::get('/callsignapi/{api:id}/run', [CallsignapidetailController::class, 'run'])->name('runcallsignapi');
     Route::post('/callsignapi/{callsign:call}', [CallsignapidetailController::class, 'create'])->name('createcallsignapi');
     Route::post('/callsignapi/{api:id}/edit', [CallsignapidetailController::class, 'edit'])->name('editcallsignapi');
     Route::get('/callsignapi/{api:id}/delete', [CallsignapidetailController::class, 'destroy'])->name('deletecallsignapi');

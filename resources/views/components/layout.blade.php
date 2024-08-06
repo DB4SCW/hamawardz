@@ -13,6 +13,7 @@
         <!-- Include Bootstrap JavaScript library -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+        <script src="https://unpkg.com/feather-icons"></script>
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -179,6 +180,11 @@
 
         <!-- On demand JS -->
         {{ $scripts ?? '' }}
+
+        <!-- Feather icons -->
+        <script>
+            feather.replace();
+        </script>
 
         <!-- Alert-JS -->
         <script type="text/javascript">

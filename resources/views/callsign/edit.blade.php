@@ -90,6 +90,7 @@
                                     <td style="vertical-align: middle; ">{{ $api->active ? 'yes' : 'no' }}</td>
                                     <td>
                                     @can('manage', $callsign)
+                                    <a href="/callsignapi/{{ $api->id }}/run"><button class="btn btn-info" style="margin: 5px;"><i data-feather="play"></i>Run</button></a>    
                                     <a href="/callsignapi/{{ $api->id }}"><button class="btn btn-warning" style="margin: 5px;">Edit</button></a>    
                                     <a href="/callsignapi/{{ $api->id }}/delete"><button class="btn btn-danger" style="margin: 5px;">DELETE</button></a>
                                     @endcan
