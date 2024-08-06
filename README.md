@@ -18,6 +18,12 @@ If you discover a security vulnerability within Hamawardz, please send an e-mail
 
 All security vulnerabilities will be promptly addressed.
 
+## Contributing
+
+If you would like to contribute to Hamawardz in any way, it is most welcome. This project has been developed in free time, so help is much appreciated.  
+
+If you submit a PR, please only do so against the dev branch. PR against master will be rejected. As for your code, please check if it is properly commented and just contains ONE feature or bugfix per PR. Please also add a meaningful description what your new feature or bug does and why it is beneficial for hamawardz.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
