@@ -178,11 +178,17 @@ class CallsignapidetailController extends Controller
         //return result
         if($result != null)
         {
-            //return to view
-            return redirect()->back()->with('success', 'API ran successfully and returned a new Upload.');
+            if($result->overall_qso_count == 0)
+            {
+                //return to view
+                return redirect()->back()->with('success', 'API ran successfully and returned no QSOs.');
+            }else{
+                //return to view
+                return redirect()->back()->with('success', 'API ran successfully and returned a new Upload with ' .  $result->overall_qso_count . ' QSOs.');
+            }
         }else{
             //return to view
-            return redirect()->back()->with('danger', 'API ran into an error or did not return any QSOs.');
+            return redirect()->back()->with('danger', 'API ran into an error.');
         }
     }
 

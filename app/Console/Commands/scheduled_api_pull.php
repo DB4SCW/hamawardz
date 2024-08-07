@@ -31,11 +31,17 @@ class scheduled_api_pull extends Command
 
         //collect all created uploads
         $created_uploads = [];
+        $qsos = 0;
 
-        //call each api
+        //call each api and sum up all collected qsos and uploads
         foreach ($active_apis as $api) {
             $upload = $api->pull();
-            array_push($created_uploads, $upload);
+            if($upload != null) 
+            { 
+                $qsos += $upload->overall_qso_count; 
+                array_push($created_uploads, $upload);
+            }
+            
         }
 
     }

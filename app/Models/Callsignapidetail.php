@@ -85,11 +85,12 @@ class Callsignapidetail extends Model
             return null;
         }
         
-
-        //dont create upload for 0 QSOs
+        //dont create upload for 0 QSOs, but create a dummydownload do differentiate from an error during processing
         if($qso_count < 1)
         {
-            return null;
+            $dummyupload = new Upload();
+            $dummyupload->overall_qso_count = 0;
+            return $dummyupload;
         }
 
         //save data to uplaod and proess data
