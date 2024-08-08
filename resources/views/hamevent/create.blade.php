@@ -6,7 +6,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <h1 class="text-center mb-4">Create event:</h1>
-                    <form action="/event/create" method="post">
+                    <form action="/event/create" method="post" style="margin-bottom: 60px;">
                         @csrf
                         <div class="form-group">
                             <label for="title">Title:</label>
