@@ -9,7 +9,7 @@
                     <div class="col-md-12 text-center" style="margin-bottom: 20px;">
                         <a href="/callsign/{{ $api->callsign->call }}"><button class="btn btn-warning">Back to callsign</button></a>
                     </div>
-                    <div class="container mt-5">
+                    <div class="container mt-5" style="margin-bottom: 60px;">
                         <form action="/callsignapi/{{ $api->id }}/edit" method="post">
                             @csrf
                             <div class="form-group">
