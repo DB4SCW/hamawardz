@@ -31,6 +31,7 @@
             <h3>Admin options:</h3>
             <div class="col-md-12 text-center" style="margin-bottom: 10px;">
                 <a href="/runtask/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
+                <a href="/runtask/pullapis"><button class="btn btn-primary">Run all QSO Pull APIs</button></a>
             </div>
             <br>
             <h4>Teleport</h4>
