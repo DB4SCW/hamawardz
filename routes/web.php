@@ -6,6 +6,7 @@ use App\Http\Controllers\CallsignController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HameventController;
+use App\Http\Controllers\LegalstuffController;
 use App\Http\Controllers\LogcheckController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
@@ -45,6 +46,9 @@ Route::post('/awards/{award:slug}/pdf', [AwardController::class, 'print'])->name
 
 //handle Guest-middleware redirect
 Route::get('/home', function() { return redirect('/'); });
+
+//Cookie Policy
+Route::get('/cookie_policy', [LegalstuffController::class, 'cookie_policy'] )->name('cookie_policy');
 
 //Only guests can login
 Route::middleware('guest')->group(function () {
