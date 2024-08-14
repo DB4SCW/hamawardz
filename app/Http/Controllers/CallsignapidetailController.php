@@ -172,24 +172,47 @@ class CallsignapidetailController extends Controller
         //check permission
         if(request()->user()->cannot('manage', $api->callsign)) { abort(403); }
 
+        //check if API is active
+        if($api->active == false)
+        {
+            //return to view
+            return redirect()->back()->with('danger', 'API cannot be run because it is inactive.');
+        }
+
+        //check if locks on relations prohibit api run
+        if($api->contextuser->locked == true or $api->callsign->active == false)
+        {
+            //return to view
+            return redirect()->back()->with('danger', 'Username to store upload is locked or callsign itself is not active.');
+        }
+
         //run API
         $result = $api->pull();
 
-        //return result
-        if($result != null)
+        //check for general error
+        if($result == null)
         {
-            if($result->overall_qso_count == 0)
-            {
-                //return to view
-                return redirect()->back()->with('success', 'API ran successfully and returned no QSOs.');
-            }else{
-                //return to view
-                return redirect()->back()->with('success', 'API ran successfully and returned a new Upload with ' .  $result->overall_qso_count . ' QSOs.');
-            }
-        }else{
             //return to view
             return redirect()->back()->with('danger', 'API ran into an error.');
         }
+
+        //check if there was just plain old 0 QSOs
+        if($result->overall_qso_count == 0)
+        {
+            //return to view
+            return redirect()->back()->with('success', 'API ran successfully and returned no QSOs.');
+        }
+
+        //check for validity error
+        if($result->overall_qso_count == -1)
+        {
+            //return to view
+            return redirect()->back()->with('success', 'API ran successfully but no QSOs were inside the specified validity period of the callsign.');
+        }
+        
+        //return to view with success message
+        return redirect()->back()->with('success', 'API ran successfully and returned a new Upload with ' .  $result->overall_qso_count . ' QSO(s).');
+        
     }
 
 }

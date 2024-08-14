@@ -80,7 +80,7 @@ class UploadController extends Controller
         $file = request()->file('file');
         $contents = file_get_contents($file);
         $data = (new Parser())->parse($contents);
-     
+
         //create a new upload record
         $upload = new Upload();
         $upload->uploader_id = auth()->user()->id;
@@ -88,6 +88,24 @@ class UploadController extends Controller
         $upload->file_content = $contents;
         $upload->overall_qso_count = count($data);
         $upload->type = 'Manual ADIF Upload';
+
+        //Before saving, check if there are QSOs in the upload
+        if($upload->overall_qso_count < 1)
+        {
+            return redirect()->back()->with('warning', 'There were no QSOs in this ADIF.');
+        }
+
+        //optional check if at least some qsos inside of the ADIF live inside the validity of the callsign
+        //deactivated because this accesses fields of the ADIF which may or may not be there
+        if(false) 
+        { 
+            if(!checkadifinsidevalidityperiod($data, $callsign))
+            {
+                return redirect()->back()->with('danger', 'There were no QSOs found that was inside the validity period of this event callsign.');
+            }
+        }
+
+        //save upload, no that we are safe that we got any blockers out of the way
         $upload->save();
 
         //load ignore duplicate flag
@@ -155,4 +173,6 @@ class UploadController extends Controller
         return redirect()->back()->with('success', 'Upload ' . $id . ' was successfully deleted.');
 
     }
+
+    
 }

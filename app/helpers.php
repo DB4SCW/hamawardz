@@ -1,5 +1,6 @@
 <?php
 use App\Models\Autoimport;
+use App\Models\Callsign;
 
 function swolf_getcallsignwithoutadditionalinfo(string $input) : string
 {
@@ -97,4 +98,26 @@ function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $re
     //return database value
     return $recordarray[$fieldinput];
 
+}
+
+function checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
+{
+    //get first and last QSO and parse datetime of these records
+    $last_qso = collect($data)->sortBy([['QSO_DATE', 'desc'], ['TIME_ON', 'desc']])->first();
+    $first_qso = collect($data)->sortBy([['QSO_DATE', 'asc'], ['TIME_ON', 'asc']])->first();
+    $first_qso_datetime = \Carbon\Carbon::parse($first_qso['QSO_DATE'] . ' ' . substr($first_qso['TIME_ON'],0,2) . ':' . substr($first_qso['TIME_ON'], 2, 2));
+    $last_qso_datetime = \Carbon\Carbon::parse($last_qso['QSO_DATE'] . ' ' . substr($last_qso['TIME_ON'],0,2) . ':' . substr($last_qso['TIME_ON'], 2, 2));
+
+    //dummyfill null values on callsign validity
+    $valid_from = $callsign->valid_from == null ? \Carbon\Carbon::parse('1900-01-01') : $callsign->valid_from;
+    $valid_to = $callsign->valid_to == null ? \Carbon\Carbon::now()->addyears(99) : $callsign->valid_to;
+
+    //check if ADIF data lives completely outside of the validity of the callsign
+    if($last_qso_datetime < $valid_from or $first_qso_datetime > $valid_to)
+    {
+        return false;
+    }
+
+    //check ok
+    return true;
 }

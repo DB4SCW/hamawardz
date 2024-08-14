@@ -38,7 +38,7 @@ class scheduled_api_pull extends Command
             $upload = $api->pull();
             if($upload != null) 
             { 
-                $qsos += $upload->overall_qso_count; 
+                $qsos += $upload->overall_qso_count >= 0 ? $upload->overall_qso_count : 0; 
                 array_push($created_uploads, $upload);
             }
             

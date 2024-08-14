@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use j4nr6n\ADIF\Parser;
 
 class Callsignapidetail extends Model
 {
@@ -48,7 +49,7 @@ class Callsignapidetail extends Model
         //create json body
         $bodytype = "application/json";
         
-        $body_content = [ 'key' => $payload->key, 'station_id' => $payload->station_id, 'fetchfromid' => $goalpost];
+        $body_content = [ 'key' => $payload->key, 'station_id' => $payload->station_id, 'fetchfromid' => $goalpost ];
         $json_body = json_encode($body_content);
 
         //get data from Wavelog
@@ -85,11 +86,36 @@ class Callsignapidetail extends Model
             return null;
         }
         
-        //dont create upload for 0 QSOs, but create a dummydownload do differentiate from an error during processing
+        //dont create upload for 0 QSOs, but create a dummydownload to differentiate from an error during processing
         if($qso_count < 1)
         {
+            //create dummy
             $dummyupload = new Upload();
             $dummyupload->overall_qso_count = 0;
+
+            //set new goalpost
+            $this->goalpost = strval($newgoalpost);
+            $this->save();
+
+            //return dummy
+            return $dummyupload;
+        }
+
+        //check if ADIF lives inside the callsign validity period for at least 1 QSO
+        //we can do this here because we know Wavelog provides the relevant fields inside the ADIF
+        //return dummyupload to differentiate from a general error during processing
+        //return -1 QSOs to signal validity error
+        if(!checkadifinsidevalidityperiod((new Parser())->parse($adif_content), $this->callsign))
+        {
+            //create dummy
+            $dummyupload = new Upload();
+            $dummyupload->overall_qso_count = -1;
+            
+            //set new goalpost
+            $this->goalpost = strval($newgoalpost);
+            $this->save();
+
+            //return dummy
             return $dummyupload;
         }
 
