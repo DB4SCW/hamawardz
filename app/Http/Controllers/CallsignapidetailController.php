@@ -68,11 +68,27 @@ class CallsignapidetailController extends Controller
             return redirect()->back()->with('danger', 'Username ' . $attributes['username'] . ' is not an active user.');
         }
 
+        //check if there are missing fields in the payload
+        $fieldcheckresult = $this->checkpayloadfields($attributes['payload'], strtolower($attributes['type']));
+        
+        //react to the check result
+        if(!$fieldcheckresult->passed)
+        {
+            //check for complete failure and offer a more helpful message
+            if(count($fieldcheckresult->minimum_fields) == count($fieldcheckresult->missing_fields))
+            {
+                return redirect()->back()->with('danger', 'Invalid payload JSON or all required fields are missing. Check your data.');
+            }
+        
+            //tell the user which fields they missed
+            return redirect()->back()->with('danger', 'The following fields are missing in the payload field: ' . implode(", ", $fieldcheckresult->missing_fields));
+        }
+
         //create API config and save
         $api = new Callsignapidetail();
         $api->callsign_id = $callsign->id;
         $api->context_userid = $user->id;
-        $api->type = $attributes['type'];
+        $api->type = strtolower($attributes['type']);
         $api->url = $attributes['url'];
         $api->payload = $attributes['payload'];
         $api->goalpost = $attributes['goalpost'];

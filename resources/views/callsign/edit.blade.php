@@ -162,7 +162,7 @@
                             <input name="url" class="form-control" type="text" value="">
                         </div>
                         <div class="form-group">
-                            <label for="payload">Payload for API:</label>
+                            <label for="payload">Payload for API as JSON:</label>
                             <input name="payload" class="form-control" type="text" value="">
                         </div>
                         <div class="form-group">
