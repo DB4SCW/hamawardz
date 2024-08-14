@@ -6,6 +6,7 @@ use App\Models\Callsign;
 use App\Models\User;
 use App\Models\Callsignapidetail;
 use Illuminate\Http\Request;
+use stdClass;
 
 class CallsignapidetailController extends Controller
 {
@@ -128,9 +129,25 @@ class CallsignapidetailController extends Controller
             return redirect()->back()->with('danger', 'Username ' . $attributes['username'] . ' is not an active user.');
         }
 
+        //check if there are missing fields in the payload
+        $fieldcheckresult = $this->checkpayloadfields($attributes['payload'], strtolower($attributes['type']));
+        
+        //react to the check result
+        if(!$fieldcheckresult->passed)
+        {
+            //check for complete failure and offer a more helpful message
+            if(count($fieldcheckresult->minimum_fields) == count($fieldcheckresult->missing_fields))
+            {
+                return redirect()->back()->with('danger', 'Invalid payload JSON or all required fields are missing. Check your data.');
+            }
+        
+            //tell the user which fields they missed
+            return redirect()->back()->with('danger', 'The following fields are missing in the payload field: ' . implode(", ", $fieldcheckresult->missing_fields));
+        }
+
         //update api data
         $api->context_userid = $user->id;
-        $api->type = $attributes['type'];
+        $api->type = strtolower($attributes['type']);
         $api->url = $attributes['url'];
         $api->payload = $attributes['payload'];
         $api->goalpost = $attributes['goalpost'];
@@ -213,6 +230,39 @@ class CallsignapidetailController extends Controller
         //return to view with success message
         return redirect()->back()->with('success', 'API ran successfully and returned a new Upload with ' .  $result->overall_qso_count . ' QSO(s).');
         
+    }
+
+    public function checkpayloadfields(string $payploadstring, string $type) : stdClass
+    {
+        //declare return object and fill with dummy data if anything goes wrong
+        $result = new stdClass();
+        $result->minimum_fields = [];
+        $result->missing_fields = [];
+        $result->passed = false;
+
+        //decode payloadstring as array
+        $payload = json_decode($payploadstring, true);
+        
+        //if json decode fails, get an empty array
+        $payload = $payload == null ? [] : $payload;
+
+        //check minimum required fields depending on API type
+        switch ($type) {
+            case 'wavelog':
+                
+                //define minimum fields
+                $result->minimum_fields = ['key', 'station_id'];
+
+                //return the missing fields
+                $result->missing_fields = array_diff($result->minimum_fields, array_keys($payload));
+
+                //set flag if passed
+                $result->passed = (count($result->missing_fields) == 0);
+            
+            default:
+                //return empty result class with passed = false;
+                return $result;
+        }
     }
 
 }
