@@ -11,6 +11,8 @@ class StatisticsController extends Controller
 {
     public function statisticsdashboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
 
         //return view
         return view('statistics.dashboard', ['event' => $event, 'databasetype' => DB::getDriverName() ]);
@@ -18,6 +20,9 @@ class StatisticsController extends Controller
 
     public function qso_leaderboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'Callsign';
         $dataheader = 'QSO Count';
@@ -37,6 +42,9 @@ class StatisticsController extends Controller
 
     public function callsign_leaderboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'Event Callsign';
         $dataheader = 'QSO Count';
@@ -56,6 +64,9 @@ class StatisticsController extends Controller
 
     public function operator_leaderboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'Operator';
         $dataheader = 'QSO Count';
@@ -74,6 +85,9 @@ class StatisticsController extends Controller
 
     public function dxcc_leaderboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'DXCC';
         $dataheader = 'QSO Count';
@@ -95,6 +109,9 @@ class StatisticsController extends Controller
 
     public function continent_leaderboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'Continent';
         $dataheader = 'QSO Count';
@@ -114,6 +131,9 @@ class StatisticsController extends Controller
 
     public function band_leaderboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'Band';
         $dataheader = 'QSO Count';
@@ -133,6 +153,9 @@ class StatisticsController extends Controller
 
     public function mode_leaderboard(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'Mode';
         $dataheader = 'QSO Count';
@@ -152,6 +175,9 @@ class StatisticsController extends Controller
 
     public function lastuploads(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //Define header
         $description = 'Callsign';
         $dataheader = 'Last Upload';
@@ -171,6 +197,9 @@ class StatisticsController extends Controller
 
     public function createdawards(Hamevent $event)
     {
+        //check permissions
+        if(request()->user()->cannot('viewstatistics', $event)) { abort(403); }   
+        
         //define header
         $description = 'Award';
         $dataheader = 'Callsign, name and (re)creation date';

@@ -3,11 +3,11 @@
 
     <x-slot name="slot">
         <div class="container mt-5">
-            @if(auth()->check())
+            @can('viewstatistics', $event)
             <h1 class="text-center mb-4">Logcheck for: <a href="/event/{{ $event->slug }}/stats" style="color: white;  text-decoration: underline;">{{ $event->title }}</a></h1>
             @else
             <h1 class="text-center mb-4">Logcheck for: {{ $event->title }}</h1>
-            @endif
+            @endcan
             <form action="/logcheck/{{ $event->slug}}" method="post">
                 @csrf
                 <div class="form-group">

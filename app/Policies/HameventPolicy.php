@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Hamevent;
 use Illuminate\Auth\Access\Response;
 
+use function PHPUnit\Framework\isEmpty;
+
 class HameventPolicy
 {
     /**
@@ -26,6 +28,24 @@ class HameventPolicy
     {
         if (!$user->cancreateevents) { return Response::deny('No permission to create events'); };
         return Response::allow();
+    }
+
+    public function viewstatistics(User $user, Hamevent $hamevent) : Response
+    {
+        //load callsign info
+        $usercalls = $user->callsigns->pluck('id');
+        $eventcalls = $hamevent->callsigns->pluck('id');
+        
+        //check if these intersect
+        $intersectingCalls = $usercalls->intersect($eventcalls);
+
+        if($intersectingCalls->isEmpty())
+        {
+            return Response::deny('You do not have permission to view statistics for this event.');;
+        }
+
+        return Response::allow();
+
     }
 
     public function edit(User $user, Hamevent $hamevent) : Response
