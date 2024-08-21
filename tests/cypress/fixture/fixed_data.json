@@ -1,5 +1,6 @@
 {
     "admin_username": "administrator",
     "adminpassword": "welcome#01",
-    "wrong_adminpassword": "welcome#02"
+    "wrong_adminpassword": "welcome#02",
+    "applicant_callsign" : "DL0LOL"
 }
