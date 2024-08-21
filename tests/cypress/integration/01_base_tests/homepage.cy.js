@@ -1,12 +1,11 @@
-describe('Example Test', () => {
+describe('Homepage Test', () => {
 
     before(() => {
         cy.refreshDatabase();
     });
 
-    it('shows a homepage', () => {
+    it('shows the homepage', () => {
         cy.visit('/');
-
         cy.contains('Hamawardz');
     });
 });

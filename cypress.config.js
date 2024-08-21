@@ -8,6 +8,8 @@ module.exports = defineConfig({
     videosFolder: 'tests/cypress/videos',
     screenshotsFolder: 'tests/cypress/screenshots',
     fixturesFolder: 'tests/cypress/fixture',
+    viewportWidth: 1920,
+    viewportHeight: 1080,
     e2e: {
         setupNodeEvents(on, config) {
             return require('./tests/cypress/plugins/index.js')(on, config)

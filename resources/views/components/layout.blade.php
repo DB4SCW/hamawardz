@@ -124,9 +124,9 @@
                     
                     <a class="nav-link navbar-link" href="/profile">{{ auth()->user()->username }} Profile</a>
                     <a class="nav-link navbar-link" href="/dashboard">Log-Upload</a>
-                    <a class="nav-link navbar-link" href="/logout">Logout</a>
+                    <a class="nav-link navbar-link" id="logoutlink" href="/logout">Logout</a>
                 @else
-                    <a class="nav-link navbar-link" href="/login">Login</a>
+                    <a class="nav-link navbar-link" id="loginlink" href="/login">Login</a>
                 @endif
             </div>
         </nav>
