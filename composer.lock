@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac0d95d188fab62ab13e67ab8509056b",
+    "content-hash": "69c251da41e92f90735772562abfeddc",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -7071,6 +7071,65 @@
             "time": "2020-07-09T08:09:16+00:00"
         },
         {
+            "name": "laracasts/cypress",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laracasts/cypress.git",
+                "reference": "449f9d69da75091c77327093e5727a5c739a4cf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laracasts/cypress/zipball/449f9d69da75091c77327093e5727a5c739a4cf8",
+                "reference": "449f9d69da75091c77327093e5727a5c739a4cf8",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^8.0|^9.5.10|^10.5",
+                "spatie/laravel-ray": "^1.29"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laracasts\\Cypress\\CypressServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laracasts\\Cypress\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeffrey Way",
+                    "email": "jeffrey@laracasts.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel Cypress Boilerplate",
+            "homepage": "https://github.com/laracasts/cypress",
+            "keywords": [
+                "cypress",
+                "laracasts"
+            ],
+            "support": {
+                "issues": "https://github.com/laracasts/cypress/issues",
+                "source": "https://github.com/laracasts/cypress/tree/3.0.2"
+            },
+            "time": "2024-03-19T14:07:37+00:00"
+        },
+        {
             "name": "laravel/pint",
             "version": "v1.17.1",
             "source": {
@@ -9345,5 +9404,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

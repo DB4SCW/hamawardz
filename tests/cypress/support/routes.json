@@ -1,0 +1,906 @@
+{
+  "cypress.factory": {
+    "name": "cypress.factory",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@factory",
+    "uri": "__cypress__/factory",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.login": {
+    "name": "cypress.login",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@login",
+    "uri": "__cypress__/login",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.logout": {
+    "name": "cypress.logout",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@logout",
+    "uri": "__cypress__/logout",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.artisan": {
+    "name": "cypress.artisan",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@artisan",
+    "uri": "__cypress__/artisan",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.run-php": {
+    "name": "cypress.run-php",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@runPhp",
+    "uri": "__cypress__/run-php",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.csrf-token": {
+    "name": "cypress.csrf-token",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@csrfToken",
+    "uri": "__cypress__/csrf_token",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cypress.routes": {
+    "name": "cypress.routes",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@routes",
+    "uri": "__cypress__/routes",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.current-user": {
+    "name": "cypress.current-user",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@currentUser",
+    "uri": "__cypress__/current-user",
+    "method": [
+      "POST"
+    ]
+  },
+  "sanctum.csrf-cookie": {
+    "name": "sanctum.csrf-cookie",
+    "domain": null,
+    "action": "Laravel\\Sanctum\\Http\\Controllers\\CsrfCookieController@show",
+    "uri": "sanctum/csrf-cookie",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ignition.healthCheck": {
+    "name": "ignition.healthCheck",
+    "domain": null,
+    "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\HealthCheckController",
+    "uri": "_ignition/health-check",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ignition.executeSolution": {
+    "name": "ignition.executeSolution",
+    "domain": null,
+    "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\ExecuteSolutionController",
+    "uri": "_ignition/execute-solution",
+    "method": [
+      "POST"
+    ]
+  },
+  "ignition.updateConfig": {
+    "name": "ignition.updateConfig",
+    "domain": null,
+    "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\UpdateConfigController",
+    "uri": "_ignition/update-config",
+    "method": [
+      "POST"
+    ]
+  },
+  "": {
+    "name": null,
+    "domain": null,
+    "action": "Closure",
+    "uri": "update",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "home": {
+    "name": "home",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LogcheckController@home",
+    "uri": "/",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "chooselogcheck": {
+    "name": "chooselogcheck",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LogcheckController@chooseindex",
+    "uri": "logcheck",
+    "method": [
+      "POST"
+    ]
+  },
+  "landingpage_eventcheck": {
+    "name": "landingpage_eventcheck",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LogcheckController@index",
+    "uri": "logcheck/{event}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "select_logcheck": {
+    "name": "select_logcheck",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LogcheckController@select",
+    "uri": "logcheck/{event}",
+    "method": [
+      "POST"
+    ]
+  },
+  "singlelogcheck": {
+    "name": "singlelogcheck",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LogcheckController@check",
+    "uri": "logcheck/{event}/{callsign}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "printaward": {
+    "name": "printaward",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@print",
+    "uri": "awards/{award}/pdf",
+    "method": [
+      "POST"
+    ]
+  },
+  "cookie_policy": {
+    "name": "cookie_policy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LegalstuffController@cookie_policy",
+    "uri": "cookie_policy",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "loginpage": {
+    "name": "loginpage",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SessionController@index",
+    "uri": "login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "login": {
+    "name": "login",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SessionController@login",
+    "uri": "login",
+    "method": [
+      "POST"
+    ]
+  },
+  "logout": {
+    "name": "logout",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SessionController@logout",
+    "uri": "logout",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "participant_dashboard": {
+    "name": "participant_dashboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DashboardController@index",
+    "uri": "dashboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showuploadform": {
+    "name": "showuploadform",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UploadController@index",
+    "uri": "upload",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "upload": {
+    "name": "upload",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UploadController@upload",
+    "uri": "upload",
+    "method": [
+      "POST"
+    ]
+  },
+  "deleteupload": {
+    "name": "deleteupload",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UploadController@delete",
+    "uri": "upload/delete",
+    "method": [
+      "POST"
+    ]
+  },
+  "showcontactsforupload": {
+    "name": "showcontactsforupload",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ContactController@show",
+    "uri": "uploads/{upload}/showcontacts",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showerrorsforupload": {
+    "name": "showerrorsforupload",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ContactController@showerrors",
+    "uri": "uploads/{upload}/showerrors",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showprofile": {
+    "name": "showprofile",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@index",
+    "uri": "profile",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "changepassword": {
+    "name": "changepassword",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@update",
+    "uri": "profile",
+    "method": [
+      "POST"
+    ]
+  },
+  "listevents": {
+    "name": "listevents",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@index",
+    "uri": "events",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showcreateevent": {
+    "name": "showcreateevent",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@showcreate",
+    "uri": "events/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "createevent": {
+    "name": "createevent",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@create",
+    "uri": "event/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "showeditevent": {
+    "name": "showeditevent",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@showedit",
+    "uri": "event/{event}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "editevent": {
+    "name": "editevent",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@edit",
+    "uri": "event/{event}",
+    "method": [
+      "POST"
+    ]
+  },
+  "deleteevent": {
+    "name": "deleteevent",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@destroy",
+    "uri": "event/{event}/delete",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "exporteventcontacts": {
+    "name": "exporteventcontacts",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ContactController@exportcontacts",
+    "uri": "event/{event}/export",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "removeeventmanager": {
+    "name": "removeeventmanager",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@removemanager",
+    "uri": "event/{event}/manager/{managerid}/remove",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "addeventmanager": {
+    "name": "addeventmanager",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@addmanager",
+    "uri": "event/{event}/addmanager",
+    "method": [
+      "POST"
+    ]
+  },
+  "removeeventparticipant": {
+    "name": "removeeventparticipant",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@removeeventparticipant",
+    "uri": "event/{event}/callsign/{callsign}/remove",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "addeventparticipant": {
+    "name": "addeventparticipant",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HameventController@addeventparticipant",
+    "uri": "event/{event}/addcallsign",
+    "method": [
+      "POST"
+    ]
+  },
+  "showcreateawardpost": {
+    "name": "showcreateawardpost",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@showcreate",
+    "uri": "event/{event}/addaward",
+    "method": [
+      "POST"
+    ]
+  },
+  "showcreateawardget": {
+    "name": "showcreateawardget",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@showcreate",
+    "uri": "event/{event}/addaward",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "deleteaward": {
+    "name": "deleteaward",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@destroy",
+    "uri": "awards/{award}/remove",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "createaward": {
+    "name": "createaward",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@create",
+    "uri": "event/{event}/createaward",
+    "method": [
+      "POST"
+    ]
+  },
+  "showeditaward": {
+    "name": "showeditaward",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@showedit",
+    "uri": "awards/{award}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "printexampleaward": {
+    "name": "printexampleaward",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@printexample",
+    "uri": "awards/{award}/exampleaward",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "editaward": {
+    "name": "editaward",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@edit",
+    "uri": "awards/{award}/edit",
+    "method": [
+      "POST"
+    ]
+  },
+  "uploadawardbackground": {
+    "name": "uploadawardbackground",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@uploadbackground",
+    "uri": "awards/{award}/uploadbackground",
+    "method": [
+      "POST"
+    ]
+  },
+  "duplicateaward": {
+    "name": "duplicateaward",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardController@duplicate",
+    "uri": "awards/{award}/duplicate",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "createawardsubtimeframe": {
+    "name": "createawardsubtimeframe",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardtimeframeController@create",
+    "uri": "award/{award}/addsubtimeframe",
+    "method": [
+      "POST"
+    ]
+  },
+  "deleteawardsubtimeframe": {
+    "name": "deleteawardsubtimeframe",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AwardtimeframeController@delete",
+    "uri": "awardtimeframe/{awardtimeframe}/delete",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showcallsigns": {
+    "name": "showcallsigns",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignController@index",
+    "uri": "callsigns",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "createcallsign": {
+    "name": "createcallsign",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignController@create",
+    "uri": "callsigns/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "showeditcallsign": {
+    "name": "showeditcallsign",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignController@show",
+    "uri": "callsign/{callsign}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "editcallsign": {
+    "name": "editcallsign",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignController@edit",
+    "uri": "callsign/{callsign}",
+    "method": [
+      "POST"
+    ]
+  },
+  "deletecallsign": {
+    "name": "deletecallsign",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignController@destroy",
+    "uri": "callsign/{callsign}/delete",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "removeuploader": {
+    "name": "removeuploader",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignController@removeuploader",
+    "uri": "callsign/{callsign}/user/{uploaderid}/delete",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "adduploader": {
+    "name": "adduploader",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignController@adduploader",
+    "uri": "callsign/{callsign}/adduploader",
+    "method": [
+      "POST"
+    ]
+  },
+  "listusers": {
+    "name": "listusers",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UserController@index",
+    "uri": "users",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "createuser": {
+    "name": "createuser",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UserController@create",
+    "uri": "users/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "toggleusers": {
+    "name": "toggleusers",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UserController@toggle",
+    "uri": "user/{user}/toggle",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showedituser": {
+    "name": "showedituser",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UserController@showedit",
+    "uri": "user/{user}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "edituser": {
+    "name": "edituser",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\UserController@edit",
+    "uri": "user/{user}",
+    "method": [
+      "POST"
+    ]
+  },
+  "autoimport": {
+    "name": "autoimport",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@trigger",
+    "uri": "executeautoimport",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "listautoimports": {
+    "name": "listautoimports",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@index",
+    "uri": "autoimports",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showcreateautoimport": {
+    "name": "showcreateautoimport",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@showcreate",
+    "uri": "autoimports/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "createautoimport": {
+    "name": "createautoimport",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@create",
+    "uri": "autoimports/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "showeditautoimport": {
+    "name": "showeditautoimport",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@showedit",
+    "uri": "autoimport/{autoimport}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "editautoimport": {
+    "name": "editautoimport",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@edit",
+    "uri": "autoimport/{autoimport}/edit",
+    "method": [
+      "POST"
+    ]
+  },
+  "deleteautoimport": {
+    "name": "deleteautoimport",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@destroy",
+    "uri": "autoimport/{autoimport}/delete",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "toggleautoimport": {
+    "name": "toggleautoimport",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AutoimportController@toggle",
+    "uri": "autoimport/{autoimport}/toggle",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticsdashboard": {
+    "name": "statisticsdashboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@statisticsdashboard",
+    "uri": "event/{event}/stats",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticsqso_leaderboard": {
+    "name": "statisticsqso_leaderboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@qso_leaderboard",
+    "uri": "event/{event}/stat/qso_leaderboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticscallsign_leaderboard": {
+    "name": "statisticscallsign_leaderboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@callsign_leaderboard",
+    "uri": "event/{event}/stat/callsign_leaderboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticsoperator_leaderboard": {
+    "name": "statisticsoperator_leaderboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@operator_leaderboard",
+    "uri": "event/{event}/stat/operator_leaderboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticsdxcc_leaderboard": {
+    "name": "statisticsdxcc_leaderboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@dxcc_leaderboard",
+    "uri": "event/{event}/stat/dxcc_leaderboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticscontinent_leaderboard": {
+    "name": "statisticscontinent_leaderboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@continent_leaderboard",
+    "uri": "event/{event}/stat/continent_leaderboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticsband_leaderboard": {
+    "name": "statisticsband_leaderboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@band_leaderboard",
+    "uri": "event/{event}/stat/band_leaderboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticsmode_leaderboard": {
+    "name": "statisticsmode_leaderboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@mode_leaderboard",
+    "uri": "event/{event}/stat/mode_leaderboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticslastuploads": {
+    "name": "statisticslastuploads",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@lastuploads",
+    "uri": "event/{event}/stat/lastuploads",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "statisticscreatedawards": {
+    "name": "statisticscreatedawards",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StatisticsController@createdawards",
+    "uri": "event/{event}/stat/createdawards",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "showcallsignapi": {
+    "name": "showcallsignapi",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignapidetailController@show",
+    "uri": "callsignapi/{api}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "runcallsignapi": {
+    "name": "runcallsignapi",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignapidetailController@run",
+    "uri": "callsignapi/{api}/run",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "createcallsignapi": {
+    "name": "createcallsignapi",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignapidetailController@create",
+    "uri": "callsignapi/{callsign}",
+    "method": [
+      "POST"
+    ]
+  },
+  "editcallsignapi": {
+    "name": "editcallsignapi",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignapidetailController@edit",
+    "uri": "callsignapi/{api}/edit",
+    "method": [
+      "POST"
+    ]
+  },
+  "deletecallsignapi": {
+    "name": "deletecallsignapi",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignapidetailController@destroy",
+    "uri": "callsignapi/{api}/delete",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "dumpalladifs": {
+    "name": "dumpalladifs",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TeleportController@dumpalluploads",
+    "uri": "dumpalladifs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "teleportout": {
+    "name": "teleportout",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TeleportController@teleportout",
+    "uri": "teleportout",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "teleportin": {
+    "name": "teleportin",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TeleportController@teleportin",
+    "uri": "teleportin",
+    "method": [
+      "POST"
+    ]
+  },
+  "restoreimages": {
+    "name": "restoreimages",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TeleportController@restoreimages",
+    "uri": "restoreimages",
+    "method": [
+      "POST"
+    ]
+  },
+  "fixdxccs": {
+    "name": "fixdxccs",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ContactController@fixmissingdxccs",
+    "uri": "runtask/fixdxccs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "runpullapis": {
+    "name": "runpullapis",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CallsignapidetailController@runtask",
+    "uri": "runtask/pullapis",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  }
+}
