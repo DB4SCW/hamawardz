@@ -27,14 +27,23 @@
                     @foreach($uploads as $upload)
                     <tr>
                         <td>{{ $upload->id }}</td>
+
                         <td>{{ $upload->created_at->format('Y-m-d @ H:i') . ' UTC' }}</td>
+
+                        @if($upload->callsignapidetail_id != null)
+                        <td><a style="color: white;" href="/callsignapi/{{ $upload->callsignapidetail_id }}">{{ $upload->type }}</a></td>
+                        @else
                         <td>{{ $upload->type }}</td>
+                        @endif
+
                         <td>{{ $upload->callsign->call }}</td>
+
                         @if($upload->overall_qso_count - $upload->contacts->count() == 0)
                         <td>{{ $upload->contacts->count() }}</td>
                         @else
                         <td>{{ $upload->contacts->count() }} <a href="/uploads/{{$upload->id}}/showerrors" style="color: red; text-decoration: underline;">({{ $upload->overall_qso_count - $upload->contacts->count() }} Errors)</a></td>
                         @endif
+
                         <td>
                             <button class="btn btn-danger" onclick="showConfirmDeleteModal({{ $upload->id }})">Delete</button>
                             <a href="/uploads/{{$upload->id}}/showcontacts"><button class="btn btn-success">Show QSOs</button></a>

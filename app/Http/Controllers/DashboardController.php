@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function index()
     {
         //Get uploads of current user
-        $uploads = Upload::with('callsign', 'uploader')->where('uploader_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
+        $uploads = Upload::with('callsign', 'uploader', 'callsignapidetail')->where('uploader_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
 
         //Load view
         return view('dashboard', ['uploads' => $uploads]);

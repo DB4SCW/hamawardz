@@ -51,11 +51,13 @@ class SessionController extends Controller
         //get locally installed version
         $versioninfo_path = storage_path('app/version.txt');
         $installed_version = File::get($versioninfo_path);
+        $installed_version = preg_replace('/\s+/', ' ', trim($installed_version));
 
         //get globally available version
         $available_version = $installed_version;
         try {
             $available_version = Http::get('https://hamawardz.de/versionfiles/hamawardz_version.txt')->body();
+            $available_version = preg_replace('/\s+/', ' ', trim($available_version));
         } catch (\Throwable $th) {
             // do nothing, cannot reach info for updated version
         }
