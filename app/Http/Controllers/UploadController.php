@@ -88,6 +88,7 @@ class UploadController extends Controller
         $upload->file_content = $contents;
         $upload->overall_qso_count = count($data);
         $upload->type = 'Manual ADIF Upload';
+        $upload->callsignapidetail_id = null;
 
         //Before saving, check if there are QSOs in the upload
         if($upload->overall_qso_count < 1)

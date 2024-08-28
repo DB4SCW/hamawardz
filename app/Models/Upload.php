@@ -44,6 +44,11 @@ class Upload extends Model
         return $this->belongsTo(User::class, "uploader_id", "id");
     }
 
+    public function callsignapidetail() : BelongsTo
+    {
+        return $this->belongsTo(Callsignapidetail::class, "callsignapidetail_id", "id");
+    }
+
     public function callsign() : BelongsTo
     {
         return $this->belongsTo(Callsign::class, 'callsign_id', 'id');

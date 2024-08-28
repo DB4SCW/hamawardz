@@ -29,6 +29,11 @@ class Callsignapidetail extends Model
         return $this->hasMany(Callsignapierrorlog::class);
     }
 
+    public function uploads() : HasMany
+    {
+        return $this->hasMany(Upload::class);
+    }
+
     public function pull() : ?Upload
     {
         //call each specific API implementation depending on the api type
@@ -140,6 +145,7 @@ class Callsignapidetail extends Model
         $upload->file_content = $adif_content;
         $upload->overall_qso_count = $qso_count;
         $upload->type = $type;
+        $upload->callsignapidetail_id = $this->id;
         $upload->save();
 
         //process upload, take operator from adif and ignore duplicates
