@@ -76,6 +76,17 @@
                             <label for="callsign_font_size_px">Callsign font size:</label>
                             <input name="callsign_font_size_px" class="form-control" type="number" min="0" max="300" step="1" value="{{ old('callsign_font_size_px') }}">
                         </div>
+                        <div class="form-group">
+                            <label for="callsign_centered_horizontal">Callsign centered horizontal?</label>
+                            <select class="form-control" name="callsign_centered_horizontal">
+                                <option value="0" {{ 0 == old('callsign_centered_horizontal') ? 'selected' : '' }}>no</option>
+                                <option value="1" {{ 1 == (old('callsign_centered_horizontal') ?? 1) ? 'selected' : '' }}>yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="callsign_left_percent">If not centered - Callsign left %:</label>
+                            <input name="callsign_left_percent" class="form-control" type="number" min="0" max="100" step="0.01" value="{{ old('callsign_left_percent') }}">
+                        </div>
 
                         <!-- Chosen name formatting -->
                         <div class="form-group">
@@ -92,6 +103,17 @@
                         <div class="form-group">
                             <label for="chosen_name_font_size_px">Chosen name font size:</label>
                             <input name="chosen_name_font_size_px" class="form-control" type="number" min="0" max="300" step="1" value="{{ old('chosen_name_font_size_px') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="chosen_name_centered_horizontal">Chosen name centered horizontal?</label>
+                            <select class="form-control" name="chosen_name_centered_horizontal">
+                                <option value="0" {{ 0 == old('chosen_name_centered_horizontal') ? 'selected' : '' }}>no</option>
+                                <option value="1" {{ 1 == (old('chosen_name_centered_horizontal') ?? 1) ? 'selected' : '' }}>yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="chosen_name_left_percent">If not centered - Chosen name left %:</label>
+                            <input name="chosen_name_left_percent" class="form-control" type="number" min="0" max="100" step="0.01" value="{{ old('chosen_name_left_percent') }}">
                         </div>
 
                         <!-- datetime formatting -->

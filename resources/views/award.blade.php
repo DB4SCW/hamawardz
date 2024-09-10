@@ -38,6 +38,9 @@
         .callsign {
             position: absolute;
             top: {{ $award->callsign_top_percent }}%;
+            @if(!$award->callsign_centered_horizontal)
+            left: {{ $award->callsign_left_percent ?? 50 }}%;
+            @endif
             text-align: center;
             font-size: {{ $award->callsign_font_size_px }}px;
             color: black;
@@ -49,6 +52,9 @@
         .chosenname {
             position: absolute;
             top: {{ $award->chosen_name_top_percent }}%;
+            @if(!$award->chosen_name_centered_horizontal)
+            left: {{ $award->chosen_name_left_percent ?? 50 }}%;
+            @endif
             text-align: center;
             font-size: {{ $award->chosen_name_font_size_px }}px;
             color: black;
@@ -74,8 +80,8 @@
         <img class="image" src="{{ $award->backgroundimage_assetpath() }}" alt="Award Background">
     </div>
     <!-- The overlays -->
-    <div class="callsign horicentre">{{ $callsign }}</div>
-    <div class="chosenname horicentre">{{ $chosenname ?? '' }}</div>
+    <div class="callsign {{ $award->callsign_centered_horizontal ? 'horicentre' : '' }}">{{ $callsign }}</div>
+    <div class="chosenname {{ $award->chosen_name_centered_horizontal ? 'horicentre' : '' }}">{{ $chosenname ?? '' }}</div>
     @if($award->datetime_print)
     <div class="datetime">{{ $issue_datetime->format('Y-m-d @ H:i') . ' UTC' }}</div>
     @endif

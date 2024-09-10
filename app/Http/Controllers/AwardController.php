@@ -111,6 +111,23 @@ class AwardController extends Controller
         return $pdf->stream( $data['issue_datetime']->format('Ymd') . '_EXAMPLE_' . $award->slug . '_award.pdf');
     }
 
+    public function previewexample(Award $award)
+    {
+        //check permissions
+        if(request()->user()->cannot('edit', $award->event)) { abort(403); }    
+
+        //Prepare data array
+        $data = [
+            'callsign' => 'P51KJU', 
+            'chosenname' => 'Kim Jong-un', 
+            'issue_datetime' => \Carbon\Carbon::now(),
+            'award' => $award
+        ];
+
+        //stream PDF
+        return view('award', ['data' => $data, 'award' => $award, 'callsign' => $data['callsign'], 'chosenname' => $data['chosenname'], 'issue_datetime' => $data['issue_datetime']]);
+    }
+
     public function duplicate(Award $award)
     {
         //check permissions
@@ -210,6 +227,10 @@ class AwardController extends Controller
         $award->active = $attributes['active'];
         $award->dxcc_id = $attributes['dxcc_id'];
         $award->dxcc_querystring = $attributes['dxcc_querystring'];
+        $award->callsign_centered_horizontal = $attributes['callsign_centered_horizontal'];
+        $award->callsign_left_percent = $attributes['callsign_centered_horizontal'] == 1 ? null : $attributes['callsign_left_percent'];
+        $award->chosen_name_centered_horizontal = $attributes['chosen_name_centered_horizontal'];
+        $award->chosen_name_left_percent = $attributes['chosen_name_centered_horizontal'] == 1 ? null : $attributes['chosen_name_left_percent'];
 
         //Save award
         $award->save();
@@ -282,6 +303,10 @@ class AwardController extends Controller
         $award->active = $attributes['active'];
         $award->dxcc_id = $attributes['dxcc_id'];
         $award->dxcc_querystring = $attributes['dxcc_querystring'];
+        $award->callsign_centered_horizontal = $attributes['callsign_centered_horizontal'];
+        $award->callsign_left_percent = $attributes['callsign_centered_horizontal'] == 1 ? null : $attributes['callsign_left_percent'];
+        $award->chosen_name_centered_horizontal = $attributes['chosen_name_centered_horizontal'];
+        $award->chosen_name_left_percent = $attributes['chosen_name_centered_horizontal'] == 1 ? null : $attributes['chosen_name_left_percent'];
 
         //save award
         $award->save();
@@ -317,7 +342,11 @@ class AwardController extends Controller
             'active' => 'integer|min:0|max:1',
             'dxcc_id' => 'nullable|exists:dxccs,id',
             'dxcc_querystring' => 'nullable|string|max:20',
-            'datetime_print' => 'integer|min:0|max:1'
+            'datetime_print' => 'integer|min:0|max:1',
+            'callsign_left_percent' => 'decimal:0,3|min:0|max:100|nullable',
+            'chosen_name_left_percent' => 'decimal:0,3|min:0|max:100|nullable',
+            'callsign_centered_horizontal' => 'integer|min:0|max:1',
+            'chosen_name_centered_horizontal' => 'integer|min:0|max:1'
         ], 
         [
             'title.string' => 'Title must be a text.',
@@ -371,7 +400,19 @@ class AwardController extends Controller
             'dxcc_querystring.max' => 'DXCC Querystring must be at most 20 characters long.',
             'datetime_print.integer' => 'Invalid datetime print type.',
             'datetime_print.min' => 'Invalid datetime print type.',
-            'datetime_print.max' => 'Invalid datetime print type.'
+            'datetime_print.max' => 'Invalid datetime print type.',
+            'callsign_centered_horizontal.integer' => 'Invalid callsign center type.',
+            'callsign_centered_horizontal.min' => 'Invalid callsign center type.',
+            'callsign_centered_horizontal.max' => 'Invalid callsign center type.',
+            'chosen_name_centered_horizontal.integer' => 'Invalid chosen name center type.',
+            'chosen_name_centered_horizontal.min' => 'Invalid chosen name center type.',
+            'chosen_name_centered_horizontal.max' => 'Invalid chosen name center type.',
+            'callsign_left_percent.decimal' => 'Callsign left % must be a number.',
+            'callsign_left_percent.min' => 'Callsign left % must be at least 0%.',
+            'callsign_left_percent.max' => 'Callsign left % must be at most 100%.',
+            'chosen_name_left_percent.decimal' => 'Chosen name left % must be a number.',
+            'chosen_name_left_percent.min' => 'Chosen name left % must be at least 0%.',
+            'chosen_name_left_percent.max' => 'Chosen name left % must be at most 100%.'
         ]);
 
         //open return class

@@ -104,6 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/event/{event:slug}/createaward', [AwardController::class, 'create'])->name('createaward');
     Route::get('/awards/{award:slug}/edit', [AwardController::class, 'showedit'])->name('showeditaward');
     Route::get('/awards/{award:slug}/exampleaward', [AwardController::class, 'printexample'])->name('printexampleaward');
+    Route::get('/awards/{award:slug}/previewaward', [AwardController::class, 'previewexample'])->name('previewexampleaward');
     Route::post('/awards/{award:slug}/edit', [AwardController::class, 'edit'])->name('editaward');
     Route::post('/awards/{award:slug}/uploadbackground', [AwardController::class, 'uploadbackground'])->name('uploadawardbackground');
     Route::get('/awards/{award:slug}/duplicate', [AwardController::class, 'duplicate'])->name('duplicateaward');
