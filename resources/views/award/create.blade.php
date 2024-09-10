@@ -77,7 +77,7 @@
                             <input name="callsign_font_size_px" class="form-control" type="number" min="0" max="300" step="1" value="{{ old('callsign_font_size_px') }}">
                         </div>
                         <div class="form-group">
-                            <label for="callsign_centered_horizontal">Callsign centered horizontal?</label>
+                            <label for="callsign_centered_horizontal">Callsign centered horizontal? Keeping "yes" is STRONGLY advised.</label>
                             <select class="form-control" name="callsign_centered_horizontal">
                                 <option value="0" {{ 0 == old('callsign_centered_horizontal') ? 'selected' : '' }}>no</option>
                                 <option value="1" {{ 1 == (old('callsign_centered_horizontal') ?? 1) ? 'selected' : '' }}>yes</option>
@@ -105,7 +105,7 @@
                             <input name="chosen_name_font_size_px" class="form-control" type="number" min="0" max="300" step="1" value="{{ old('chosen_name_font_size_px') }}">
                         </div>
                         <div class="form-group">
-                            <label for="chosen_name_centered_horizontal">Chosen name centered horizontal?</label>
+                            <label for="chosen_name_centered_horizontal">Chosen name centered horizontal? Keeping "yes" is STRONGLY advised.</label>
                             <select class="form-control" name="chosen_name_centered_horizontal">
                                 <option value="0" {{ 0 == old('chosen_name_centered_horizontal') ? 'selected' : '' }}>no</option>
                                 <option value="1" {{ 1 == (old('chosen_name_centered_horizontal') ?? 1) ? 'selected' : '' }}>yes</option>
