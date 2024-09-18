@@ -47,15 +47,50 @@ class Callsignapidetail extends Model
 
     public function pull_wavelog() : ?Upload
     {
+        //define minimal data in payload
+        $minimal_keys = ['key', 'station_id'];
+        
         //get payload from model
-        $payload = json_decode($this->payload);
-        $goalpost = (int)$this->goalpost;
+        $payload = json_decode($this->payload, true);
+        
+        //check if at least the minimal data fields are there
+        $missingFields = array_diff($minimal_keys, array_keys($payload));
 
-        //create json body
+        //create error log for missing fields in payload
+        if(!empty($missingFields))
+        {
+            $this->createerrorlog(500, "Missing fields in payload: " . implode(", ", $missingFields));
+            return null;
+        }
+
+        //get goalpost from model
+        if(is_numeric(($this->goalpost ?? 0)))
+        {
+            $goalpost = (int)$this->goalpost;
+        }else
+        {
+            $this->createerrorlog(500, "Goalpost must be a number.");
+            return null;
+        }
+
+        //set json body type
         $bodytype = "application/json";
         
-        $body_content = [ 'key' => $payload->key, 'station_id' => $payload->station_id, 'fetchfromid' => $goalpost ];
-        $json_body = json_encode($body_content);
+        //create minimum payload content
+        $payload_content = [ 'key' => $payload['key'], 'station_id' => $payload['station_id'], 'fetchfromid' => $goalpost ];
+
+        //if optional limit is specified, add data to payload content
+        if(array_key_exists("limit", $payload))
+        {
+            if(is_numeric($payload['limit']))
+            {
+                $limit = max((int)$payload['limit'], -1);
+                $payload_content['limit'] = $limit == 0 ? -1 : $limit;
+            }
+        }
+
+        //convert content to json
+        $json_body = json_encode($payload_content);
 
         //get data from Wavelog
         $response = Http::acceptJson()->withBody($json_body , $bodytype)->post($this->url);
@@ -88,6 +123,7 @@ class Callsignapidetail extends Model
             $newgoalpost = $response['lastfetchedid'];
             $adif_content = $response['adif'];
         } catch (\Throwable $th) {
+            $this->createerrorlog(500, 'Cannot fetch needed info from response. Missing fields!');
             return null;
         }
         
