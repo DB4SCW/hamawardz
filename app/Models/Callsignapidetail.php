@@ -79,7 +79,7 @@ class Callsignapidetail extends Model
         //create minimum payload content
         $payload_content = [ 'key' => $payload['key'], 'station_id' => $payload['station_id'], 'fetchfromid' => $goalpost ];
 
-        //if optional limit is specified, add data to payload content
+        //if optional limit is specified and a number, add data to payload content
         if(array_key_exists("limit", $payload))
         {
             if(is_numeric($payload['limit']))
