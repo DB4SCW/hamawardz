@@ -35,7 +35,7 @@ class Award extends Model
 
     public function mode_text()
     {
-        return swolf_getawardmodetext($this->mode, $this->min_threshold ?? 0);
+        return db4scw_getawardmodetext($this->mode, $this->min_threshold ?? 0);
     }
 
     public function eligible(string $callsign) : bool
@@ -118,7 +118,7 @@ class Award extends Model
 
     public function getexcludedcallsignids()
     {
-        $callsigns_raw = swolf_getcallsignsfromstring($this->excluded_callsigns ?? '') ;
+        $callsigns_raw = db4scw_getcallsignsfromstring($this->excluded_callsigns ?? '') ;
         $callsignids = Callsign::whereIn('call', $callsigns_raw)->get()->pluck('id');
         return $callsignids->toArray();
     }

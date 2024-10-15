@@ -82,19 +82,19 @@ class scheduled_autoimport extends Command
                 $c->upload_id = $upload->id;
 
                 //get operator callsign from DB. If invalid, use callsign of eventcall
-                $c->operator = getAutoImportFieldContent($config, "operator", $record) ?? $call->call;
+                $c->operator = db4scw_getAutoImportFieldContent($config, "operator", $record) ?? $call->call;
                 
                 //if Date or Time is null, abort this crecord
-                if(getAutoImportFieldContent($config, "qsodate", $record) == null || getAutoImportFieldContent($config, "qsotime", $record) == null )
+                if(db4scw_getAutoImportFieldContent($config, "qsodate", $record) == null || db4scw_getAutoImportFieldContent($config, "qsotime", $record) == null )
                 {
                     continue;
                 }
 
                 //Set datetime of QSO
-                $c->qso_datetime = getAutoImportFieldContent($config, "qsodate", $record) . ' ' . getAutoImportFieldContent($config, "qsotime", $record);
+                $c->qso_datetime = db4scw_getAutoImportFieldContent($config, "qsodate", $record) . ' ' . db4scw_getAutoImportFieldContent($config, "qsotime", $record);
                 
                 //get raw callsign, abort if empty
-                $c->raw_callsign = getAutoImportFieldContent($config, "qsopartner_callsign", $record);
+                $c->raw_callsign = db4scw_getAutoImportFieldContent($config, "qsopartner_callsign", $record);
 
                 if($c->raw_callsign == null)
                 {
@@ -102,13 +102,13 @@ class scheduled_autoimport extends Command
                 }
 
                 //strip prefix and suffix from raw callsign
-                $c->callsign = swolf_getcallsignwithoutadditionalinfo($c->raw_callsign);
+                $c->callsign = db4scw_getcallsignwithoutadditionalinfo($c->raw_callsign);
                 
                 //get frequency
-                $c->freq = getAutoImportFieldContent($config, "frequency", $record);
+                $c->freq = db4scw_getAutoImportFieldContent($config, "frequency", $record);
                 
                 //get band, abort if empty
-                $band = Band::where('band', strtolower(getAutoImportFieldContent($config, "band", $record) ?? ""))->first();
+                $band = Band::where('band', strtolower(db4scw_getAutoImportFieldContent($config, "band", $record) ?? ""))->first();
 
                 if($band == null) 
                 {
@@ -118,7 +118,7 @@ class scheduled_autoimport extends Command
                 $c->band_id = $band->id;
 
                 //get mode, abort if empty
-                $mode = Mode::where('submode', getAutoImportFieldContent($config, "mode", $record) ?? "")->first();
+                $mode = Mode::where('submode', db4scw_getAutoImportFieldContent($config, "mode", $record) ?? "")->first();
 
                 if($mode == null)
                 {
@@ -128,11 +128,11 @@ class scheduled_autoimport extends Command
                 $c->mode_id = $mode->id;
                 
                 //get RSTs
-                $c->rst_s = getAutoImportFieldContent($config, "rst_s", $record) ?? "";
-                $c->rst_r = getAutoImportFieldContent($config, "rst_r", $record) ?? "";
+                $c->rst_s = db4scw_getAutoImportFieldContent($config, "rst_s", $record) ?? "";
+                $c->rst_r = db4scw_getAutoImportFieldContent($config, "rst_r", $record) ?? "";
                 
                 //get DXCC, 0 if empty
-                $dxcc = Dxcc::where('dxcc', getAutoImportFieldContent($config, "dxcc", $record) ?? "0")->first();
+                $dxcc = Dxcc::where('dxcc', db4scw_getAutoImportFieldContent($config, "dxcc", $record) ?? "0")->first();
                 $c->dxcc_id = $dxcc == null ? 0 : $dxcc->id;
                 
                 //set database and foreign id

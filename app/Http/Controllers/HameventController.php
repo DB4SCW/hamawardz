@@ -81,7 +81,7 @@ class HameventController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator))->withInput();
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator))->withInput();
         }
 
         //get validated attributes
@@ -170,7 +170,7 @@ class HameventController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator));
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator));
         }
 
         //get validated attributes
@@ -251,7 +251,7 @@ class HameventController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator))->withInput();
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator))->withInput();
         }
 
         //get validated attributes
@@ -318,7 +318,7 @@ class HameventController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator))->withInput();
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator))->withInput();
         }
 
         //get validated attributes

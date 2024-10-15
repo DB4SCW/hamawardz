@@ -50,7 +50,7 @@ class UploadController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator));
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator));
         }
 
         //get validated attributes
@@ -100,7 +100,7 @@ class UploadController extends Controller
         //deactivated because this accesses fields of the ADIF which may or may not be there
         if(false) 
         { 
-            if(!checkadifinsidevalidityperiod($data, $callsign))
+            if(!db4scw_checkadifinsidevalidityperiod($data, $callsign))
             {
                 return redirect()->back()->with('danger', 'There were no QSOs found that was inside the validity period of this event callsign.');
             }
@@ -144,7 +144,7 @@ class UploadController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator));
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator));
         }
 
         //get validated attributes

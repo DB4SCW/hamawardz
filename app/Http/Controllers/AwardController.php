@@ -30,7 +30,7 @@ class AwardController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator));
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator));
         }
 
         //get validated attributes
@@ -213,7 +213,7 @@ class AwardController extends Controller
         $award->ranking = $attributes['ranking'];
         $award->mode = $attributes['mode'];
         $award->min_threshold = $attributes['min_threshold'];
-        $award->excluded_callsigns = swolf_sanitizecallsignstring($attributes['excluded_callsigns']);
+        $award->excluded_callsigns = db4scw_sanitizecallsignstring($attributes['excluded_callsigns']);
         $award->callsign_top_percent = $attributes['callsign_top_percent'];
         $award->callsign_bold = $attributes['callsign_bold'];
         $award->callsign_font_size_px = $attributes['callsign_font_size_px'];
@@ -289,7 +289,7 @@ class AwardController extends Controller
         $award->ranking = $attributes['ranking'];
         $award->mode = $attributes['mode'];
         $award->min_threshold = $attributes['min_threshold'];
-        $award->excluded_callsigns = swolf_sanitizecallsignstring($attributes['excluded_callsigns']);
+        $award->excluded_callsigns = db4scw_sanitizecallsignstring($attributes['excluded_callsigns']);
         $award->callsign_top_percent = $attributes['callsign_top_percent'];
         $award->callsign_bold = $attributes['callsign_bold'];
         $award->callsign_font_size_px = $attributes['callsign_font_size_px'];
@@ -327,7 +327,7 @@ class AwardController extends Controller
             'slug' => 'string|min:3|max:200|unique:awards,slug' . ($awardid != null ? (',' . $awardid) : ''),
             'description' => 'string|max:200',
             'ranking' => 'integer|min:0',
-            'mode' => 'integer|min:0|max:' . swolf_getmaxmode(),
+            'mode' => 'integer|min:0|max:' . db4scw_getmaxmode(),
             'min_threshold' => 'integer|min:1',
             'excluded_callsigns' => 'string|max:255|nullable',
             'callsign_top_percent' => 'decimal:0,3|min:0|max:100',
@@ -420,7 +420,7 @@ class AwardController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            $returnvalue->redirect = redirect()->back()->with('danger', swolf_validatorerrors($validator))->withInput();
+            $returnvalue->redirect = redirect()->back()->with('danger', db4scw_validatorerrors($validator))->withInput();
             $returnvalue->attributes = null;
             $returnvalue->result = false;
             return $returnvalue;
@@ -453,7 +453,7 @@ class AwardController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->back()->with('danger', swolf_validatorerrors($validator));
+            return redirect()->back()->with('danger', db4scw_validatorerrors($validator));
         }
 
         //get validated attributes

@@ -146,7 +146,7 @@ class Callsignapidetail extends Model
         //we can do this here because we know Wavelog provides the relevant fields inside the ADIF
         //return dummyupload to differentiate from a general error during processing
         //return -1 QSOs to signal validity error
-        if(!checkadifinsidevalidityperiod((new Parser())->parse($adif_content), $this->callsign))
+        if(!db4scw_checkadifinsidevalidityperiod((new Parser())->parse($adif_content), $this->callsign))
         {
             //create dummy
             $dummyupload = new Upload();

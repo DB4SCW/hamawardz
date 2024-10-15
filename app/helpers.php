@@ -2,7 +2,7 @@
 use App\Models\Autoimport;
 use App\Models\Callsign;
 
-function swolf_getcallsignwithoutadditionalinfo(string $input) : string
+function db4scw_getcallsignwithoutadditionalinfo(string $input) : string
 {
     $result = strtoupper($input);
     $result = preg_replace("/^[A-Z, 0-9]{1,3}\//", "", $result); //delete prefix
@@ -12,12 +12,12 @@ function swolf_getcallsignwithoutadditionalinfo(string $input) : string
     return $result;
 }
 
-function swolf_getcallsignsfromstring(?string $input)
+function db4scw_getcallsignsfromstring(?string $input)
 {
-    return explode(",", swolf_sanitizecallsignstring($input) ?? '');
+    return explode(",", db4scw_sanitizecallsignstring($input) ?? '');
 }
 
-function swolf_sanitizecallsignstring(?string $input) : ?string
+function db4scw_sanitizecallsignstring(?string $input) : ?string
 {
     if($input == null) { return null; }
     $callsignstrings_raw = str_replace(" ", "", $input);
@@ -29,12 +29,12 @@ function swolf_sanitizecallsignstring(?string $input) : ?string
     return strtoupper($callsignstrings_raw);
 }
 
-function swolf_validatorerrors(\Illuminate\Validation\Validator $validator) : string
+function db4scw_validatorerrors(\Illuminate\Validation\Validator $validator) : string
 {
     return implode(" | ", $validator->errors()->all());
 }
 
-function swolf_getawardmodetext(int $mode, $threshold = null) : string
+function db4scw_getawardmodetext(int $mode, $threshold = null) : string
 {
     switch ($mode) {
         case 0:
@@ -62,12 +62,12 @@ function swolf_getawardmodetext(int $mode, $threshold = null) : string
     }
 }
 
-function swolf_getmaxmode() : int
+function db4scw_getmaxmode() : int
 {
     return 9;
 }
 
-function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $record) : ?string
+function db4scw_getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $record) : ?string
 {
     //check null-field
     if($field == null)
@@ -100,7 +100,7 @@ function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $re
 
 }
 
-function checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
+function db4scw_checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
 {
     //get first and last QSO and parse datetime of these records
     $last_qso = collect($data)->sortBy([['QSO_DATE', 'desc'], ['TIME_ON', 'desc']])->first();
@@ -122,15 +122,19 @@ function checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
     return true;
 }
 
-function stalinsort(array $array, bool $reverse = false): array {
+function stalinsort(array $array, bool $reverse = false) : array {
     
     //if array is empty, return empty array
-    if (empty($array)) {
+    if (empty($array)) 
+    {
         return [];
     }
 
     //only add elements that are already sorted to the array, eliminate the rest of the elements
-    foreach ($array as $element) {
+    $sortedArray = [];
+
+    foreach ($array as $element) 
+    {
 
         //first element is always fine
         if(empty($sortedArray))
