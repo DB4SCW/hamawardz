@@ -347,6 +347,7 @@ class Award extends Model
         $new_award->creator_id = auth()->user()->id;
         $new_award->created_at = \Carbon\Carbon::now();
         $new_award->updated_at = \Carbon\Carbon::now();
+        $new_award->background_image = 'Blank.jpg';
         $new_award->title = $uid;
         $new_award->slug = $uid;
         
