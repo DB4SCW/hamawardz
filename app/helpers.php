@@ -2,7 +2,7 @@
 use App\Models\Autoimport;
 use App\Models\Callsign;
 
-function swolf_getcallsignwithoutadditionalinfo(string $input) : string
+function db4scw_getcallsignwithoutadditionalinfo(string $input) : string
 {
     $result = strtoupper($input);
     $result = preg_replace("/^[A-Z, 0-9]{1,3}\//", "", $result); //delete prefix
@@ -12,12 +12,12 @@ function swolf_getcallsignwithoutadditionalinfo(string $input) : string
     return $result;
 }
 
-function swolf_getcallsignsfromstring(?string $input)
+function db4scw_getcallsignsfromstring(?string $input)
 {
-    return explode(",", swolf_sanitizecallsignstring($input) ?? '');
+    return explode(",", db4scw_sanitizecallsignstring($input) ?? '');
 }
 
-function swolf_sanitizecallsignstring(?string $input) : ?string
+function db4scw_sanitizecallsignstring(?string $input) : ?string
 {
     if($input == null) { return null; }
     $callsignstrings_raw = str_replace(" ", "", $input);
@@ -29,12 +29,12 @@ function swolf_sanitizecallsignstring(?string $input) : ?string
     return strtoupper($callsignstrings_raw);
 }
 
-function swolf_validatorerrors(\Illuminate\Validation\Validator $validator) : string
+function db4scw_validatorerrors(\Illuminate\Validation\Validator $validator) : string
 {
     return implode(" | ", $validator->errors()->all());
 }
 
-function swolf_getawardmodetext(int $mode, $threshold = null) : string
+function db4scw_getawardmodetext(int $mode, $threshold = null) : string
 {
     switch ($mode) {
         case 0:
@@ -62,12 +62,12 @@ function swolf_getawardmodetext(int $mode, $threshold = null) : string
     }
 }
 
-function swolf_getmaxmode() : int
+function db4scw_getmaxmode() : int
 {
     return 9;
 }
 
-function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $record) : ?string
+function db4scw_getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $record) : ?string
 {
     //check null-field
     if($field == null)
@@ -100,7 +100,7 @@ function getAutoImportFieldContent(Autoimport $conf, string $field, stdClass $re
 
 }
 
-function checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
+function db4scw_checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
 {
     //get first and last QSO and parse datetime of these records
     $last_qso = collect($data)->sortBy([['QSO_DATE', 'desc'], ['TIME_ON', 'desc']])->first();
@@ -121,3 +121,195 @@ function checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
     //check ok
     return true;
 }
+
+function stalinsort(array $array, bool $reverse = false) : array {
+    
+    //if array is empty, return empty array
+    if (empty($array)) 
+    {
+        return [];
+    }
+
+    //only add elements that are already sorted to the array, eliminate the rest of the elements
+    $sortedArray = [];
+
+    foreach ($array as $element) 
+    {
+
+        //first element is always fine
+        if(empty($sortedArray))
+        {
+            $sortedArray[] = $element;
+            continue;
+        }
+
+        //only add element if greater or equal than the last one
+        if ($element >= end($sortedArray)) {
+            $sortedArray[] = $element;
+        }
+    }
+
+    //return result, reverse if needed
+    return $reverse ? array_reverse($sortedArray) : $sortedArray;
+}
+
+function parse(string $input, $serial_number_present = false) : array
+    {
+        //split the input into lines
+        $lines = explode("\n", trim($input));
+
+        //initialize the result array
+        $qso_lines_raw = [];
+        $header = [];
+
+        //helper variable to determine common 59 element indices in QSO lines
+        $common_59_indices = null;
+
+        //flag to indicate processing mode
+        $qso_mode = false;
+
+        //loop through each line
+        foreach ($lines as $line) {
+
+            //if we encounter "QSO" or "X-QSO" switch processing mode to QSO mode
+            if (strpos($line, 'QSO:') === 0 or strpos($line, 'X-QSO:') === 0) {
+                $qso_mode = true;
+            }else {
+                $qso_mode = false;
+            }
+
+            //if we encounter "END-OF-LOG", stop processing lines
+            if (strpos($line, 'END-OF-LOG') === 0) {
+                break;
+            }
+
+            //process and collect header lines if qso mode is not set
+            if (!$qso_mode) {
+                
+                //split the line into an array using ': ' as the delimiter
+                $parts = explode(': ', $line, 2);
+
+                //collect header information
+                $header[$parts[0]] = $parts[1];
+
+                //skip to next line
+                continue;
+            }
+
+            //process and collect QSO lines if qso mode is set
+            if ($qso_mode) {
+                
+                //split the line into the elements
+                $qso_elements = preg_split('/\s+/', trim($line));
+                
+                //add qso elements to qso line array
+                array_push($qso_lines_raw, $qso_elements);
+
+                //find all occurrences of "59"
+                $indices_of_59 = [];
+                foreach ($qso_elements as $index => $value) {
+                    if ($value === "59" or $value === "599") {
+                        $indices_of_59[] = $index;
+                    }
+                }
+
+                //find common indices
+                if ($common_59_indices === null) {
+                    //initialize common indices on the first iteration
+                    $common_59_indices = $indices_of_59;
+                } else {
+                    //intersect with current indices, preserving only common indices
+                    $common_59_indices = array_intersect($common_59_indices, $indices_of_59);
+                }
+                
+                //skip to next line
+                continue;
+            }
+        }
+
+        //abort further processing if no qso lines were found, return header only
+        if(count($qso_lines_raw) < 1)
+        {
+            $result = [];
+            $result["HEADER"] = $header;
+            $result["QSOS"] = [];
+            $result["SENT_59_POS"] = 0;
+            $result["RCVD_59_POS"] = 0;
+            $result["SENT_EXCHANGE_COUNT"] = 0;
+            $result["RCVD_EXCHANGE_COUNT"] = 0;
+    
+            //return result
+            return $result;
+        }
+
+        //get positions of 59s inside QSO lines
+        $sent_59_pos = min($common_59_indices);
+        $rcvd_59_pos = max($common_59_indices);
+
+        //using 59 positions, remake qso_lines
+        $qso_lines = [];
+
+        //change all QSOs into associative arrays with meaningful keys
+        foreach ($qso_lines_raw as $line) {
+            
+            $qso_line = [];
+            
+            //get well defined fields
+            $qso_line["QSO_MARKER"] = $line[0];
+            $qso_line["FREQ"] = $line[1];
+            $qso_line["MODE"] = $line[2];
+            $qso_line["DATE"] = $line[3];
+            $qso_line["TIME"] = $line[4];
+            $qso_line["OWN_CALLSIGN"] = $line[5];
+            $qso_line["SENT_59"] = $line[$sent_59_pos];
+           
+            //set serial if requested
+            if($serial_number_present)
+            {
+                $qso_line["SENT_SERIAL"] = $line[$sent_59_pos + 1];
+            }
+
+            //get all remaining sent exchanges
+            $exchange_nr = 1;
+            $startindex = ($sent_59_pos + ($serial_number_present ? 2 : 1));
+            $endindex = ($rcvd_59_pos - 1);
+            for ($i = $startindex; $i < $endindex; $i++) { 
+                $qso_line["SENT_EXCH_" . $exchange_nr] = $line[$i];
+                $exchange_nr++;
+            }
+
+            //get rest of the well defined fields
+            $qso_line["RCVD_CALLSIGN"] = $line[$rcvd_59_pos - 1];
+            $qso_line["RCVD_59"] = $line[$rcvd_59_pos];
+
+            //set serial if requested
+            if($serial_number_present)
+            {
+                $qso_line["RCVD_SERIAL"] = $line[$rcvd_59_pos + 1];
+            }
+
+            //get all remaining received exchanges
+            $exchange_nr = 1;
+            $startindex = ($rcvd_59_pos + ($serial_number_present ? 2 : 1));
+            $endindex = (count($line));
+            for ($i = $startindex; $i < $endindex; $i++) { 
+                $qso_line["RCVD_EXCH_" . $exchange_nr] = $line[$i];
+                $exchange_nr++;
+            }
+
+            //collect new associative array
+            array_push($qso_lines, $qso_line);
+        }
+
+        //construct result, including positions of 59s for further processing down the line
+        $result = [];
+        $result["HEADER"] = $header;
+        $result["QSOS"] = $qso_lines;
+        $result["SENT_59_POS"] = $sent_59_pos;
+        $result["RCVD_59_POS"] = $rcvd_59_pos;
+        $result["SENT_EXCHANGE_COUNT"] = $rcvd_59_pos - $sent_59_pos - ($serial_number_present ? 3 : 2);
+        $result["RCVD_EXCHANGE_COUNT"] = count($qso_lines[0]) - 1 - $rcvd_59_pos - ($serial_number_present ? 1 : 0);
+
+        //return result
+        return $result;
+    }

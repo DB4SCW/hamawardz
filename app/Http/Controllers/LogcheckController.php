@@ -29,7 +29,7 @@ class LogcheckController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->route('home')->with('danger', swolf_validatorerrors($validator));
+            return redirect()->route('home')->with('danger', db4scw_validatorerrors($validator));
         }
 
         //get validated attributes
@@ -69,14 +69,14 @@ class LogcheckController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->route('select_logcheck', ['event' => $event->slug])->with('danger', swolf_validatorerrors($validator))->withInput();
+            return redirect()->route('select_logcheck', ['event' => $event->slug])->with('danger', db4scw_validatorerrors($validator))->withInput();
         }
 
         //get validated attributes
         $attributes = $validator->validated();
 
         //get owner callsign 
-        $callsign = swolf_getcallsignwithoutadditionalinfo($attributes['callsign']);
+        $callsign = db4scw_getcallsignwithoutadditionalinfo($attributes['callsign']);
 
         //check valid callsign
         if(!preg_match("/^[A-Z, 0-9]{3,20}$/", $callsign))
@@ -103,7 +103,7 @@ class LogcheckController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            return redirect()->route('select_logcheck', ['event' => $event->slug])->with('danger', swolf_validatorerrors($validator))->withInput();
+            return redirect()->route('select_logcheck', ['event' => $event->slug])->with('danger', db4scw_validatorerrors($validator))->withInput();
         }
 
         //check valid callsign

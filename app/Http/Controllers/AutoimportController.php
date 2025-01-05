@@ -227,7 +227,7 @@ class AutoimportController extends Controller
 
         //handle validation failure
         if ($validator->fails()) {
-            $returnvalue->redirect = redirect()->back()->with('danger', swolf_validatorerrors($validator))->withInput();
+            $returnvalue->redirect = redirect()->back()->with('danger', db4scw_validatorerrors($validator))->withInput();
             $returnvalue->attributes = null;
             $returnvalue->result = false;
             return $returnvalue;

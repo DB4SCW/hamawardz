@@ -34,8 +34,8 @@
                         <div class="form-group">
                             <label for="mode">Award mode</label>
                             <select class="form-control" name="mode">
-                                @foreach(range(0, swolf_getmaxmode()) as $x)
-                                <option value="{{ $x }}" {{ $x == (old('mode') ?? $award->mode) ? 'selected' : '' }}>{{ swolf_getawardmodetext($x, null) }}</option>
+                                @foreach(range(0, db4scw_getmaxmode()) as $x)
+                                <option value="{{ $x }}" {{ $x == (old('mode') ?? $award->mode) ? 'selected' : '' }}>{{ db4scw_getawardmodetext($x, null) }}</option>
                                 @endforeach
                             </select>
                         </div>

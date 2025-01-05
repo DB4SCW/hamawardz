@@ -100,7 +100,7 @@ class Upload extends Model
             $contact->upload_id = $this->id;
             $contact->qso_datetime = \Carbon\Carbon::parse($record['QSO_DATE'] . ' ' . substr($record['TIME_ON'],0,2) . ':' . substr($record['TIME_ON'], 2, 2));
             $contact->raw_callsign = $record['CALL'];
-            $contact->callsign = swolf_getcallsignwithoutadditionalinfo($record['CALL']);
+            $contact->callsign = db4scw_getcallsignwithoutadditionalinfo($record['CALL']);
             $contact->freq = $record['FREQ'];
             $contact->rst_s = $record['RST_SENT'];
             $contact->rst_r = $record['RST_RCVD'];
