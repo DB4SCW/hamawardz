@@ -6,12 +6,13 @@ use App\Models\Callsign;
 use Illuminate\Http\Request;
 use \App\Models\Autoimport;
 use stdClass;
+use Illuminate\Support\Facades\DB;
 
 class AutoimportController extends Controller
 {
     public function trigger()
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
@@ -27,13 +28,13 @@ class AutoimportController extends Controller
     
     public function index()
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
             return $permissioncheck;
         }
-        
+
         //Get all autoimport configs
         $autoimports = Autoimport::with('callsign')->get();
 
@@ -44,7 +45,7 @@ class AutoimportController extends Controller
     
     public function showedit(Autoimport $autoimport)
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
@@ -60,7 +61,7 @@ class AutoimportController extends Controller
 
     public function edit(Autoimport $autoimport)
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
@@ -103,7 +104,7 @@ class AutoimportController extends Controller
 
     public function showcreate()
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
@@ -119,7 +120,7 @@ class AutoimportController extends Controller
 
     public function create()
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
@@ -164,7 +165,7 @@ class AutoimportController extends Controller
 
     public function destroy(Autoimport $autoimport)
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
@@ -181,7 +182,7 @@ class AutoimportController extends Controller
 
     public function toggle(Autoimport $autoimport)
     {
-        //check permissions
+        //check permissions and database driver
         $permissioncheck = $this->checkpermissions();
         if($permissioncheck != null)
         {
@@ -248,6 +249,12 @@ class AutoimportController extends Controller
         if(!auth()->user()->siteadmin)
         {
             return redirect()->back()->with('danger', 'You do not have site admin permissions.');
+        }
+
+        //check if we use a multi-database db-driver
+        if(DB::getDriverName() == "sqlite")
+        {
+            return redirect()->back()->with('danger', 'Unable to use this feature using an sqlite database.');
         }
 
         return null;
