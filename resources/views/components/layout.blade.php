@@ -114,7 +114,7 @@
                     <a class="nav-link navbar-link" href="/users">User-Admin</a>
                     @endcan
 
-                    @if(auth()->user()->siteadmin)
+                    @if(auth()->user()->siteadmin and Illuminate\Support\Facades\DB::getDriverName() != "sqlite")
                     <a class="nav-link navbar-link" href="/autoimports">Autoimport-Admin</a>
                     @endif
 
