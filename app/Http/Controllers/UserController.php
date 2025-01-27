@@ -31,10 +31,10 @@ class UserController extends Controller
         //check permission
         if(request()->user()->cannot('updateadmindata', User::class)) { abort(403); }
 
-        //prevent locking of the last admin user
+        //prevent locking of the last unlocked admin user
         if(!$user->locked)
         {
-            $other_admins = User::whereNotIn('id', [$user->id])->where('siteadmin', true)->count();
+            $other_admins = User::whereNotIn('id', [$user->id])->where([['siteadmin', true], ['locked', 0]])->count();
 
             if($other_admins < 1)
             {
