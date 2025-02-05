@@ -36,7 +36,7 @@ class scheduled_dxcc_fix extends Command
         foreach ($todo as $contact) {
             
             //get dxcc from API
-            $dxcc = $this->getdxcc($contact->raw_callsign);
+            $dxcc = db4scw_getdxcc($contact->raw_callsign);
 
             //react to a faulty answer from the HamQTH API - return the error code
             if($dxcc->dxcc < 0) { return $dxcc->dxcc; }
@@ -55,7 +55,7 @@ class scheduled_dxcc_fix extends Command
         foreach ($todo as $awardlog) {
 
             //get dxcc from API
-            $dxcc = $this->getdxcc($awardlog->callsign);
+            $dxcc = db4scw_getdxcc($awardlog->callsign);
 
             //react to a faulty answer from the HamQTH API - return the error code
             if($dxcc->dxcc < 0) { return $dxcc->dxcc; }
@@ -70,32 +70,5 @@ class scheduled_dxcc_fix extends Command
         //return no error code
         return 0;
 
-    }
-
-    function getdxcc(string $callsign) : Dxcc {
-        
-        //load info from API - return dummy answer in case API does not answer
-        try {
-            $dxccinfo = file_get_contents("https://www.hamqth.com/dxcc.php?callsign=" . urlencode($callsign));
-        } catch (\Throwable $th) {
-            $dummyanswer = new Dxcc();
-            $dummyanswer->dxcc = -1;
-            return $dummyanswer;
-        }
-        
-        //read XML anser
-        $xmlObject = simplexml_load_string($dxccinfo);
-        
-        //get ADIF info - return dummy answer in case API does not provide the expected information
-        try {
-            $adif = (integer)$xmlObject->dxcc->adif;
-        } catch (\Throwable $th) {
-            $dummyanswer = new Dxcc();
-            $dummyanswer->dxcc = -2;
-            return $dummyanswer;
-        }
-        
-        //Load DXCC Model - return null if there is something wrong
-        return Dxcc::where('dxcc', $adif)->first();
     }
 }

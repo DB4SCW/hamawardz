@@ -1,6 +1,7 @@
 <?php
 use App\Models\Autoimport;
 use App\Models\Callsign;
+use App\Models\Dxcc;
 
 function db4scw_getcallsignwithoutadditionalinfo(string $input) : string
 {
@@ -120,4 +121,39 @@ function db4scw_checkadifinsidevalidityperiod($data, Callsign $callsign) : bool
 
     //check ok
     return true;
+}
+
+function db4scw_getdxcc(string $callsign) : Dxcc {
+        
+    //load info from API - return dummy answer in case API does not answer
+    try {
+        $dxccinfo = file_get_contents("https://www.hamqth.com/dxcc.php?callsign=" . urlencode($callsign));
+    } catch (\Throwable $th) {
+        $dummyanswer = new Dxcc();
+        $dummyanswer->dxcc = -1;
+        return $dummyanswer;
+    }
+    
+    //read XML anser
+    $xmlObject = simplexml_load_string($dxccinfo);
+    
+    //get ADIF info - return dummy answer in case API does not provide the expected information
+    try {
+        $adif = (integer)$xmlObject->dxcc->adif;
+    } catch (\Throwable $th) {
+        $dummyanswer = new Dxcc();
+        $dummyanswer->dxcc = -2;
+        return $dummyanswer;
+    }
+    
+    //Load DXCC Model - return null if there is something wrong
+    return Dxcc::where('dxcc', $adif)->first();
+}
+
+function db4scw_getdxcc_wavelog(string $callsign) : Dxcc 
+{
+    $adif = 1;
+
+    //Load DXCC Model - return null if there is something wrong
+    return Dxcc::where('dxcc', $adif)->first();
 }
