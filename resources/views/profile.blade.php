@@ -32,6 +32,7 @@
             <div class="col-md-12 text-center" style="margin-bottom: 10px;">
                 <a href="/runtask/fixdxccs"><button class="btn btn-primary">Fix DXCCs</button></a>
                 <a href="/runtask/pullapis"><button class="btn btn-primary">Run all QSO Pull APIs</button></a>
+                <p style="color: red;">DXCC fix may take a while, depending on your data... Uses {{ db4scw_determine_dxcc_api_mode() }} API.</p>
             </div>
             <br>
             <h4>Teleport</h4>

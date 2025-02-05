@@ -194,3 +194,23 @@ function db4scw_getdxcc_wavelog(string $callsign, string $wavelog_server, string
     $dxcc = Dxcc::where('dxcc', $dxcc_id)->first(); 
     return $dxcc == null ? Dxcc::where('dxcc', 0)->first() : $dxcc;
 }
+
+function db4scw_determine_dxcc_api_mode() : string
+{
+    //get environment variables
+    $wavelog_url = env('WAVELOG_URL');
+    $wavelog_key = env('WAVELOG_API_KEY');
+
+    //determine mode - use Wavelog if environment variables are existent, as well as filled
+    $use_wavelog = false;
+    if($wavelog_key != null and $wavelog_url != null)
+    {
+        if(strlen($wavelog_url) > 0 and strlen($wavelog_key) > 0)
+        {
+            $use_wavelog = true;
+        }
+    }
+
+    //return API mode
+    return $use_wavelog ? 'Wavelog' : 'HamQTH';
+}
