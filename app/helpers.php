@@ -146,14 +146,51 @@ function db4scw_getdxcc(string $callsign) : Dxcc {
         return $dummyanswer;
     }
     
-    //Load DXCC Model - return null if there is something wrong
-    return Dxcc::where('dxcc', $adif)->first();
+    //Load DXCC Model - return unknown DXCC if there is something wrong
+    $dxcc = Dxcc::where('dxcc', $adif)->first(); 
+    return $dxcc == null ? Dxcc::where('dxcc', 0)->first() : $dxcc;
 }
 
-function db4scw_getdxcc_wavelog(string $callsign) : Dxcc 
+function db4scw_getdxcc_wavelog(string $callsign, string $wavelog_server, string $wavelog_key ) : Dxcc 
 {
-    $adif = 1;
+    //create options and API payload
+    $options = [
+        'http' => [
+            'method'  => 'POST',
+            'header'  => "Content-Type: application/json\r\n",
+            'content' => json_encode([ 'key' => $wavelog_key, 'callsign' => $callsign ]),
+            'timeout' => 5, // Set timeout to 5 seconds
+        ]
+    ];
 
-    //Load DXCC Model - return null if there is something wrong
-    return Dxcc::where('dxcc', $adif)->first();
+    //set context
+    $context = stream_context_create($options);
+
+    try {
+        $response = file_get_contents($wavelog_server, false, $context);
+        if ($response === FALSE) {
+            throw new \Exception("DXCC lookup failed.");
+        }
+        $httpResponseHeader = $http_response_header[0] ?? '';
+        if ($httpResponseHeader != 200) {
+            throw new \Exception("DXCC lookup failed.");
+        }
+    } catch (\Exception $e) {
+        if ($response === FALSE) {
+            $dummyanswer = new Dxcc();
+            $dummyanswer->dxcc = -3;
+            return $dummyanswer;
+
+        }
+    }
+
+    //get data from response
+    $data = json_decode($response, true);
+
+    //extract adif dxcc_id
+    $dxcc_id = $data['dxcc_id'];
+
+    //Load DXCC Model - return unknown DXCC if there is something wrong
+    $dxcc = Dxcc::where('dxcc', $dxcc_id)->first(); 
+    return $dxcc == null ? Dxcc::where('dxcc', 0)->first() : $dxcc;
 }
