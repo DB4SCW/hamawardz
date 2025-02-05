@@ -180,7 +180,6 @@ function db4scw_getdxcc_wavelog(string $callsign, string $wavelog_server, string
             $dummyanswer = new Dxcc();
             $dummyanswer->dxcc = -3;
             return $dummyanswer;
-
         }
     }
 
