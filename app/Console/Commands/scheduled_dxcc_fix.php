@@ -34,7 +34,7 @@ class scheduled_dxcc_fix extends Command
         $wavelog_key = env('WAVELOG_API_KEY');
 
         //determine mode
-        $use_wavelog = (db4scw_determine_dxcc_api_mode() == 'wavelog');
+        $use_wavelog = (db4scw_determine_dxcc_api_mode() == 'Wavelog');
 
         //get missing DXCCs on contacts
         $todo = Contact::where('dxcc_id', 1)->get();
