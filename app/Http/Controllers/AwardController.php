@@ -8,11 +8,15 @@ use App\Models\Dxcc;
 use App\Models\Hamevent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use PDF;
 use stdClass;
 
 class AwardController extends Controller
 {
+
+    //possible text colors on awards
+    const TEXT_COLORS = ['black', 'white', 'red', 'green', 'blue', 'yellow'];
 
     public function print(Award $award)
     {
@@ -153,7 +157,7 @@ class AwardController extends Controller
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
 
         //return to event view
-        return view('award.create', ['event' => $event, 'dxccs' => $dxccs]);
+        return view('award.create', ['event' => $event, 'dxccs' => $dxccs, 'text_colors' => self::TEXT_COLORS]);
     }
 
     public function destroy(Award $award)
@@ -231,6 +235,9 @@ class AwardController extends Controller
         $award->callsign_left_percent = $attributes['callsign_centered_horizontal'] == 1 ? null : $attributes['callsign_left_percent'];
         $award->chosen_name_centered_horizontal = $attributes['chosen_name_centered_horizontal'];
         $award->chosen_name_left_percent = $attributes['chosen_name_centered_horizontal'] == 1 ? null : $attributes['chosen_name_left_percent'];
+        $award->callsign_text_color = $attributes['callsign_text_color'];
+        $award->chosen_name_text_color = $attributes['chosen_name_text_color'];
+        $award->datetime_text_color = $attributes['datetime_text_color'];
 
         //Save award
         $award->save();
@@ -252,7 +259,7 @@ class AwardController extends Controller
         $dxccs = Dxcc::orderBy('name', 'ASC')->get();
 
         //return view
-        return view('award.edit', ['award' => $award, 'dxccs' => $dxccs]);
+        return view('award.edit', ['award' => $award, 'dxccs' => $dxccs, 'text_colors' => self::TEXT_COLORS]);
 
     }
 
@@ -307,6 +314,9 @@ class AwardController extends Controller
         $award->callsign_left_percent = $attributes['callsign_centered_horizontal'] == 1 ? null : $attributes['callsign_left_percent'];
         $award->chosen_name_centered_horizontal = $attributes['chosen_name_centered_horizontal'];
         $award->chosen_name_left_percent = $attributes['chosen_name_centered_horizontal'] == 1 ? null : $attributes['chosen_name_left_percent'];
+        $award->callsign_text_color = $attributes['callsign_text_color'];
+        $award->chosen_name_text_color = $attributes['chosen_name_text_color'];
+        $award->datetime_text_color = $attributes['datetime_text_color'];
 
         //save award
         $award->save();
@@ -318,6 +328,7 @@ class AwardController extends Controller
 
     public function validateawardrequest($requestinput, $awardid = null) : stdClass
     {
+               
         //manipulate the slug before validation
         $requestinput['slug'] = $requestinput['slug'] == '' ? Str::slug($requestinput['title']) : Str::slug($requestinput['slug']);
 
@@ -346,7 +357,10 @@ class AwardController extends Controller
             'callsign_left_percent' => 'decimal:0,3|min:0|max:100|nullable',
             'chosen_name_left_percent' => 'decimal:0,3|min:0|max:100|nullable',
             'callsign_centered_horizontal' => 'integer|min:0|max:1',
-            'chosen_name_centered_horizontal' => 'integer|min:0|max:1'
+            'chosen_name_centered_horizontal' => 'integer|min:0|max:1',
+            'callsign_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
+            'chosen_name_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
+            'datetime_text_color' => ['required', Rule::in(self::TEXT_COLORS)]
         ], 
         [
             'title.string' => 'Title must be a text.',
@@ -412,7 +426,10 @@ class AwardController extends Controller
             'callsign_left_percent.max' => 'Callsign left % must be at most 100%.',
             'chosen_name_left_percent.decimal' => 'Chosen name left % must be a number.',
             'chosen_name_left_percent.min' => 'Chosen name left % must be at least 0%.',
-            'chosen_name_left_percent.max' => 'Chosen name left % must be at most 100%.'
+            'chosen_name_left_percent.max' => 'Chosen name left % must be at most 100%.',
+            'callsign_text_color.in' => 'Invalid callsign text color',
+            'chosen_name_text_color.in' => 'Invalid chosen name text color',
+            'datetime_text_color.in' => 'Invalid datetime text color'
         ]);
 
         //open return class

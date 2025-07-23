@@ -87,6 +87,14 @@
                             <label for="callsign_left_percent">If not centered - Callsign left %:</label>
                             <input name="callsign_left_percent" class="form-control" type="number" min="0" max="100" step="0.01" value="{{ old('callsign_left_percent') }}">
                         </div>
+                        <div class="form-group">
+                            <label for="callsign_text_color">Callsign text color:</label>
+                            <select class="form-control" name="callsign_text_color">
+                                @foreach ($text_colors as $color)
+                                <option value="{{ $color }}" {{ $color == old('callsign_text_color') ? 'selected' : '' }}>{{ $color }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <!-- Chosen name formatting -->
                         <div class="form-group">
@@ -115,6 +123,14 @@
                             <label for="chosen_name_left_percent">If not centered - Chosen name left %:</label>
                             <input name="chosen_name_left_percent" class="form-control" type="number" min="0" max="100" step="0.01" value="{{ old('chosen_name_left_percent') }}">
                         </div>
+                        <div class="form-group">
+                            <label for="chosen_name_text_color">Chosen name text color:</label>
+                            <select class="form-control" name="chosen_name_text_color">
+                                @foreach ($text_colors as $color)
+                                <option value="{{ $color }}" {{ $color == old('chosen_name_text_color') ? 'selected' : '' }}>{{ $color }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <!-- datetime formatting -->
                         <div class="form-group">
@@ -135,6 +151,14 @@
                         <div class="form-group">
                             <label for="datetime_font_size_px">Datetime font size:</label>
                             <input name="datetime_font_size_px" class="form-control" type="number" min="0" max="300" step="1" value="{{ old('datetime_font_size_px') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="datetime_text_color">Datetime text color:</label>
+                            <select class="form-control" name="datetime_text_color">
+                                @foreach ($text_colors as $color)
+                                <option value="{{ $color }}" {{ $color == old('datetime_text_color') ? 'selected' : '' }}>{{ $color }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         
                         

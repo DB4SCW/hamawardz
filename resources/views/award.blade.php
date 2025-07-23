@@ -43,7 +43,7 @@
             @endif
             text-align: center;
             font-size: {{ $award->callsign_font_size_px }}px;
-            color: black;
+            color: {{ $award->callsign_text_color }};
             @if($award->callsign_bold)
             font-weight: bold;
             @endif
@@ -57,7 +57,7 @@
             @endif
             text-align: center;
             font-size: {{ $award->chosen_name_font_size_px }}px;
-            color: black;
+            color: {{ $award->chosen_name_text_color }};
             @if($award->chosen_name_bold)
             font-weight: bold;
             @endif
@@ -69,7 +69,7 @@
             left: {{ $award->datetime_left_percent }}%;
             text-align: center;
             font-size: {{ $award->datetime_font_size_px }}px;
-            color: black;
+            color: {{ $award->datetime_text_color }};
         }
 
     </style>
