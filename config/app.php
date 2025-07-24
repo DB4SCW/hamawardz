@@ -232,5 +232,17 @@ return [
     'db4scw_modal_body_background_color' => env('MODAL_BODY_BACKGROUND_COLOR', '#212529'),
     'db4scw_navbar_link_text_color' => env('NAVBAR_LINK_TEXT_COLOR', 'rgba(255, 255, 255, 0.5)'),
     
+    /*
+    |--------------------------------------------------------------------------
+    | other hamawardz environment variables
+    |--------------------------------------------------------------------------
+    |
+    | This exposes the hamawardz specific environment variables as config entries
+    |
+    */
 
+    'db4scw_wavelog_url' => env('WAVELOG_URL'),
+    'db4scw_wavelog_api_key' => env('WAVELOG_API_KEY'),
+    'db4scw_impressum_url' => env('APP_IMPRESSUM_URL', '/'),
+    'db4scw_data_protection_url' => env('APP_DATA_PROTECTION_URL', '/'),
 ];

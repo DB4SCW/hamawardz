@@ -197,8 +197,8 @@ function db4scw_getdxcc_wavelog(string $callsign, string $wavelog_server, string
 function db4scw_determine_dxcc_api_mode() : string
 {
     //get environment variables
-    $wavelog_url = env('WAVELOG_URL');
-    $wavelog_key = env('WAVELOG_API_KEY');
+    $wavelog_url = config('app.db4scw_wavelog_url');
+    $wavelog_key = config('app.db4scw_wavelog_api_key');
 
     //determine mode - use Wavelog if environment variables are existent, as well as filled
     $use_wavelog = false;
