@@ -36,6 +36,7 @@
             .btn-primary {
                 background-color: {{ config('app.db4scw_accent_background_color') }};
                 border-color: {{ config('app.db4scw_accent_background_color') }};
+                color: {{ config('app.db4scw_body_text_color') }};
             }
             .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
                 color: {{ config('app.db4scw_body_text_color') }};
