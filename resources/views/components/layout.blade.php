@@ -44,11 +44,11 @@
                 border-color: {{ config('app.db4scw_accent_background_color') }};
             }
             .modal-content {
-                background-color: {{ config('app.db4scw_modal_header_background_color') }};
+                background-color: {{ config('app.db4scw_modal_body_background_color') }};
                 color: {{ config('app.db4scw_body_text_color') }};
             }
             .modal-header {
-                background-color: {{ config('app.db4scw_modal_body_background_color') }};
+                background-color: {{ config('app.db4scw_modal_header_background_color') }};
                 color: {{ config('app.db4scw_body_text_color') }};
             }
             .modal-footer {
