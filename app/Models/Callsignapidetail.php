@@ -203,7 +203,7 @@ class Callsignapidetail extends Model
     {
         //create errorlog and return
         $log = new Callsignapierrorlog();
-        $log->callsignapierrorlogs = $this->id;
+        $log->callsignapidetail_id = $this->id;
         $log->statuscode = $statuscode;
         $log->message = $message;
         $log->save();
