@@ -93,7 +93,13 @@ class Callsignapidetail extends Model
         $json_body = json_encode($payload_content);
 
         //get data from Wavelog
-        $response = Http::acceptJson()->withBody($json_body , $bodytype)->post($this->url);
+        $response = null;
+        try {
+            $response = Http::acceptJson()->withBody($json_body , $bodytype)->post($this->url);
+        } catch (\Throwable $th) {
+            $this->createerrorlog($response->status(), 'Could not successfully pull data from ' . $this->url);
+            return $response;
+        }
 
         //react to response status
         switch ($response->status()) {
