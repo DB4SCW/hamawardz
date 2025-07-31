@@ -205,7 +205,7 @@ class Callsignapidetail extends Model
         $log = new Callsignapierrorlog();
         $log->callsignapidetail_id = $this->id;
         $log->statuscode = $statuscode;
-        $log->message = $message;
+        $log->logmessage = $message;
         $log->save();
         return $log;
     }
