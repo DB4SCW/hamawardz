@@ -29,6 +29,7 @@
                       <td>
                         @if(auth()->user()->is_manager_of_callsign($callsign))
                             <a href="/callsign/{{ $callsign->call }}"><button class="btn btn-warning" style="margin: 5px;">Edit</button></a>
+                            <a href="/callsign/{{ $callsign->call }}/dumpmasteradif"><button class="btn btn-success" style="margin: 5px;">Export ADIF</button></a>
                             @if($callsign->contacts->count() <= 0)
                                 <a href="/callsign/{{ $callsign->call }}/delete"><button class="btn btn-danger" style="margin: 5px;">DELETE</button></a>
                             @endif

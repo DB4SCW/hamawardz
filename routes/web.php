@@ -122,6 +122,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/callsign/{callsign:call}/user/{uploaderid}/delete', [CallsignController::class, 'removeuploader'])->name('removeuploader');
     Route::post('/callsign/{callsign:call}/adduploader', [CallsignController::class, 'adduploader'])->name('adduploader');
+    Route::get('/callsign/{callsign:call}/dumpmasteradif', [CallsignController::class, 'exportcompletelog'])->name('exportcompletelogforcallsign');
 
     //Users
     Route::get('/users', [UserController::class, 'index'])->name('listusers');

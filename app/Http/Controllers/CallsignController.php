@@ -7,6 +7,9 @@ use App\Models\Dxcc;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use j4nr6n\ADIF\Parser;
+use j4nr6n\ADIF\Writer;
 
 class CallsignController extends Controller
 {
@@ -246,6 +249,43 @@ class CallsignController extends Controller
 
         //redirect back
         return redirect()->route('showeditcallsign', ['callsign' => $callsign->call])->with('success', 'Successfully added user as uploader.');
+
+    }
+
+    public function exportcompletelog(Callsign $callsign)
+    {
+        //check permission
+        if(request()->user()->cannot('manage', $callsign)) { abort(403); }
+
+        //read version of hamwardz
+        $versioninfo_path = storage_path('app/version.txt');
+        $installed_version = preg_replace('/\s+/', ' ', trim(File::get($versioninfo_path)));
+        
+        //load all uploads for the callsign
+        $uploads = $callsign->uploads;
+
+        //create a flat array of all QSO records
+        $records = [];
+        foreach ($uploads as $upload) {
+            $parsed = (new Parser())->parse($upload->file_content);
+            foreach ($parsed as $rec) {
+                $records[] = $rec;
+            }
+        }
+
+        //create a temporary file
+        $tempPath = tempnam(sys_get_temp_dir(), 'adif_');
+
+        //write temporary file
+        (new Writer('Hamawardz', $installed_version))->write($tempPath, $records);
+
+        //stream temporary file to user
+        return response()->streamDownload(function () use ($tempPath) {
+            readfile($tempPath); //read temp file
+            @unlink($tempPath); //delete temp file
+        }, $callsign->call . '_complete.adi', [
+            'Content-Type' => 'text/plain; charset=UTF-8',
+        ]);
 
     }
 
