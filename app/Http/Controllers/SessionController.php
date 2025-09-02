@@ -53,26 +53,16 @@ class SessionController extends Controller
         $installed_version = File::get($versioninfo_path);
         $installed_version = preg_replace('/\s+/', ' ', trim($installed_version));
 
-        //get globally available version
-        $available_version = $installed_version;
-        try {
-            $available_version = Http::get('https://hamawardz.de/versionfiles/hamawardz_version.txt')->body();
-            $available_version = preg_replace('/\s+/', ' ', trim($available_version));
-        } catch (\Throwable $th) {
-            // do nothing, cannot reach info for updated version
-        }
-        
+        //get newest release from Github
+        $githubinfos =  db4scw_checklatestGithubRelease("DB4SCW", "hamawardz", $installed_version);
+
         //check if upgrade is needed and set updateinfo for display on GUI
-        if(version_compare($available_version, $installed_version, '>'))
+        if($githubinfos["isNewer"])
         {
-            //redirect to homepage
-            return redirect()->intended('/')->with('success', 'Login successful. Welcome back!')->with('updateinfo', $available_version);
+            return redirect()->intended('/')->with('success', 'Login successful. Welcome back!')->with('updateinfo', $githubinfos["latestVersion"]);
         }else{
-            //redirect to homepage
             return redirect()->intended('/')->with('success', 'Login successful. Welcome back!');
         }
-
-        
     }
 
     public function logout()

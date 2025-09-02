@@ -2,6 +2,7 @@
 use App\Models\Autoimport;
 use App\Models\Callsign;
 use App\Models\Dxcc;
+use Illuminate\Support\Facades\Http;
 
 function db4scw_getcallsignwithoutadditionalinfo(string $input) : string
 {
@@ -212,4 +213,61 @@ function db4scw_determine_dxcc_api_mode() : string
 
     //return API mode
     return $use_wavelog ? 'Wavelog' : 'HamQTH';
+}
+
+function db4scw_checklatestGithubRelease(string $owner, string $repo, string $currentversion)
+{
+
+    //calculate url
+    $url = "https://api.github.com/repos/{$owner}/{$repo}/releases/latest";
+
+    //hold latest data
+    $latest = null;
+
+    $req = Http::withHeaders([
+            'User-Agent'            => "{$repo}-updater",
+            'Accept'                => 'application/vnd.github+json',
+            'X-GitHub-Api-Version'  => '2022-11-28',
+        ])
+        ->timeout(2)          //short timeout: fail gently
+        ->connectTimeout(1.5) //fast connect fail
+        ->get($url);
+
+    //if not ok, fail silently: treat as "no info". If ok, load json response
+    if (!$req->ok()) {
+        $latest = null; 
+    }else{
+        $latest = $req->json();
+    }
+
+    //abort if no info
+    if (!$latest) {
+        return [
+            'isNewer'       => false,
+            'latestVersion' => $currentversion,
+            'htmlUrl'       => null,
+            'body'          => '',
+        ];
+    }
+
+    //get tag
+    $tag = $latest['tag_name'] ?? ($latest['name'] ?? '');
+    
+    //remove leading "v" or "v." (case-insensitive)
+    $latestVersion = preg_replace('/^v\.?/i', '', (string) $tag);
+
+    //clear current version as well
+    $current = preg_replace('/^v\.?/i', '', $currentversion);
+    
+    //check if newer
+    $isNewer = version_compare($latestVersion, $current, '>');
+
+    //return info
+    return [
+        'isNewer'       => $isNewer,
+        'latestVersion' => $tag,
+        'htmlUrl'       => $latest['html_url'] ?? null,
+        'body'          => $latest['body'] ?? ''
+    ];
+
 }
