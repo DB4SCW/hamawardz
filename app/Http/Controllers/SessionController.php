@@ -59,7 +59,7 @@ class SessionController extends Controller
         //check if upgrade is needed and set updateinfo for display on GUI
         if($githubinfos["isNewer"])
         {
-            return redirect()->intended('/')->with('success', 'Login successful. Welcome back!')->with('updateinfo', $githubinfos["latestVersion"]);
+            return redirect()->intended('/')->with('success', 'Login successful. Welcome back!')->with('updateinfo', $githubinfos);
         }else{
             return redirect()->intended('/')->with('success', 'Login successful. Welcome back!');
         }

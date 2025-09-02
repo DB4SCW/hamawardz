@@ -165,7 +165,7 @@
         @if(session()->has('updateinfo'))
         <div class="top-left-alert">
             <div class="alert alert-danger">
-                A new version {{ session('updateinfo') }} got released. Please update asap following the <a href="https://hamawardz.de/docs/hamawardz/installation/#updating-hamawardz-to-a-new-version">instructions</a>.
+                A new version <a href="{{ session('updateinfo')['htmlUrl'] }}">{{ session('updateinfo')['latestVersion'] }}</a> got released. Please update asap following the <a href="https://hamawardz.de/docs/hamawardz/installation/#updating-hamawardz-to-a-new-version">instructions</a>.
             </div>
         </div>
         @endif
