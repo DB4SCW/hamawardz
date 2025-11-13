@@ -46,61 +46,14 @@ class Award extends Model
             return false;
         }
 
-        //check eligibility
-        switch ($this->mode) {
-            case 0:
-                return $this->eligible_mode_0($callsign);
-            case 1:
-                return $this->eligible_mode_1($callsign);
-            case 2:
-                return $this->eligible_mode_2($callsign);
-            case 3:
-                return $this->eligible_mode_3($callsign);
-            case 4:
-                return $this->eligible_mode_4($callsign);
-            case 5:
-                return $this->eligible_mode_5($callsign);
-            case 6:
-                return $this->eligible_mode_6($callsign);
-            case 7:
-                return $this->eligible_mode_7($callsign);
-            case 8:
-                return $this->eligible_mode_8($callsign);
-            case 9:
-                return $this->eligible_mode_9($callsign);
-            default:
-                return false;
+        //cannot be eligible if there is no threshold
+        if($this->min_threshold == null)
+        {
+            return false;
         }
 
-    }
-
-    public function aggregate_count(string $callsign) : int
-    {
-        
-        switch ($this->mode) {
-            case 0:
-                return $this->aggregate_count_mode_0($callsign);
-            case 1:
-                return $this->aggregate_count_mode_1($callsign);
-            case 2:
-                return $this->aggregate_count_mode_2($callsign);
-            case 3:
-                return $this->aggregate_count_mode_3($callsign);
-            case 4:
-                return $this->aggregate_count_mode_4($callsign);
-            case 5:
-                return $this->aggregate_count_mode_5($callsign);
-            case 6:
-                return $this->aggregate_count_mode_6($callsign);
-            case 7:
-                return $this->aggregate_count_mode_7($callsign);
-            case 8:
-                return $this->aggregate_count_mode_8($callsign);
-            case 9:
-                return $this->aggregate_count_mode_9($callsign);
-            default:
-                return 0;
-        }
+        //only eligible if aggregate count greater than threshold
+        return $this->aggregate_count($callsign) >= $this->min_threshold;
 
     }
 
@@ -118,221 +71,107 @@ class Award extends Model
 
     public function getexcludedcallsignids()
     {
+        //extract excluded callsign ids to array
         $callsigns_raw = db4scw_getcallsignsfromstring($this->excluded_callsigns ?? '') ;
         $callsignids = Callsign::whereIn('call', $callsigns_raw)->get()->pluck('id');
         return $callsignids->toArray();
     }
 
-    public function aggregate_count_mode_0(string $callsign) : int
+    public function eventcallsignids()
     {
-        return Contact::where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())->count();
+        //diff event callsign ids with excluded call ids
+        return array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids());
     }
 
-    public function aggregate_count_mode_1(string $callsign) : int
-    {
-        return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('callsign_id')
-        ->get()
-        ->count();
-    }
 
-    public function aggregate_count_mode_2(string $callsign) : int
+    public function aggregate_count(string $callsign) : int 
     {
-        return DB::table('contacts')
-        ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-        ->select(DB::raw('contacts.callsign_id, modes.mode, count(contacts.id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('contacts.callsign_id', 'modes.mode')
-        ->get()
-        ->count();
-    }
-
-    public function aggregate_count_mode_3(string $callsign) : int
-    {
-        return DB::table('contacts')
-        ->join('bands', 'bands.id', '=', 'contacts.band_id')
-        ->select(DB::raw('contacts.callsign_id, bands.band, count(contacts.id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('contacts.callsign_id', 'bands.band')
-        ->get()
-        ->count();
-    }
-
-    public function aggregate_count_mode_4(string $callsign) : int
-    {
-        return DB::table('contacts')
-        ->join('bands', 'bands.id', '=', 'contacts.band_id')
-        ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-        ->select(DB::raw('contacts.callsign_id, bands.band, modes.mode, count(contacts.id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mode')
-        ->get()
-        ->count();
-    }
-
-    public function aggregate_count_mode_5(string $callsign) : int
-    {
-        return DB::table('contacts')
-        ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-        ->select(DB::raw('contacts.callsign_id, modes.mainmode, count(contacts.id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('contacts.callsign_id', 'modes.mainmode')
-        ->get()
-        ->count();
-    }
-
-    public function aggregate_count_mode_6(string $callsign) : int
-    {
-        return DB::table('contacts')
-        ->join('bands', 'bands.id', '=', 'contacts.band_id')
-        ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-        ->select(DB::raw('contacts.callsign_id, bands.band, modes.mainmode, count(contacts.id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mainmode')
-        ->get()
-        ->count();
-    }
-
-    public function aggregate_count_mode_7(string $callsign) : int
-    {
-        return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('callsign_id')
-        ->get()
-        ->count();
-    }
-
-    public function aggregate_count_mode_8(string $callsign) : int
-    {
-        return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
-        ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-        ->whereIn('callsign_id', array_diff($this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('callsign_id')
-        ->get()
-        ->count();
-    }
-
-    public function aggregate_count_mode_9(string $callsign) : int
-    {
-        return DB::table('awardtimeframes')
-        ->leftJoin('contacts', function($join) {
-            $join->on('contacts.qso_datetime', '>=', 'awardtimeframes.start')
-                 ->on('contacts.qso_datetime', '<=', 'awardtimeframes.end');
-        })
-        ->select('awardtimeframes.id', DB::raw('COUNT(contacts.id) AS COUNT'))
-        ->where([['awardtimeframes.award_id', $this->id], ['contacts.callsign', $callsign]])
-        ->whereIn('contacts.callsign_id', array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids()))
-        ->groupBy('awardtimeframes.id')
-        ->get()
-        ->count();
-    }
-
-    public function eligible_mode_0(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
+        switch ($this->mode) {
+            case 0:
+                return Contact::where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())->count();
+            case 1:
+                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', $this->eventcallsignids())
+                    ->groupBy('callsign_id')
+                    ->get()
+                    ->count();
+            case 2:
+                return DB::table('contacts')
+                    ->join('modes', 'modes.id', '=', 'contacts.mode_id')
+                    ->select(DB::raw('contacts.callsign_id, modes.mode, count(contacts.id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', $this->eventcallsignids())
+                    ->groupBy('contacts.callsign_id', 'modes.mode')
+                    ->get()
+                    ->count();
+            case 3:
+                return DB::table('contacts')
+                    ->join('bands', 'bands.id', '=', 'contacts.band_id')
+                    ->select(DB::raw('contacts.callsign_id, bands.band, count(contacts.id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', $this->eventcallsignids())
+                    ->groupBy('contacts.callsign_id', 'bands.band')
+                    ->get()
+                    ->count();
+            case 4:
+                return DB::table('contacts')
+                    ->join('bands', 'bands.id', '=', 'contacts.band_id')
+                    ->join('modes', 'modes.id', '=', 'contacts.mode_id')
+                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mode, count(contacts.id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', $this->eventcallsignids())
+                    ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mode')
+                    ->get()
+                    ->count();
+            case 5:
+                return DB::table('contacts')
+                    ->join('modes', 'modes.id', '=', 'contacts.mode_id')
+                    ->select(DB::raw('contacts.callsign_id, modes.mainmode, count(contacts.id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', $this->eventcallsignids())
+                    ->groupBy('contacts.callsign_id', 'modes.mainmode')
+                    ->get()
+                    ->count();
+            case 6:
+                return DB::table('contacts')
+                    ->join('bands', 'bands.id', '=', 'contacts.band_id')
+                    ->join('modes', 'modes.id', '=', 'contacts.mode_id')
+                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mainmode, count(contacts.id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', $this->eventcallsignids())
+                    ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mainmode')
+                    ->get()
+                    ->count();
+            case 7:
+                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', array_diff($this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
+                    ->groupBy('callsign_id')
+                    ->get()
+                    ->count();
+            case 8:
+                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+                    ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                    ->whereIn('callsign_id', array_diff($this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
+                    ->groupBy('callsign_id')
+                    ->get()
+                    ->count();
+            case 9:
+                return DB::table('awardtimeframes')
+                    ->leftJoin('contacts', function($join) {
+                        $join->on('contacts.qso_datetime', '>=', 'awardtimeframes.start')
+                            ->on('contacts.qso_datetime', '<=', 'awardtimeframes.end');
+                    })
+                    ->select('awardtimeframes.id', DB::raw('COUNT(contacts.id) AS COUNT'))
+                    ->where([['awardtimeframes.award_id', $this->id], ['contacts.callsign', $callsign]])
+                    ->whereIn('contacts.callsign_id', $this->eventcallsignids())
+                    ->groupBy('awardtimeframes.id')
+                    ->get()
+                    ->count(); 
+            default:
+                return 0;
         }
-
-        return $this->aggregate_count_mode_0($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_1(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_1($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_2(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_2($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_3(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_3($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_4(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_4($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_5(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_5($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_6(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_6($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_7(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_7($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_8(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_8($callsign) >= $this->min_threshold;
-    }
-
-    public function eligible_mode_9(string $callsign) : bool
-    {
-        if($this->min_threshold == null)
-        {
-            return false;
-        }
-
-        return $this->aggregate_count_mode_9($callsign) >= $this->min_threshold;
     }
 
     public function duplicate() : Award
