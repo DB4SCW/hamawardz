@@ -97,8 +97,8 @@ class Callsignapidetail extends Model
         try {
             $response = Http::acceptJson()->withBody($json_body , $bodytype)->post($this->url);
         } catch (\Throwable $th) {
-            $this->createerrorlog($response->status(), 'Could not successfully pull data from ' . $this->url);
-            return $response;
+            $this->createerrorlog($response == null ? 999 : $response->status(), 'Could not successfully pull data from ' . $this->url);
+            return null;
         }
 
         //react to response status
