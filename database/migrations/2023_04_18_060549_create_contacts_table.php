@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTimeTz('qso_datetime');
             $table->string('callsign', 20);
             $table->string('raw_callsign', 20)->nullable();
-            $table->unsignedDecimal('freq', 10, 4);
+            $table->decimal('freq', 10, 4);
             $table->unsignedBigInteger('band_id')->index();
             $table->unsignedBigInteger('mode_id')->index();
             $table->string('rst_s', 20);
