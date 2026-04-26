@@ -121,6 +121,7 @@
                   <tr>
                       <th>Award</th>
                       <th style="max-width: 320px;">Mode</th>
+                      <th style="width: 120px;">Daily reset?</th>
                       <th>Action</th>
                   </tr>
               </thead>
@@ -132,6 +133,7 @@
                     <tr>
                         <td style="vertical-align: middle;">{{ $award->title }}</td>
                         <td style="vertical-align: middle; max-width: 320px;">{{ $award->mode_text() }}</td>
+                        <td style="vertical-align: middle;">{{ $award->resets_daily ? 'Yes' : 'No' }}</td>
                         <td style="text-align: center;">
                             <a href="/awards/{{ $award->slug }}/edit"><button class="btn btn-warning">Edit Award Tier</button></a>
                             @if($award->issued_awards->count() <= 0)
