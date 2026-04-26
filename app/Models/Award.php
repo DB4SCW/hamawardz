@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
+use App\Support\SqlHelper;
 
 class Award extends Model
 {
@@ -35,7 +36,7 @@ class Award extends Model
 
     public function mode_text()
     {
-        return db4scw_getawardmodetext($this->mode, $this->min_threshold ?? 0);
+        return db4scw_getawardmodetext($this->mode, $this->min_threshold ?? 0, $this->resets_daily);
     }
 
     public function eligible(string $callsign) : bool
@@ -86,75 +87,106 @@ class Award extends Model
 
     public function aggregate_count(string $callsign) : int 
     {
+    
+        //get database specific date expression
+        $dateExpression = SqlHelper::dateOnly('contacts.qso_datetime');
+
         switch ($this->mode) {
             case 0:
-                return Contact::where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])->whereIn('callsign_id', $this->event->callsigns->pluck('id')->toArray())->count();
+                return Contact::where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
+                        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')
+                        ->toArray())
+                        ->count();
             case 1:
-                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+                return DB::table('contacts')->select(DB::raw("callsign_id, count(id) as count" . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', $this->eventcallsignids())
                     ->groupBy('callsign_id')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 2:
                 return DB::table('contacts')
                     ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-                    ->select(DB::raw('contacts.callsign_id, modes.mode, count(contacts.id) as count'))
+                    ->select(DB::raw('contacts.callsign_id, modes.mode, count(contacts.id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', $this->eventcallsignids())
                     ->groupBy('contacts.callsign_id', 'modes.mode')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 3:
                 return DB::table('contacts')
                     ->join('bands', 'bands.id', '=', 'contacts.band_id')
-                    ->select(DB::raw('contacts.callsign_id, bands.band, count(contacts.id) as count'))
+                    ->select(DB::raw('contacts.callsign_id, bands.band, count(contacts.id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', $this->eventcallsignids())
                     ->groupBy('contacts.callsign_id', 'bands.band')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 4:
                 return DB::table('contacts')
                     ->join('bands', 'bands.id', '=', 'contacts.band_id')
                     ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mode, count(contacts.id) as count'))
+                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mode, count(contacts.id) as count . ($this->resets_daily ? ", $dateExpression" : "")'))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', $this->eventcallsignids())
                     ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mode')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 5:
                 return DB::table('contacts')
                     ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-                    ->select(DB::raw('contacts.callsign_id, modes.mainmode, count(contacts.id) as count'))
+                    ->select(DB::raw('contacts.callsign_id, modes.mainmode, count(contacts.id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', $this->eventcallsignids())
                     ->groupBy('contacts.callsign_id', 'modes.mainmode')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 6:
                 return DB::table('contacts')
                     ->join('bands', 'bands.id', '=', 'contacts.band_id')
                     ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mainmode, count(contacts.id) as count'))
+                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mainmode, count(contacts.id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', $this->eventcallsignids())
                     ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mainmode')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 7:
-                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', array_diff($this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
                     ->groupBy('callsign_id')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 8:
-                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count'))
+                return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', array_diff($this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
                     ->groupBy('callsign_id')
+                    ->when($this->resets_daily, function ($query) use ($dateExpression) {
+                        $query->groupBy(DB::raw($dateExpression));
+                    })
                     ->get()
                     ->count();
             case 9:

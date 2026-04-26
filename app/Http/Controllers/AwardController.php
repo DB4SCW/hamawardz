@@ -238,6 +238,7 @@ class AwardController extends Controller
         $award->callsign_text_color = $attributes['callsign_text_color'];
         $award->chosen_name_text_color = $attributes['chosen_name_text_color'];
         $award->datetime_text_color = $attributes['datetime_text_color'];
+        $award->resets_daily = $attributes['resets_daily'];
 
         //Save award
         $award->save();
@@ -317,6 +318,7 @@ class AwardController extends Controller
         $award->callsign_text_color = $attributes['callsign_text_color'];
         $award->chosen_name_text_color = $attributes['chosen_name_text_color'];
         $award->datetime_text_color = $attributes['datetime_text_color'];
+        $award->resets_daily = $attributes['resets_daily'];
 
         //save award
         $award->save();
@@ -360,7 +362,8 @@ class AwardController extends Controller
             'chosen_name_centered_horizontal' => 'integer|min:0|max:1',
             'callsign_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
             'chosen_name_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
-            'datetime_text_color' => ['required', Rule::in(self::TEXT_COLORS)]
+            'datetime_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
+            'resets_daily' => 'integer|min:0|max:1'
         ], 
         [
             'title.string' => 'Title must be a text.',
@@ -415,6 +418,9 @@ class AwardController extends Controller
             'datetime_print.integer' => 'Invalid datetime print type.',
             'datetime_print.min' => 'Invalid datetime print type.',
             'datetime_print.max' => 'Invalid datetime print type.',
+            'resets_daily.integer' => 'Invalid reset daily type.',
+            'resets_daily.min' => 'Invalid reset daily type.',
+            'resets_daily.max' => 'Invalid reset daily type.',
             'callsign_centered_horizontal.integer' => 'Invalid callsign center type.',
             'callsign_centered_horizontal.min' => 'Invalid callsign center type.',
             'callsign_centered_horizontal.max' => 'Invalid callsign center type.',

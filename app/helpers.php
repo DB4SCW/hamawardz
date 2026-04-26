@@ -3,6 +3,7 @@ use App\Models\Autoimport;
 use App\Models\Callsign;
 use App\Models\Dxcc;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 function db4scw_getcallsignwithoutadditionalinfo(string $input) : string
 {
@@ -36,32 +37,59 @@ function db4scw_validatorerrors(\Illuminate\Validation\Validator $validator) : s
     return implode(" | ", $validator->errors()->all());
 }
 
-function db4scw_getawardmodetext(int $mode, $threshold = null) : string
+function db4scw_getawardmodetext(int $mode, $threshold = null, $resets_daily = false) : string
 {
+    
+    //specify award modes that can not reset daily wwa style
+    $cannot_reset_daily = [0,9];
+
+    //save result
+    $result = "";
+
     switch ($mode) {
         case 0:
-            return "Each QSO counts. (min: " . ($threshold ?? 0) . ")";
+            $result = "Each QSO counts. (min: " . ($threshold ?? 0) . ")";
+            break;
         case 1:
-            return "Each distinct event callsign counts for 1 QSO. (min: " . ($threshold ?? 0) . ")";
+            $result = "Each distinct event callsign counts for 1 QSO. (min: " . ($threshold ?? 0) . ")";
+            break;
         case 2:
-            return "Each callsign counts 1 on each mode. (min: " . ($threshold ?? 0) . ")";
+            $result = "Each callsign counts 1 on each mode. (min: " . ($threshold ?? 0) . ")";
+            break;
         case 3:
-            return "Each callsign counts 1 each band. (min: " . ($threshold ?? 0) . ")";
+            $result = "Each callsign counts 1 each band. (min: " . ($threshold ?? 0) . ")";
+            break;
         case 4:
-            return "Each callsign counts 1 on each band and each mode. (min: " . ($threshold ?? 0) . ")";
+            $result = "Each callsign counts 1 on each band and each mode. (min: " . ($threshold ?? 0) . ")";
+            break;
         case 5:
-            return "Each callsign counts 1 on each mainmode (CW, VOICE, DIGITAL) again (min: " . ($threshold ?? 0) . ")";
+            $result = "Each callsign counts 1 on each mainmode (CW, VOICE, DIGITAL) again (min: " . ($threshold ?? 0) . ")";
+            break;
         case 6:
-            return "Each callsign counts 1 on each band and each mainmode (CW, VOICE, DIGITAL). (min: " . ($threshold ?? 0) . ")";
+            $result = "Each callsign counts 1 on each band and each mainmode (CW, VOICE, DIGITAL). (min: " . ($threshold ?? 0) . ")";
+            break;
         case 7:
-            return "Each callsign of the chosen dxcc counts 1. (min: " . ($threshold ?? 0) . ")";
+            $result = "Each callsign of the chosen dxcc counts 1. (min: " . ($threshold ?? 0) . ")";
+            break;
         case 8:
-            return "Each callsign of the chosen continent counts 1. (min: " . ($threshold ?? 0) . ")";
+            $result = "Each callsign of the chosen continent counts 1. (min: " . ($threshold ?? 0) . ")";
+            break;
         case 9:
-            return "Any number of QSOs inside one defined award subtimeframe counts as 1. (min: " . ($threshold ?? 0) . ")";
+            $result = "Any number of QSOs inside one defined award subtimeframe counts as 1. (min: " . ($threshold ?? 0) . ")";
+            break;
         default:
-            return "error";
+            $result = "error";
+            break;
     }
+
+    //append reset hint if possible and needed
+    if($resets_daily and !in_array($mode, $cannot_reset_daily, true))
+    {
+        return $result . ($resets_daily ? '. Resets daily.' : '');    
+    }
+    
+    //return without reset hint otherwise
+    return $result;
 }
 
 function db4scw_getmaxmode() : int

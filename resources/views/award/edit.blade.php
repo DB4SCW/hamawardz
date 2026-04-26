@@ -35,8 +35,15 @@
                             <label for="mode">Award mode</label>
                             <select class="form-control" name="mode">
                                 @foreach(range(0, db4scw_getmaxmode()) as $x)
-                                <option value="{{ $x }}" {{ $x == (old('mode') ?? $award->mode) ? 'selected' : '' }}>{{ db4scw_getawardmodetext($x, null) }}</option>
+                                <option value="{{ $x }}" {{ $x == (old('mode') ?? $award->mode) ? 'selected' : '' }}>{{ db4scw_getawardmodetext($x, null, $award->resets_daily) }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="resets_daily">scoring restrictions resets daily? (WWA style):</label>
+                            <select class="form-control" name="resets_daily">
+                                <option value="0" {{ 0 == (old('resets_daily') ?? $award->resets_daily) ? 'selected' : '' }}>no</option>
+                                <option value="1" {{ 1 == (old('resets_daily') ?? $award->resets_daily) ? 'selected' : '' }}>yes</option>
                             </select>
                         </div>
                         <div class="form-group">

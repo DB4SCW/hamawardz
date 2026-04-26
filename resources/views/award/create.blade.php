@@ -35,6 +35,13 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="resets_daily">scoring restrictions resets daily? (WWA style):</label>
+                            <select class="form-control" name="resets_daily">
+                                <option value="0" {{ 0 == old('resets_daily') ? 'selected' : '' }}>no</option>
+                                <option value="1" {{ 1 == old('resets_daily') ? 'selected' : '' }}>yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="min_threshold">Threshold for mode:</label>
                             <input name="min_threshold" class="form-control" type="number" min="0" step="1" value="{{ old('min_threshold') }}">
                         </div>
