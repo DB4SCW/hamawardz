@@ -135,7 +135,7 @@ class Award extends Model
                 return DB::table('contacts')
                     ->join('bands', 'bands.id', '=', 'contacts.band_id')
                     ->join('modes', 'modes.id', '=', 'contacts.mode_id')
-                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mode, count(contacts.id) as count . ($this->resets_daily ? ", $dateExpression" : "")'))
+                    ->select(DB::raw('contacts.callsign_id, bands.band, modes.mode, count(contacts.id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
                     ->whereIn('callsign_id', $this->eventcallsignids())
                     ->groupBy('contacts.callsign_id', 'bands.band', 'modes.mode')
