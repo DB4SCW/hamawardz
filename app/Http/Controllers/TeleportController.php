@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Upload;
+use App\Models\User;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\DB;
 use RecursiveIteratorIterator;
@@ -107,6 +108,9 @@ class TeleportController extends Controller
     {
         //only siteadmin may do that
         if(!auth()->user()->siteadmin) { abort(403); }
+
+        //store siteadmin user id
+        $triggeruser_id = auth()->user()->id;
         
         //validate inputs
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
@@ -135,15 +139,37 @@ class TeleportController extends Controller
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         } elseif ($databaseType === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
+        } elseif ($databaseType === 'pgsql') {
+            DB::statement('SET session_replication_role = replica;');
         }
 
         foreach ($data as $table => $rows) {
-            DB::table($table)->truncate();
-            if($databaseType === 'sqlsrv') { DB::unprepared('SET IDENTITY_INSERT dbo.' . $table . ' ON;'); }
+
+            $quotedTable = '"' . str_replace('"', '""', $table) . '"';
+
+
+            if ($databaseType === 'pgsql') {
+                DB::statement("TRUNCATE TABLE {$quotedTable} RESTART IDENTITY CASCADE");
+            } else {
+                DB::table($table)->truncate();
+            }
+
+
+            if ($databaseType === 'sqlsrv') {
+                DB::unprepared('SET IDENTITY_INSERT dbo.' . $table . ' ON;');
+            }
+
             foreach (array_chunk($rows, 10) as $chunk) {
                 DB::table($table)->insert($chunk);
             }
-            if($databaseType === 'sqlsrv') { DB::unprepared('SET IDENTITY_INSERT dbo.' . $table . ' OFF;'); }
+
+            if ($databaseType === 'sqlsrv') {
+                DB::unprepared('SET IDENTITY_INSERT dbo.' . $table . ' OFF;');
+            }
+
+            if ($databaseType === 'pgsql') {
+                DB::statement("SELECT setval(pg_get_serial_sequence(?, 'id'), COALESCE((SELECT MAX(id) FROM {$quotedTable}), 1), true)", [$table]);
+            }
         }
 
         // Enable foreign key checks
@@ -151,7 +177,14 @@ class TeleportController extends Controller
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         } elseif ($databaseType === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = ON;');
+        }elseif ($databaseType === 'pgsql') {
+            DB::statement('SET session_replication_role = DEFAULT;');
         }
+
+        //specifically restore admin-access for the trigger user
+        $triggeruser = User::find($triggeruser_id);
+        $triggeruser->siteadmin = true;
+        $triggeruser->save();
 
         return redirect()->route('showprofile')->with('success', 'Data imported successfully.');
     }

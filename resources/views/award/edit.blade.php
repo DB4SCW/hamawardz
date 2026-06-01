@@ -52,8 +52,17 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="excluded_callsigns">Exclude these callsigns from award computation:</label>
-                            <input name="excluded_callsigns" class="form-control" type="text" value="{{ old('excluded_callsigns') ?? $award->excluded_callsigns }}">
+                            <label for="specific_callsign_computation">Only compute for certain callsigns:</label>
+                            <select class="form-control" name="specific_callsign_computation">
+                                <option value="-1" {{ -1 == (old('specific_callsign_computation') ?? $award->specific_callsign_computation) ? 'selected' : '' }}>no restriction</option>
+                                <option value="0" {{ 0 == (old('specific_callsign_computation') ?? $award->specific_callsign_computation) ? 'selected' : '' }}>exclude following callsigns</option>
+                                <option value="1" {{ 1 == (old('specific_callsign_computation') ?? $award->specific_callsign_computation) ? 'selected' : '' }}>include following callsigns</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specific_callsigns">Exclude/Include these callsigns from award computation:</label>
+                            <input name="specific_callsigns" class="form-control" type="text" value="{{ old('specific_callsigns') ?? $award->specific_callsigns }}">
                         </div>
 
                         <!-- DXCC modes handling -->

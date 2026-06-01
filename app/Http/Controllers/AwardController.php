@@ -217,7 +217,7 @@ class AwardController extends Controller
         $award->ranking = $attributes['ranking'];
         $award->mode = $attributes['mode'];
         $award->min_threshold = $attributes['min_threshold'];
-        $award->excluded_callsigns = db4scw_sanitizecallsignstring($attributes['excluded_callsigns']);
+        $award->specific_callsigns = db4scw_sanitizecallsignstring($attributes['specific_callsigns']);
         $award->callsign_top_percent = $attributes['callsign_top_percent'];
         $award->callsign_bold = $attributes['callsign_bold'];
         $award->callsign_font_size_px = $attributes['callsign_font_size_px'];
@@ -239,6 +239,10 @@ class AwardController extends Controller
         $award->chosen_name_text_color = $attributes['chosen_name_text_color'];
         $award->datetime_text_color = $attributes['datetime_text_color'];
         $award->resets_daily = $attributes['resets_daily'];
+        $award->specific_callsign_computation = $attributes['specific_callsign_computation'];
+
+        //reset callsign specifics if prerequisites are not met
+        $award = $this->resetspecifics($award);
 
         //Save award
         $award->save();
@@ -297,7 +301,7 @@ class AwardController extends Controller
         $award->ranking = $attributes['ranking'];
         $award->mode = $attributes['mode'];
         $award->min_threshold = $attributes['min_threshold'];
-        $award->excluded_callsigns = db4scw_sanitizecallsignstring($attributes['excluded_callsigns']);
+        $award->specific_callsigns = db4scw_sanitizecallsignstring($attributes['specific_callsigns']);
         $award->callsign_top_percent = $attributes['callsign_top_percent'];
         $award->callsign_bold = $attributes['callsign_bold'];
         $award->callsign_font_size_px = $attributes['callsign_font_size_px'];
@@ -319,6 +323,10 @@ class AwardController extends Controller
         $award->chosen_name_text_color = $attributes['chosen_name_text_color'];
         $award->datetime_text_color = $attributes['datetime_text_color'];
         $award->resets_daily = $attributes['resets_daily'];
+        $award->specific_callsign_computation = $attributes['specific_callsign_computation'];
+
+        //reset callsign specifics if prerequisites are not met
+        $award = $this->resetspecifics($award);
 
         //save award
         $award->save();
@@ -326,6 +334,23 @@ class AwardController extends Controller
         //return to award view
         return redirect()->route('showeditaward', ['award' => $award->slug])->with('success', 'Award was saved successfully.');
 
+    }
+
+    public function resetspecifics($award)
+    {
+        
+        //reset specific callsigns if prerequisites are not met
+        if($award->specific_callsign_computation == -1 and $award->specific_callsigns != null)
+        {
+            $award->specific_callsigns = null;
+        }
+
+        if(($award->mode == 7 or $award->mode == 8) and $award->specific_callsigns != null)
+        {
+            $award->specific_callsigns = null;
+        }
+
+        return $award;
     }
 
     public function validateawardrequest($requestinput, $awardid = null) : stdClass
@@ -342,7 +367,7 @@ class AwardController extends Controller
             'ranking' => 'integer|min:0',
             'mode' => 'integer|min:0|max:' . db4scw_getmaxmode(),
             'min_threshold' => 'integer|min:1',
-            'excluded_callsigns' => 'string|max:255|nullable',
+            'specific_callsigns' => 'string|max:255|nullable',
             'callsign_top_percent' => 'decimal:0,3|min:0|max:100',
             'callsign_bold' => 'integer|min:0|max:1',
             'callsign_font_size_px' => 'integer|min:1',
@@ -363,7 +388,8 @@ class AwardController extends Controller
             'callsign_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
             'chosen_name_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
             'datetime_text_color' => ['required', Rule::in(self::TEXT_COLORS)],
-            'resets_daily' => 'integer|min:0|max:1'
+            'resets_daily' => 'integer|min:0|max:1',
+            'specific_callsign_computation' => 'integer|min:-1|max:1'
         ], 
         [
             'title.string' => 'Title must be a text.',
@@ -383,8 +409,8 @@ class AwardController extends Controller
             'mode.max' => 'Invalid mode.',
             'min_threshold.integer' => 'Threshold must be a whole number.',
             'min_threshold.min' => 'Threshold must be a positive number.',
-            'excluded_callsigns.string' => 'Excluded callsigns must be a valid string.',
-            'excluded_callsigns.max' => 'List of excluded callsigns may not be longer than 255 characters.',
+            'specific_callsigns.string' => 'Excluded callsigns must be a valid string.',
+            'specific_callsigns.max' => 'List of excluded callsigns may not be longer than 255 characters.',
             'callsign_top_percent.decimal' => 'Callsign Top % must be a number.',
             'callsign_top_percent.min' => 'Callsign Top % must be at least 0%.',
             'callsign_top_percent.max' => 'Callsign Top % must be at most 100%.',
@@ -421,6 +447,9 @@ class AwardController extends Controller
             'resets_daily.integer' => 'Invalid reset daily type.',
             'resets_daily.min' => 'Invalid reset daily type.',
             'resets_daily.max' => 'Invalid reset daily type.',
+            'specific_callsign_computation.integer' => 'Invalid exclusion logic reversal type.',
+            'specific_callsign_computation.min' => 'Invalid exclusion logic reversal type.',
+            'specific_callsign_computation.max' => 'Invalid exclusion logic reversal type.',
             'callsign_centered_horizontal.integer' => 'Invalid callsign center type.',
             'callsign_centered_horizontal.min' => 'Invalid callsign center type.',
             'callsign_centered_horizontal.max' => 'Invalid callsign center type.',

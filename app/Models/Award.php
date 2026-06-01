@@ -70,18 +70,34 @@ class Award extends Model
         
     }
 
-    public function getexcludedcallsignids()
+    public function getspecificcallsignids()
     {
-        //extract excluded callsign ids to array
-        $callsigns_raw = db4scw_getcallsignsfromstring($this->excluded_callsigns ?? '') ;
+        //extract included callsign ids to array
+        $callsigns_raw = db4scw_getcallsignsfromstring($this->specific_callsigns ?? '') ;
         $callsignids = Callsign::whereIn('call', $callsigns_raw)->get()->pluck('id');
         return $callsignids->toArray();
     }
 
     public function eventcallsignids()
     {
-        //diff event callsign ids with excluded call ids
-        return array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getexcludedcallsignids());
+        if($this->specific_callsign_computation == 1)
+        {
+            //if reverse exclusion logic is active, included callsigns are the only ones that count, so return included callsign ids
+            return $this->event->callsigns->wherein('id', $this->getspecificcallsignids())->pluck('id')->toArray();
+        }
+
+        if($this->specific_callsign_computation == 0)
+        {
+            //diff event callsign ids with excluded call ids
+            return array_diff($this->event->callsigns->pluck('id')->toArray(), $this->getspecificcallsignids());
+        }
+
+        if($this->specific_callsign_computation == -1)
+        {
+            //no specific computation
+            return $this->event->callsigns->pluck('id')->toArray();
+        }
+        
     }
 
 
@@ -94,8 +110,7 @@ class Award extends Model
         switch ($this->mode) {
             case 0:
                 return Contact::where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-                        ->whereIn('callsign_id', $this->event->callsigns->pluck('id')
-                        ->toArray())
+                        ->whereIn('callsign_id', $this->eventcallsignids())
                         ->count();
             case 1:
                 return DB::table('contacts')->select(DB::raw("callsign_id, count(id) as count" . ($this->resets_daily ? ", $dateExpression" : "")))
@@ -172,7 +187,7 @@ class Award extends Model
             case 7:
                 return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-                    ->whereIn('callsign_id', array_diff($this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
+                    ->whereIn('callsign_id', $this->event->callsigns()->where('dxcc_id', $this->dxcc_id)->get()->pluck('id')->toArray())
                     ->groupBy('callsign_id')
                     ->when($this->resets_daily, function ($query) use ($dateExpression) {
                         $query->groupBy(DB::raw($dateExpression));
@@ -182,7 +197,7 @@ class Award extends Model
             case 8:
                 return DB::table('contacts')->select(DB::raw('callsign_id, count(id) as count' . ($this->resets_daily ? ", $dateExpression" : "")))
                     ->where([['qso_datetime', '>=', $this->event->start], ['qso_datetime', '<=', $this->event->end], ['callsign', $callsign]])
-                    ->whereIn('callsign_id', array_diff($this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray(), $this->getexcludedcallsignids()))
+                    ->whereIn('callsign_id', $this->event->callsigns()->whereRelation('dxcc', 'cont', $this->dxcc_querystring)->get()->pluck('id')->toArray())
                     ->groupBy('callsign_id')
                     ->when($this->resets_daily, function ($query) use ($dateExpression) {
                         $query->groupBy(DB::raw($dateExpression));

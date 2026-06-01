@@ -103,6 +103,23 @@ class CallsignController extends Controller
         //save callsign
         $callsign->save();
 
+        //check if the certificate holder is also a user in hamawardz
+        $cert_holder_users = User::whereRaw('LOWER(username) = ?', [strtolower($attributes['cert_holder_callsign'])])->get();
+
+        //if exactly one user exists, add this user to the uploaders immediately
+        if($cert_holder_users->count() == 1)
+        {
+            //load user
+            $cert_holder_user = $cert_holder_users->first();
+        
+            //Sanity check
+            if(!$callsign->uploadusers->contains($cert_holder_user))
+            {
+                //attach permission
+                $callsign->uploadusers()->attach($cert_holder_user);
+            }
+        }
+
         //go to edit page
         return redirect()->route('showcallsigns')->with('success', 'Callsign saved successfully.');
 
