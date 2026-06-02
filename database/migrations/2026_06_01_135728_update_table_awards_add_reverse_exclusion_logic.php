@@ -51,7 +51,7 @@ return new class extends Migration
         //get all awards
         $awards = Award::all();
 
-        //migrate data back (as far as we can do, only able to reverse back to exclusion mode)
+        //migrate data back
         foreach ($awards as $award) {
             if($award->specific_callsigns != null)
             {
@@ -59,6 +59,12 @@ return new class extends Migration
                 {
                     $award->excluded_callsigns = $award->specific_callsigns;
                     $award->save();    
+                }
+
+                if($award->specific_callsign_computation == 1)
+                {
+                    $award->excluded_callsigns = implode(",", array_diff($award->event->callsigns->pluck('call')->toArray(), db4scw_getcallsignsfromstring($this->specific_callsigns ?? '')));
+                    $award->save();
                 }
             }
         }

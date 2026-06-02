@@ -109,8 +109,8 @@ class TeleportController extends Controller
         //only siteadmin may do that
         if(!auth()->user()->siteadmin) { abort(403); }
 
-        //store siteadmin user id
-        $triggeruser_id = auth()->user()->id;
+        //store siteadmin username
+        $triggeruser_username = auth()->user()->username;
         
         //validate inputs
         $validator = \Illuminate\Support\Facades\Validator::make(request()->all(), [
@@ -182,9 +182,14 @@ class TeleportController extends Controller
         }
 
         //specifically restore admin-access for the trigger user
-        $triggeruser = User::find($triggeruser_id);
-        $triggeruser->siteadmin = true;
-        $triggeruser->save();
+        $triggerusers = User::where('username', $triggeruser_username)->get();
+
+        if($triggerusers->count() == 1)
+        {
+            $triggeruser = $triggerusers->first();
+            $triggeruser->siteadmin = true;
+            $triggeruser->save();
+        }
 
         return redirect()->route('showprofile')->with('success', 'Data imported successfully.');
     }
